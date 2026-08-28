@@ -203,6 +203,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showWA, setShowWA] = useState(false);
+  const [leadData, setLeadData] = useState<{ nama?: string; kelas?: string; entitas?: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -214,9 +215,10 @@ export default function ChatPage({ brand }: { brand: Brand }) {
   const otherBrands = Object.values(BRANDS).filter((b) => b.id !== brand.id);
   const landing = LANDING[brand.id];
 
-  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
-    `Halo, saya ingin konsultasi pendaftaran merek dagang via ${brand.name}.`
-  )}`;
+  const waText = leadData?.nama
+    ? `Halo ${brand.name}, saya sudah konsultasi via AI dan ingin melanjutkan pendaftaran merek:\n- Nama Merek: ${leadData.nama}\n- Kelas NICE: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
+    : `Halo, saya ingin konsultasi pendaftaran merek dagang via ${brand.name}.`;
+  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(waText)}`;
 
   useEffect(() => {
     if (msgsRef.current) {
@@ -270,7 +272,10 @@ export default function ChatPage({ brand }: { brand: Brand }) {
           ...prev,
           { role: "assistant", content: data.reply },
         ]);
-        if (data.show_wa) setShowWA(true);
+        if (data.show_wa) {
+          setShowWA(true);
+          if (data.lead) setLeadData(data.lead);
+        }
       } catch {
         setMessages((prev) => [
           ...prev,

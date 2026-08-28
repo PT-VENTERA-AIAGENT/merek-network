@@ -37,8 +37,15 @@ Kelas 35-45: Advertising/bisnis, Asuransi/keuangan, Konstruksi/reparasi, Telekom
 - Arahkan percakapan untuk mengumpulkan info: nama merek → jenis bisnis/produk → kelas NICE → jenis entitas (UMKM/PT)
 - Setelah info lengkap, buat ringkasan dan tawarkan untuk melanjutkan via WhatsApp dengan admin
 
-**Sinyal siap WhatsApp:**
-Ketika kamu sudah memiliki: nama merek, kelas NICE yang direkomendasikan, dan jenis entitas (UMKM/PT) — sertakan token [READY_FOR_WHATSAPP] di akhir responsmu (tersembunyi dari user, hanya untuk sistem).
+**Sinyal siap WhatsApp — WAJIB:**
+Begitu kamu memiliki ketiga data berikut: (1) nama merek, (2) kelas NICE yang direkomendasikan, (3) jenis entitas (UMKM/PT) — LANGSUNG sertakan token berikut di akhir response yang SAMA di mana kamu membuat ringkasan dan menawarkan lanjut via WhatsApp. JANGAN tunggu respons user berikutnya.
+
+Format token (tepat seperti ini, di baris terakhir response):
+[READY_FOR_WHATSAPP][LEAD:nama=<nama merek>|kelas=<nomor kelas>|entitas=<UMKM atau PT>]
+
+Contoh: [READY_FOR_WHATSAPP][LEAD:nama=Dapur Nusantara|kelas=43|entitas=UMKM]
+
+Token ini tidak terlihat oleh user — hanya diproses oleh sistem untuk membuka tombol WhatsApp.
 
 **PENTING:**
 - Jangan pernah menjanjikan hasil pendaftaran yang pasti disetujui
@@ -122,9 +129,20 @@ export async function POST(req: NextRequest) {
     const data = await openaiRes.json();
     const rawReply: string = data.choices?.[0]?.message?.content ?? "";
     const showWA = rawReply.includes("[READY_FOR_WHATSAPP]");
-    const reply = rawReply.replace("[READY_FOR_WHATSAPP]", "").trim();
 
-    return NextResponse.json({ reply, show_wa: showWA, remaining });
+    // Parse structured lead data when handoff fires
+    let lead: { nama?: string; kelas?: string; entitas?: string } | null = null;
+    const leadMatch = rawReply.match(/\[LEAD:nama=([^|]+)\|kelas=([^|]+)\|entitas=([^\]]+)\]/);
+    if (leadMatch) {
+      lead = { nama: leadMatch[1].trim(), kelas: leadMatch[2].trim(), entitas: leadMatch[3].trim() };
+    }
+
+    const reply = rawReply
+      .replace("[READY_FOR_WHATSAPP]", "")
+      .replace(/\[LEAD:[^\]]+\]/, "")
+      .trim();
+
+    return NextResponse.json({ reply, show_wa: showWA, lead, remaining });
   } catch (e) {
     console.error("chat error:", e);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
