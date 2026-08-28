@@ -27,3 +27,5 @@ yarn-error.log*
 
 # Vercel
 .vercel
+supabase/.temp/
+supabase/config.toml
