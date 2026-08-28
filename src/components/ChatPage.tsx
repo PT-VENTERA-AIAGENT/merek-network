@@ -11,7 +11,7 @@ interface Message {
 }
 
 const INITIAL_MESSAGE =
-  "Halo! Saya Asisten Merek AI. Saya siap bantu kamu cek, konsultasi, dan daftarkan merek dagangmu ke DJKI. Ceritakan dulu nama merek yang ingin kamu lindungi, atau tanyakan apa saja seputar merek dagang.";
+  "Halo! Saya Asisten Merek AI Hakio 👋\n\nSaya bantu proses pendaftaran merek dagang ke DJKI — mulai dari cek nama, rekomendasi kelas NICE, sampai estimasi biaya.\n\nBoleh tahu nama merek yang ingin Anda daftarkan?";
 
 // ── Brand-specific landing content ──────────────────────────────────────────
 
@@ -203,6 +203,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showWA, setShowWA] = useState(false);
+  const [waClicked, setWaClicked] = useState(false);
   const [leadData, setLeadData] = useState<{ nama?: string; kelas?: string; entitas?: string; user?: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -307,6 +308,17 @@ export default function ChatPage({ brand }: { brand: Brand }) {
       chatSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => inputRef.current?.focus(), 400);
     }, 100);
+  };
+
+  const handleWaClick = () => {
+    setWaClicked(true);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: `Terima kasih${leadData?.user ? `, ${leadData.user}` : ""}! Admin kami akan segera membalas via WhatsApp. Sambil menunggu, pastikan WhatsApp Anda aktif. Selamat berbisnis! 🎉`,
+      },
+    ]);
   };
 
   const accentStyle = {
@@ -697,10 +709,10 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                           <div className="mt-4 flex flex-col gap-3">
                             <div className="flex flex-wrap gap-2">
                               <button
-                                onClick={() => sendMessage("Apakah nama merek saya sudah terdaftar atau mirip dengan merek lain di PDKI?")}
+                                onClick={() => sendMessage("Bagaimana cara cek apakah nama merek saya sudah terdaftar?")}
                                 className="px-3 py-1.5 rounded-full border border-white/12 bg-[#1a1a1a] text-[#b0b0b0] text-[.775rem] font-medium cursor-pointer transition-all font-[inherit] hover:border-white/24 hover:text-[#ececec]"
                               >
-                                Cek nama dulu
+                                Cara cek nama merek
                               </button>
                               <button
                                 onClick={() => sendMessage("Berapa total biaya yang harus saya bayar?")}
@@ -713,10 +725,11 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                               href={waLink}
                               target="_blank"
                               rel="noopener noreferrer"
+                              onClick={handleWaClick}
                               className="inline-flex items-center gap-2 px-[22px] py-[11px] rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity w-fit"
                             >
                               <WaIcon />
-                              Lanjut ke WhatsApp
+                              {waClicked ? "WhatsApp Terbuka ✓" : "Lanjut ke WhatsApp"}
                             </a>
                           </div>
                         )}
@@ -745,10 +758,16 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                         href={waLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity"
+                        onClick={handleWaClick}
+                        className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full text-white text-[.875rem] font-semibold no-underline transition-opacity"
+                        style={{ background: waClicked ? "#128c57" : "#25D366" }}
                       >
                         <WaIcon />
-                        {leadData?.user ? `Lanjut ke WhatsApp, ${leadData.user}` : "Lanjut ke WhatsApp"}
+                        {waClicked
+                          ? "WhatsApp Terbuka ✓"
+                          : leadData?.user
+                          ? `Lanjut ke WhatsApp, ${leadData.user}`
+                          : "Lanjut ke WhatsApp"}
                       </a>
                     </div>
                   )}
