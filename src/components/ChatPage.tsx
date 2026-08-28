@@ -203,7 +203,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showWA, setShowWA] = useState(false);
-  const [leadData, setLeadData] = useState<{ nama?: string; kelas?: string; entitas?: string } | null>(null);
+  const [leadData, setLeadData] = useState<{ nama?: string; kelas?: string; entitas?: string; user?: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -216,7 +216,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
   const landing = LANDING[brand.id];
 
   const waText = leadData?.nama
-    ? `Halo ${brand.name}, saya sudah konsultasi via AI dan ingin melanjutkan pendaftaran merek:\n- Nama Merek: ${leadData.nama}\n- Kelas NICE: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
+    ? `Halo ${brand.name}!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah konsultasi via AI dan ingin melanjutkan pendaftaran merek:\n- Nama Merek: ${leadData.nama}\n- Kelas NICE: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
     : `Halo, saya ingin konsultasi pendaftaran merek dagang via ${brand.name}.`;
   const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(waText)}`;
 
@@ -248,7 +248,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: newMessages.slice(-20) }),
+          body: JSON.stringify({ messages: newMessages.slice(-20), brand: brand.id }),
         });
 
         const data = await res.json();
@@ -694,10 +694,29 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                       >
                         {msg.content}
                         {msg.role === "assistant" && showWA && i === messages.length - 1 && (
-                          <div className="mt-3">
-                            <a href={waLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-[22px] py-[11px] rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity">
+                          <div className="mt-4 flex flex-col gap-3">
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                onClick={() => sendMessage("Apakah nama merek saya sudah terdaftar atau mirip dengan merek lain di PDKI?")}
+                                className="px-3 py-1.5 rounded-full border border-white/12 bg-[#1a1a1a] text-[#b0b0b0] text-[.775rem] font-medium cursor-pointer transition-all font-[inherit] hover:border-white/24 hover:text-[#ececec]"
+                              >
+                                Cek nama dulu
+                              </button>
+                              <button
+                                onClick={() => sendMessage("Berapa total biaya yang harus saya bayar?")}
+                                className="px-3 py-1.5 rounded-full border border-white/12 bg-[#1a1a1a] text-[#b0b0b0] text-[.775rem] font-medium cursor-pointer transition-all font-[inherit] hover:border-white/24 hover:text-[#ececec]"
+                              >
+                                Total biaya?
+                              </button>
+                            </div>
+                            <a
+                              href={waLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-[22px] py-[11px] rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity w-fit"
+                            >
                               <WaIcon />
-                              Lanjut via WhatsApp
+                              Lanjut ke WhatsApp
                             </a>
                           </div>
                         )}
@@ -721,10 +740,15 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                 {/* Input */}
                 <div className="px-4 py-3 border-t border-white/8">
                   {showWA && (
-                    <div className="mb-3 text-center">
-                      <a href={waLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity">
+                    <div className="mb-3 flex items-center gap-2 px-1">
+                      <a
+                        href={waLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity"
+                      >
                         <WaIcon />
-                        Konsultasi via WhatsApp
+                        {leadData?.user ? `Lanjut ke WhatsApp, ${leadData.user}` : "Lanjut ke WhatsApp"}
                       </a>
                     </div>
                   )}

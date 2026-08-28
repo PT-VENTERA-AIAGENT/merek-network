@@ -34,18 +34,23 @@ Kelas 35-45: Advertising/bisnis, Asuransi/keuangan, Konstruksi/reparasi, Telekom
 - Ramah, profesional, dan informatif
 - Gunakan bahasa Indonesia yang mudah dipahami
 - Berikan rekomendasi kelas NICE yang spesifik berdasarkan bisnis user
-- Arahkan percakapan untuk mengumpulkan info: nama merek → jenis bisnis/produk → kelas NICE → jenis entitas (UMKM/PT)
-- Setelah info lengkap, buat ringkasan dan tawarkan untuk melanjutkan via WhatsApp dengan admin
+- Arahkan percakapan untuk mengumpulkan info secara berurutan:
+  1. nama merek
+  2. jenis bisnis/produk
+  3. kelas NICE yang direkomendasikan
+  4. jenis entitas (UMKM/PT)
+  5. nama user — tanya dengan ramah di akhir, misal: "Boleh tahu nama Anda agar admin kami bisa menyapa langsung?"
+- Setelah semua info terkumpul (termasuk nama user), buat ringkasan dan langsung aktifkan tombol WhatsApp
 
 **Sinyal siap WhatsApp — WAJIB:**
-Begitu kamu memiliki ketiga data berikut: (1) nama merek, (2) kelas NICE yang direkomendasikan, (3) jenis entitas (UMKM/PT) — LANGSUNG sertakan token berikut di akhir response yang SAMA di mana kamu membuat ringkasan dan menawarkan lanjut via WhatsApp. JANGAN tunggu respons user berikutnya.
+Begitu kamu memiliki kelima data: nama merek, kelas NICE, jenis entitas, DAN nama user — LANGSUNG sertakan token berikut di baris TERAKHIR response yang sama di mana kamu membuat ringkasan. JANGAN tunggu respons user berikutnya.
 
-Format token (tepat seperti ini, di baris terakhir response):
-[READY_FOR_WHATSAPP][LEAD:nama=<nama merek>|kelas=<nomor kelas>|entitas=<UMKM atau PT>]
+Format token (tepat seperti ini, di baris terakhir — tidak ada teks setelahnya):
+[READY_FOR_WHATSAPP][LEAD:nama=<nama merek>|kelas=<nomor kelas>|entitas=<UMKM atau PT>|user=<nama user>]
 
-Contoh: [READY_FOR_WHATSAPP][LEAD:nama=Dapur Nusantara|kelas=43|entitas=UMKM]
+Contoh: [READY_FOR_WHATSAPP][LEAD:nama=Dapur Nusantara|kelas=43|entitas=UMKM|user=Budi]
 
-Token ini tidak terlihat oleh user — hanya diproses oleh sistem untuk membuka tombol WhatsApp.
+Token ini tidak terlihat oleh user — hanya diproses sistem untuk membuka tombol WhatsApp.
 
 **PENTING:**
 - Jangan pernah menjanjikan hasil pendaftaran yang pasti disetujui
@@ -67,6 +72,41 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   return { allowed: hits.length <= RATE_LIMIT_MAX, remaining };
 }
 
+interface Lead {
+  nama?: string;
+  kelas?: string;
+  entitas?: string;
+  user?: string;
+}
+
+async function logLeadToSupabase(lead: Lead, brand: string): Promise<void> {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return;
+
+  try {
+    await fetch(`${supabaseUrl}/rest/v1/chat_leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        brand,
+        nama_merek: lead.nama ?? null,
+        kelas_nice: lead.kelas ?? null,
+        jenis_entitas: lead.entitas ?? null,
+        nama_user: lead.user ?? null,
+        source: "ai_chat",
+      }),
+    });
+  } catch {
+    // fire-and-forget — never fail the response over logging
+  }
+}
+
 export async function POST(req: NextRequest) {
   const openaiKey = process.env.OPENAI_API_KEY;
   if (!openaiKey) {
@@ -79,6 +119,7 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       req.headers.get("x-real-ip") ??
       "unknown";
+    const brand = (body.brand as string) ?? "unknown";
 
     const { allowed, remaining } = checkRateLimit(ip);
     if (!allowed) {
@@ -130,11 +171,20 @@ export async function POST(req: NextRequest) {
     const rawReply: string = data.choices?.[0]?.message?.content ?? "";
     const showWA = rawReply.includes("[READY_FOR_WHATSAPP]");
 
-    // Parse structured lead data when handoff fires
-    let lead: { nama?: string; kelas?: string; entitas?: string } | null = null;
-    const leadMatch = rawReply.match(/\[LEAD:nama=([^|]+)\|kelas=([^|]+)\|entitas=([^\]]+)\]/);
+    // Parse structured lead data
+    let lead: Lead | null = null;
+    const leadMatch = rawReply.match(
+      /\[LEAD:nama=([^|]+)\|kelas=([^|]+)\|entitas=([^|]+)\|user=([^\]]+)\]/
+    );
     if (leadMatch) {
-      lead = { nama: leadMatch[1].trim(), kelas: leadMatch[2].trim(), entitas: leadMatch[3].trim() };
+      lead = {
+        nama: leadMatch[1].trim(),
+        kelas: leadMatch[2].trim(),
+        entitas: leadMatch[3].trim(),
+        user: leadMatch[4].trim(),
+      };
+      // fire-and-forget lead logging
+      logLeadToSupabase(lead, brand);
     }
 
     const reply = rawReply
