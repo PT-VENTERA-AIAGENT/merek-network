@@ -80,12 +80,15 @@ interface Lead {
 }
 
 async function logLeadToSupabase(lead: Lead, brand: string): Promise<void> {
-  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, "");
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!supabaseUrl || !supabaseKey) return;
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("[leads] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set");
+    return;
+  }
 
   try {
-    await fetch(`${supabaseUrl}/rest/v1/chat_leads`, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/chat_leads`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,8 +105,14 @@ async function logLeadToSupabase(lead: Lead, brand: string): Promise<void> {
         source: "ai_chat",
       }),
     });
-  } catch {
-    // fire-and-forget — never fail the response over logging
+    if (!res.ok) {
+      const body = await res.text();
+      console.error("[leads] Supabase insert failed:", res.status, body);
+    } else {
+      console.log("[leads] Inserted lead:", brand, lead.nama, lead.user);
+    }
+  } catch (e) {
+    console.error("[leads] fetch error:", e);
   }
 }
 
@@ -183,8 +192,8 @@ export async function POST(req: NextRequest) {
         entitas: leadMatch[3].trim(),
         user: leadMatch[4].trim(),
       };
-      // fire-and-forget lead logging
-      logLeadToSupabase(lead, brand);
+      // await so Vercel doesn't terminate before insert completes
+      await logLeadToSupabase(lead, brand);
     }
 
     const reply = rawReply
