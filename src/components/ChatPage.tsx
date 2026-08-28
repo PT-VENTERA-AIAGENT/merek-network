@@ -705,7 +705,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                         }`}
                       >
                         {msg.content}
-                        {msg.role === "assistant" && showWA && i === messages.length - 1 && (
+                        {msg.role === "assistant" && showWA && i === messages.length - 1 && !waClicked && (
                           <div className="mt-4 flex flex-col gap-3">
                             <div className="flex flex-wrap gap-2">
                               <button
@@ -729,7 +729,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                               className="inline-flex items-center gap-2 px-[22px] py-[11px] rounded-full bg-[#25D366] text-white text-[.875rem] font-semibold no-underline wa-btn-hover transition-opacity w-fit"
                             >
                               <WaIcon />
-                              {waClicked ? "WhatsApp Terbuka ✓" : "Lanjut ke WhatsApp"}
+                              Lanjut ke WhatsApp
                             </a>
                           </div>
                         )}
