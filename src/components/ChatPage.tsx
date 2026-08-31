@@ -119,7 +119,6 @@ export default function ChatPage({ brand }: { brand: Brand }) {
 
   const a = brand.accent;
   const aRgb = brand.accentRgb;
-  const aLight = brand.accentLight;
 
   useEffect(() => {
     if (msgsRef.current) {
@@ -339,8 +338,6 @@ export default function ChatPage({ brand }: { brand: Brand }) {
         /* ─ Typing ───────────────────────────────────────────── */
         @keyframes ap-dot { 0%,80%,100%{transform:scale(.5);opacity:.25;} 40%{transform:scale(1);opacity:1;} }
         .ap-dot { animation: ap-dot 1.2s ease infinite; }
-        .ap-dot:nth-child(2){animation-delay:.2s;}
-        .ap-dot:nth-child(3){animation-delay:.4s;}
 
         /* ─ Fade up ──────────────────────────────────────────── */
         @keyframes ap-up { from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);} }
