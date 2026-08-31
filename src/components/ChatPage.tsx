@@ -11,66 +11,86 @@ interface Message {
 }
 
 const INITIAL_MESSAGE =
-  "Halo! Saya Asisten Merek AI Hakio 👋\n\nSaya bantu proses pendaftaran merek dagang ke DJKI — mulai dari cek nama, rekomendasi kelas NICE, sampai estimasi biaya.\n\nBoleh tahu nama merek yang ingin Anda daftarkan?";
+  "Halo! Saya Asisten Merek AI Hakio.\n\nSaya bantu proses pendaftaran merek dagang ke DJKI — mulai dari cek nama, rekomendasi kelas NICE, sampai estimasi biaya.\n\nBoleh tahu nama merek yang ingin Anda daftarkan?";
 
 interface LandingContent {
+  eyebrow: string;
   heroTitle: string;
   heroSubtitle: string;
 }
 
 const LANDING: Record<BrandId, LandingContent> = {
   hakimerek: {
+    eyebrow: "Pendaftaran Merek Dagang",
     heroTitle: "Lindungi Merekmu Sebelum Orang Lain Mendaftarnya",
     heroSubtitle:
-      "Ribuan merek dicuri tiap tahun karena pemilik aslinya terlambat mendaftar. Konsultan AI kami bantu kamu cek dan daftar sekarang.",
+      "Ribuan merek dicuri tiap tahun karena pemilik aslinya terlambat mendaftar. Konsultan AI kami bantu Anda cek dan daftar sekarang.",
   },
   cekhaki: {
-    heroTitle: "Cek Nama Merekmu — Sebelum Orang Lain Mendaftarnya",
+    eyebrow: "Cek Nama Merek Gratis",
+    heroTitle: "Pastikan Nama Merekmu Aman Sebelum Daftar",
     heroSubtitle:
-      "Cek database DJKI secara instan. Konsultasi AI gratis, lanjut ke WhatsApp jika siap daftar.",
+      "Cek database DJKI secara instan. Konsultasi AI gratis, lanjut ke WhatsApp jika siap mendaftar.",
   },
   merekin: {
-    heroTitle: "Daftarkan Merekmu — Proses 100% Online",
+    eyebrow: "Pendaftaran Merek Online",
+    heroTitle: "Daftarkan Merekmu. Proses 100% Online.",
     heroSubtitle:
-      "Dari konsultasi hingga sertifikat resmi DJKI, semua bisa dikerjakan dari smartphone.",
+      "Dari konsultasi hingga sertifikat resmi DJKI — semua bisa dikerjakan dari smartphone.",
   },
   hkimerek: {
-    heroTitle: "Platform HKI Merek Berbasis AI Pertama di Indonesia",
+    eyebrow: "Platform HKI Merek Berbasis AI",
+    heroTitle: "HKI Merek yang Lebih Cerdas, Lebih Cepat",
     heroSubtitle:
-      "Analisis otomatis nama merek, rekomendasi kelas NICE, dan proses DJKI yang transparan.",
+      "Analisis otomatis nama merek, rekomendasi kelas NICE, dan pendampingan hingga sertifikat terbit.",
   },
   daftarmerekmu: {
+    eyebrow: "Daftar Merek untuk UMKM",
     heroTitle: "Cara Paling Mudah Daftar Merek Dagang",
     heroSubtitle:
-      "Tidak perlu paham hukum. Konsultan AI kami pandu langkah demi langkah hingga sertifikat terbit.",
+      "Tidak perlu paham hukum. AI konsultan kami pandu langkah demi langkah hingga sertifikat jadi.",
   },
 };
 
+/* ── Icons ──────────────────────────────────────────────────── */
+
 const WaIcon = () => (
-  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
   </svg>
 );
 
-const SendIcon = ({ active }: { active: boolean }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-    stroke={active ? "#fff" : "#bbb"}>
-    <line x1="22" y1="2" x2="11" y2="13" />
-    <polygon points="22 2 15 22 11 13 2 9 22 2" fill={active ? "#fff" : "#bbb"} stroke="none" />
+const ArrowUpIcon = ({ active }: { active: boolean }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+    stroke={active ? "#fff" : "#aeaeb2"} strokeWidth="2.5"
+    strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="19" x2="12" y2="5" />
+    <polyline points="5 12 12 5 19 12" />
   </svg>
 );
 
 const ShieldIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
   </svg>
 );
 
 const CheckIcon = ({ color }: { color: string }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+    stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
+
+const ChevronIcon = () => (
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+/* ── Main component ─────────────────────────────────────────── */
 
 export default function ChatPage({ brand }: { brand: Brand }) {
   const [messages, setMessages] = useState<Message[]>([
@@ -90,7 +110,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
 
   const otherBrands = Object.values(BRANDS).filter((b) => b.id !== brand.id);
   const landing = LANDING[brand.id];
-  const hasConversation = messages.length > 1;
+  const hasConversation = messages.some((m) => m.role === "user");
 
   const waText = leadData?.nama
     ? `Halo ${brand.name}!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah konsultasi via AI dan ingin melanjutkan pendaftaran merek:\n- Nama Merek: ${leadData.nama}\n- Kelas NICE: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
@@ -99,6 +119,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
 
   const a = brand.accent;
   const aRgb = brand.accentRgb;
+  const aLight = brand.accentLight;
 
   useEffect(() => {
     if (msgsRef.current) {
@@ -128,7 +149,6 @@ export default function ChatPage({ brand }: { brand: Brand }) {
             brand: brand.id,
           }),
         });
-
         const data = await res.json();
 
         if (res.status === 429 || data.rate_limited) {
@@ -185,7 +205,7 @@ export default function ChatPage({ brand }: { brand: Brand }) {
       ...prev,
       {
         role: "assistant",
-        content: `Terima kasih${leadData?.user ? `, ${leadData.user}` : ""}! Admin kami akan segera membalas via WhatsApp. Selamat berbisnis! 🎉`,
+        content: `Terima kasih${leadData?.user ? `, ${leadData.user}` : ""}! Admin kami akan segera membalas via WhatsApp. Selamat berbisnis!`,
       },
     ]);
   };
@@ -194,302 +214,404 @@ export default function ChatPage({ brand }: { brand: Brand }) {
     <>
       <JsonLd brand={brand} />
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
-
-        *, *::before, *::after { box-sizing: border-box; }
-
-        .ch-root * { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
-        .ch-root h1, .ch-root h2 { font-family: 'Instrument Serif', Georgia, serif; }
-
-        .ch-root { background: #fff; min-height: 100vh; color: #111; }
-
-        /* Nav */
-        .ch-nav {
-          position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-          height: 54px; display: flex; align-items: center; justify-content: space-between;
-          padding: 0 24px;
-          background: rgba(255,255,255,0.94);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-bottom: 1px solid #ebebeb;
+        /* ─ Reset & font ─────────────────────────────────────── */
+        .ap * {
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+            "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+          -webkit-font-smoothing: antialiased;
         }
-        .ch-logo { text-decoration: none; display: flex; align-items: baseline; }
-        .ch-logo-accent { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; color: ${a}; font-size: 1.25rem; }
-        .ch-logo-rest { font-family: 'Instrument Serif', Georgia, serif; color: #111; font-size: 1.25rem; }
-        .ch-nav-link {
-          font-size: .8125rem; color: #888; text-decoration: none;
-          padding: 6px 12px; border-radius: 8px; transition: color .15s, background .15s;
-          background: none; border: none; cursor: pointer; font-family: inherit;
+        .ap { background: #fff; color: #1d1d1f; min-height: 100vh; }
+
+        /* ─ Nav ─────────────────────────────────────────────── */
+        .ap-nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          height: 48px;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 0 22px;
+          background: rgba(255,255,255,0.85);
+          backdrop-filter: saturate(180%) blur(20px);
+          -webkit-backdrop-filter: saturate(180%) blur(20px);
+          border-bottom: 1px solid rgba(0,0,0,0.08);
         }
-        .ch-nav-link:hover { color: #111; background: #f5f5f3; }
-        .ch-dropdown {
+        .ap-logo {
+          text-decoration: none; display: flex; align-items: center;
+          font-size: .9375rem; font-weight: 600; letter-spacing: -.01em;
+          color: #1d1d1f;
+        }
+        .ap-logo-accent { color: ${a}; }
+        .ap-nav-link {
+          font-size: .8125rem; color: #6e6e70; text-decoration: none;
+          padding: 5px 10px; border-radius: 6px;
+          background: none; border: none; cursor: pointer;
+          font-family: inherit; transition: color .12s, background .12s;
+        }
+        .ap-nav-link:hover { color: #1d1d1f; background: rgba(0,0,0,.05); }
+        .ap-dropdown {
           position: absolute; right: 0; top: calc(100% + 6px);
-          background: #fff; border: 1px solid #ebebeb; border-radius: 14px;
-          padding: 6px; min-width: 190px;
-          box-shadow: 0 8px 32px rgba(0,0,0,.1);
-          z-index: 200;
+          background: #fff; border: 1px solid #d2d2d7;
+          border-radius: 12px; padding: 5px; min-width: 196px;
+          box-shadow: 0 8px 32px rgba(0,0,0,.1); z-index: 200;
         }
-        .ch-dropdown-link {
-          display: block; padding: 9px 12px; font-size: .8125rem;
-          text-decoration: none; color: #555; border-radius: 8px; transition: background .12s;
+        .ap-dropdown-item {
+          display: block; padding: 8px 11px; font-size: .8125rem;
+          text-decoration: none; color: #6e6e70; border-radius: 7px;
+          transition: background .1s, color .1s;
         }
-        .ch-dropdown-link:hover { background: #f5f5f3; color: #111; }
-        .ch-dropdown-sep { height: 1px; background: #ebebeb; margin: 4px 0; }
+        .ap-dropdown-item:hover { background: #f5f5f7; color: #1d1d1f; }
+        .ap-dropdown-sep { height: 1px; background: #d2d2d7; margin: 4px 2px; }
 
-        /* Hero */
-        .ch-badge {
-          display: inline-flex; align-items: center; gap: 6px;
-          background: rgba(${aRgb},.07); color: ${a};
-          font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-          padding: 5px 14px; border-radius: 100px; margin-bottom: 20px;
+        /* ─ Eyebrow ─────────────────────────────────────────── */
+        .ap-eyebrow {
+          font-size: .8125rem; font-weight: 600;
+          letter-spacing: .01em; text-transform: uppercase;
+          color: ${a}; margin-bottom: 14px;
         }
-        .ch-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: ${a}; }
-        .ch-h1 {
-          font-size: clamp(1.85rem, 4.5vw, 2.9rem); font-weight: 400;
-          line-height: 1.2; color: #111; margin: 0 0 12px; letter-spacing: -.025em;
-        }
-        .ch-subtitle { font-size: .9375rem; color: #888; line-height: 1.65; margin: 0; }
 
-        /* Chat box */
-        .ch-box {
-          border: 1px solid #e8e8e6;
-          border-radius: 20px; background: #fff;
-          box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 6px 48px rgba(0,0,0,.08);
+        /* ─ Headline ─────────────────────────────────────────── */
+        .ap-h1 {
+          font-size: clamp(2rem, 5vw, 3.25rem);
+          font-weight: 700; line-height: 1.1;
+          letter-spacing: -.03em; color: #1d1d1f;
+          margin: 0 0 14px;
+        }
+        .ap-subtitle {
+          font-size: clamp(1rem, 2vw, 1.1875rem);
+          line-height: 1.6; color: #6e6e70; margin: 0;
+        }
+
+        /* ─ Chat box ─────────────────────────────────────────── */
+        .ap-chat-box {
+          border: 1px solid #d2d2d7;
+          border-radius: 18px;
+          background: #fff;
+          box-shadow: 0 2px 8px rgba(0,0,0,.04), 0 12px 48px rgba(0,0,0,.07);
           display: flex; flex-direction: column; overflow: hidden;
           height: 560px;
         }
-        .ch-box-header {
+        .ap-chat-header {
           display: flex; align-items: center; gap: 10px;
-          padding: 14px 18px; border-bottom: 1px solid #eee; flex-shrink: 0;
+          padding: 13px 16px;
+          border-bottom: 1px solid #f0f0f0;
+          flex-shrink: 0;
         }
-        .ch-ai-avatar {
-          width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-          background: linear-gradient(135deg, ${a}, ${brand.accentLight});
+        .ap-avatar {
+          width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+          background: ${a};
           display: flex; align-items: center; justify-content: center;
-          font-size: .62rem; font-weight: 800; color: #fff; letter-spacing: .02em;
+          font-size: .6rem; font-weight: 700; color: #fff; letter-spacing: .02em;
         }
-        .ch-online-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
+        .ap-avatar-sm {
+          width: 26px; height: 26px; border-radius: 7px; font-size: .58rem;
+        }
+        .ap-online {
+          display: flex; align-items: center; gap: 4px;
+          font-size: .6875rem; color: #34c759;
+        }
+        .ap-online-dot {
+          width: 5px; height: 5px; border-radius: 50%; background: #34c759;
+        }
 
-        /* Messages */
-        .ch-msgs { flex: 1; overflow-y: auto; padding: 20px 18px; display: flex; flex-direction: column; gap: 18px; }
-        .ch-msgs::-webkit-scrollbar { width: 3px; }
-        .ch-msgs::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 4px; }
+        /* ─ Messages ─────────────────────────────────────────── */
+        .ap-msgs {
+          flex: 1; overflow-y: auto; padding: 18px 16px;
+          display: flex; flex-direction: column; gap: 16px;
+          scroll-behavior: smooth;
+        }
+        .ap-msgs::-webkit-scrollbar { width: 2px; }
+        .ap-msgs::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 4px; }
 
-        .ch-msg-user { display: flex; justify-content: flex-end; }
-        .ch-bubble-user {
+        .ap-msg-ai { display: flex; gap: 9px; align-items: flex-start; }
+        .ap-msg-user { display: flex; justify-content: flex-end; }
+
+        .ap-bubble-ai {
+          font-size: .9rem; line-height: 1.65; color: #1d1d1f;
+          white-space: pre-wrap; max-width: 88%;
+          padding-top: 1px;
+        }
+        .ap-bubble-user {
           background: ${a}; color: #fff;
-          padding: 10px 16px; border-radius: 18px 18px 4px 18px;
-          font-size: .9rem; line-height: 1.6; max-width: 72%; white-space: pre-wrap;
+          padding: 10px 15px;
+          border-radius: 18px 18px 4px 18px;
+          font-size: .9rem; line-height: 1.6;
+          white-space: pre-wrap; max-width: 72%;
         }
-        .ch-msg-ai { display: flex; gap: 10px; align-items: flex-start; }
-        .ch-bubble-ai { font-size: .9rem; line-height: 1.65; color: #222; white-space: pre-wrap; max-width: 86%; padding-top: 2px; }
 
-        /* Chips */
-        .ch-chips { padding: 0 18px 14px; display: flex; flex-wrap: wrap; gap: 7px; flex-shrink: 0; }
-        .ch-chip {
-          padding: 7px 14px; border-radius: 100px;
-          border: 1px solid #e8e8e6; background: #fafaf8;
-          font-size: .8rem; color: #666; cursor: pointer; font-family: inherit;
-          font-weight: 500; transition: all .15s;
+        /* ─ Typing ───────────────────────────────────────────── */
+        @keyframes ap-dot { 0%,80%,100%{transform:scale(.5);opacity:.25;} 40%{transform:scale(1);opacity:1;} }
+        .ap-dot { animation: ap-dot 1.2s ease infinite; }
+        .ap-dot:nth-child(2){animation-delay:.2s;}
+        .ap-dot:nth-child(3){animation-delay:.4s;}
+
+        /* ─ Fade up ──────────────────────────────────────────── */
+        @keyframes ap-up { from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);} }
+        .ap-up { animation: ap-up .24s ease forwards; }
+
+        /* ─ Chips ────────────────────────────────────────────── */
+        .ap-chips {
+          padding: 0 16px 13px;
+          display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0;
         }
-        .ch-chip:hover { background: rgba(${aRgb},.07); border-color: rgba(${aRgb},.3); color: ${a}; }
+        .ap-chip {
+          padding: 6px 13px; border-radius: 100px;
+          border: 1px solid #d2d2d7; background: #f5f5f7;
+          font-size: .78rem; color: #3a3a3c; cursor: pointer;
+          font-family: inherit; font-weight: 500;
+          transition: background .12s, border-color .12s, color .12s;
+        }
+        .ap-chip:hover {
+          background: rgba(${aRgb},.07);
+          border-color: rgba(${aRgb},.35);
+          color: ${a};
+        }
 
-        /* Input area */
-        .ch-input-area { padding: 12px 14px 14px; border-top: 1px solid #eee; flex-shrink: 0; }
-        .ch-input-wrap {
-          display: flex; align-items: flex-end; gap: 10px;
-          background: #f8f8f6; border: 1.5px solid #e8e8e6;
-          border-radius: 14px; padding: 10px 10px 10px 16px;
+        /* ─ Input area ───────────────────────────────────────── */
+        .ap-input-area {
+          padding: 11px 12px 13px;
+          border-top: 1px solid #f0f0f0;
+          flex-shrink: 0;
+        }
+        .ap-input-wrap {
+          display: flex; align-items: flex-end; gap: 8px;
+          background: #f5f5f7;
+          border: 1px solid #e0e0e0;
+          border-radius: 13px;
+          padding: 9px 9px 9px 14px;
           transition: border-color .15s, box-shadow .15s;
         }
-        .ch-input-wrap:focus-within {
-          border-color: rgba(${aRgb},.45);
-          box-shadow: 0 0 0 3px rgba(${aRgb},.07);
+        .ap-input-wrap:focus-within {
+          border-color: rgba(${aRgb},.5);
+          box-shadow: 0 0 0 3px rgba(${aRgb},.1);
+          background: #fff;
         }
-        .ch-textarea {
+        .ap-textarea {
           flex: 1; background: transparent; border: none; outline: none;
-          color: #111; font-size: .9rem; resize: none; max-height: 108px;
-          line-height: 1.5; font-family: inherit;
+          color: #1d1d1f; font-size: .9rem; resize: none;
+          max-height: 108px; line-height: 1.5; font-family: inherit;
         }
-        .ch-textarea::placeholder { color: #bbb; }
-        .ch-send {
-          width: 34px; height: 34px; border-radius: 10px; border: none;
+        .ap-textarea::placeholder { color: #aeaeb2; }
+        .ap-send {
+          width: 32px; height: 32px; border-radius: 9px;
+          border: none; cursor: pointer; flex-shrink: 0;
           display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0; cursor: pointer; transition: background .15s;
+          transition: background .15s; outline: none;
         }
-        .ch-send-active { background: ${a}; }
-        .ch-send-disabled { background: #eee; cursor: not-allowed; }
+        .ap-send-on { background: ${a}; }
+        .ap-send-off { background: #e5e5ea; cursor: not-allowed; }
 
-        /* WA buttons */
-        .ch-wa-sticky {
-          display: flex; align-items: center; justify-content: center; gap: 8px;
-          width: 100%; padding: 11px 20px; border-radius: 100px;
-          color: #fff; font-size: .875rem; font-weight: 600; text-decoration: none;
-          transition: opacity .15s; border: none; cursor: pointer; font-family: inherit;
+        /* ─ WA button ────────────────────────────────────────── */
+        .ap-wa {
+          display: flex; align-items: center; justify-content: center; gap: 7px;
+          width: 100%; padding: 11px; border-radius: 11px;
+          color: #fff; font-size: .875rem; font-weight: 600;
+          text-decoration: none; border: none; cursor: pointer;
+          font-family: inherit; transition: opacity .15s;
           margin-bottom: 8px;
         }
-        .ch-wa-green { background: #22c55e; }
-        .ch-wa-green:hover { background: #16a34a; }
-        .ch-wa-dark { background: #16a34a; }
+        .ap-wa-green { background: #34c759; }
+        .ap-wa-green:hover { opacity: .88; }
+        .ap-wa-done { background: #248a3d; }
 
-        .ch-wa-inline {
-          display: inline-flex; align-items: center; gap: 8px;
-          padding: 10px 20px; border-radius: 100px;
-          background: #22c55e; color: #fff; font-size: .875rem; font-weight: 600;
-          text-decoration: none; transition: background .15s; border: none; cursor: pointer;
+        .ap-wa-inline {
+          display: inline-flex; align-items: center; gap: 7px;
+          padding: 9px 18px; border-radius: 100px;
+          background: #34c759; color: #fff;
+          font-size: .8375rem; font-weight: 600;
+          text-decoration: none; transition: opacity .15s;
         }
-        .ch-wa-inline:hover { background: #16a34a; }
-        .ch-action-chip {
-          padding: 6px 14px; border-radius: 100px;
-          border: 1px solid #e8e8e6; background: #f8f8f6;
-          font-size: .775rem; color: #666; cursor: pointer; font-family: inherit;
-          transition: all .15s;
+        .ap-wa-inline:hover { opacity: .88; }
+
+        /* WA post-summary chips */
+        .ap-action-chip {
+          padding: 6px 13px; border-radius: 100px;
+          border: 1px solid #d2d2d7; background: #f5f5f7;
+          font-size: .775rem; color: #6e6e70; cursor: pointer;
+          font-family: inherit; transition: background .12s;
         }
-        .ch-action-chip:hover { background: #f0f0ee; color: #333; }
+        .ap-action-chip:hover { background: #ebebeb; color: #1d1d1f; }
 
-        /* Typing dots */
-        @keyframes ch-dot { 0%,80%,100%{transform:scale(.55);opacity:.3;} 40%{transform:scale(1);opacity:1;} }
-        .ch-dot { animation: ch-dot 1.2s ease infinite; }
-        .ch-dot:nth-child(2){animation-delay:.2s;}
-        .ch-dot:nth-child(3){animation-delay:.4s;}
-
-        /* Fade-up */
-        @keyframes ch-up { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
-        .ch-up { animation: ch-up 0.28s ease forwards; }
-
-        /* Trust bar */
-        .ch-trust {
-          border-top: 1px solid #ebebeb; border-bottom: 1px solid #ebebeb;
-          padding: 20px; display: flex; justify-content: center;
+        /* ─ Trust bar ────────────────────────────────────────── */
+        .ap-trust {
+          display: flex; justify-content: center;
+          border-top: 1px solid #f0f0f0;
+          border-bottom: 1px solid #f0f0f0;
+          padding: 20px;
         }
-        .ch-trust-inner {
-          display: flex; align-items: center; gap: 0; max-width: 480px; width: 100%; justify-content: center;
+        .ap-trust-inner {
+          display: flex; align-items: center;
+          max-width: 520px; width: 100%;
         }
-        .ch-trust-item { text-align: center; flex: 1; }
-        .ch-trust-sep { width: 1px; height: 32px; background: #ebebeb; flex-shrink: 0; }
-        .ch-trust-num { font-size: 1rem; font-weight: 700; color: ${a}; }
-        .ch-trust-label { font-size: .7rem; color: #aaa; margin-top: 2px; }
+        .ap-trust-item { flex: 1; text-align: center; }
+        .ap-trust-num {
+          font-size: 1.125rem; font-weight: 700;
+          color: ${a}; letter-spacing: -.01em;
+        }
+        .ap-trust-label { font-size: .6875rem; color: #aeaeb2; margin-top: 2px; }
+        .ap-trust-sep { width: 1px; height: 28px; background: #e5e5ea; }
 
-        /* Pricing */
-        .ch-price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .ch-price-card {
-          border: 1.5px solid #e8e8e6; border-radius: 18px;
-          padding: 24px; background: #fff; display: flex; flex-direction: column;
+        /* ─ Section heading ──────────────────────────────────── */
+        .ap-sec-title {
+          font-size: clamp(1.5rem, 3vw, 1.875rem);
+          font-weight: 700; color: #1d1d1f;
+          letter-spacing: -.025em; margin: 0 0 8px;
+        }
+        .ap-sec-sub { font-size: .9375rem; color: #6e6e70; margin: 0; }
+
+        /* ─ Pricing cards ────────────────────────────────────── */
+        .ap-price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .ap-price-card {
+          border: 1px solid #d2d2d7; border-radius: 18px;
+          padding: 26px; background: #fff;
+          display: flex; flex-direction: column;
           transition: box-shadow .2s;
         }
-        .ch-price-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.06); }
-        .ch-price-featured { border-color: ${a} !important; border-width: 2px !important; }
-        .ch-price-badge {
-          position: absolute; top: 0; right: 0;
+        .ap-price-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,.07); }
+        .ap-price-featured { border-color: ${a}; border-width: 1.5px; }
+        .ap-price-badge {
+          display: inline-block;
           background: ${a}; color: #fff;
-          font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-          padding: 5px 12px; border-radius: 0 16px 0 10px;
+          font-size: .6rem; font-weight: 700;
+          letter-spacing: .08em; text-transform: uppercase;
+          padding: 3px 10px; border-radius: 100px; margin-bottom: 14px;
+          width: fit-content;
         }
-        .ch-price-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
-        .ch-price-amount { font-size: 1.9rem; font-weight: 800; color: #111; line-height: 1; margin-bottom: 4px; }
-        .ch-price-per { font-size: .78rem; color: #bbb; margin-bottom: 20px; }
-        .ch-price-list { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-        .ch-price-item { display: flex; align-items: flex-start; gap: 8px; font-size: .8375rem; color: #555; }
-        .ch-btn-primary {
-          display: block; text-align: center; padding: 12px;
+        .ap-price-label {
+          font-size: .6875rem; font-weight: 700;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: ${a}; margin-bottom: 12px;
+        }
+        .ap-price-label-muted {
+          font-size: .6875rem; font-weight: 700;
+          letter-spacing: .08em; text-transform: uppercase;
+          color: #aeaeb2; margin-bottom: 12px;
+        }
+        .ap-price-amount {
+          font-size: 2rem; font-weight: 700;
+          color: #1d1d1f; letter-spacing: -.03em;
+          line-height: 1; margin-bottom: 4px;
+        }
+        .ap-price-per { font-size: .78rem; color: #aeaeb2; margin-bottom: 22px; }
+        .ap-price-list {
+          list-style: none; padding: 0; margin: 0 0 22px;
+          display: flex; flex-direction: column; gap: 9px; flex: 1;
+        }
+        .ap-price-item {
+          display: flex; align-items: flex-start; gap: 8px;
+          font-size: .84rem; color: #3a3a3c;
+        }
+        .ap-price-item-icon { flex-shrink: 0; margin-top: 1px; }
+
+        /* ─ CTA buttons ──────────────────────────────────────── */
+        .ap-btn-primary {
+          display: block; text-align: center; padding: 12px 16px;
           border-radius: 10px; background: ${a}; color: #fff;
           font-size: .875rem; font-weight: 600; text-decoration: none;
-          transition: opacity .15s; border: none; cursor: pointer; font-family: inherit;
+          border: none; cursor: pointer; font-family: inherit;
+          transition: opacity .15s;
         }
-        .ch-btn-primary:hover { opacity: .88; }
-        .ch-btn-secondary {
-          display: block; text-align: center; padding: 12px;
-          border-radius: 10px; border: 1.5px solid #e8e8e6;
-          background: #fff; color: #555;
-          font-size: .875rem; font-weight: 600; text-decoration: none;
-          transition: background .15s; cursor: pointer;
+        .ap-btn-primary:hover { opacity: .88; }
+        .ap-btn-secondary {
+          display: block; text-align: center; padding: 12px 16px;
+          border-radius: 10px; border: 1px solid #d2d2d7;
+          background: #fff; color: #1d1d1f;
+          font-size: .875rem; font-weight: 500; text-decoration: none;
+          transition: background .12s;
         }
-        .ch-btn-secondary:hover { background: #f8f8f6; }
+        .ap-btn-secondary:hover { background: #f5f5f7; }
 
-        /* Guarantee */
-        .ch-guarantee {
-          background: rgba(${aRgb},.04);
-          border-top: 1px solid rgba(${aRgb},.12);
-          border-bottom: 1px solid rgba(${aRgb},.12);
-          padding: 22px 20px; text-align: center;
+        /* ─ Guarantee ────────────────────────────────────────── */
+        .ap-guarantee {
+          text-align: center; padding: 22px 20px;
+          border-top: 1px solid #f0f0f0;
+          border-bottom: 1px solid #f0f0f0;
         }
-        .ch-guarantee-inner {
+        .ap-guarantee-inner {
           display: inline-flex; align-items: center; gap: 8px;
-          font-size: .9rem; color: #333;
+          font-size: .9rem; color: #6e6e70;
         }
-        .ch-guarantee-icon { color: ${a}; display: flex; align-items: center; }
+        .ap-guarantee-icon { color: ${a}; display: flex; }
+        .ap-guarantee-strong { color: #1d1d1f; font-weight: 600; }
 
-        /* Footer */
-        .ch-footer { padding: 32px 20px; text-align: center; border-top: 1px solid #ebebeb; }
-        .ch-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 24px; margin-bottom: 14px; }
-        .ch-footer-link { font-size: .8rem; text-decoration: none; color: #ccc; }
-        .ch-footer-link:hover { color: #888; }
-        .ch-footer-link-active { color: ${a} !important; font-weight: 600; }
-        .ch-footer-copy { font-size: .75rem; color: #ddd; }
-        .ch-footer-copy a { color: #ccc; text-decoration: none; }
-        .ch-footer-copy a:hover { color: #888; }
-
-        /* Caption below chat */
-        .ch-caption { text-align: center; font-size: .72rem; color: #ccc; margin-top: 10px; letter-spacing: .01em; }
-
-        /* Section heading */
-        .ch-section-title {
-          font-family: 'Instrument Serif', Georgia, serif;
-          font-size: 1.7rem; font-weight: 400; color: #111;
-          letter-spacing: -.02em; margin: 0 0 8px;
+        /* ─ Footer ───────────────────────────────────────────── */
+        .ap-footer { padding: 28px 20px; text-align: center; }
+        .ap-footer-links {
+          display: flex; flex-wrap: wrap; justify-content: center;
+          gap: 8px 20px; margin-bottom: 12px;
         }
-        .ch-section-sub { font-size: .875rem; color: #aaa; margin: 0; }
+        .ap-footer-link {
+          font-size: .78rem; text-decoration: none; color: #aeaeb2;
+          transition: color .12s;
+        }
+        .ap-footer-link:hover { color: #6e6e70; }
+        .ap-footer-link-active { color: ${a} !important; font-weight: 500; }
+        .ap-footer-copy { font-size: .72rem; color: #d2d2d7; line-height: 1.6; }
+        .ap-footer-copy a { color: #aeaeb2; text-decoration: none; }
+        .ap-footer-copy a:hover { color: #6e6e70; }
 
-        /* Responsive */
+        /* ─ Caption ──────────────────────────────────────────── */
+        .ap-caption {
+          text-align: center; font-size: .6875rem; color: #d2d2d7;
+          margin-top: 10px; letter-spacing: .01em;
+        }
+
+        /* ─ Responsive ───────────────────────────────────────── */
         @media(max-width: 640px) {
-          .ch-h1 { font-size: clamp(1.6rem, 6vw, 2rem); }
-          .ch-box { height: 490px; }
-          .ch-price-grid { grid-template-columns: 1fr; }
-          .ch-bubble-user { max-width: 85%; }
-          .ch-bubble-ai { max-width: 92%; }
-          .ch-trust-inner { gap: 0; }
+          .ap-h1 { font-size: 1.8rem; letter-spacing: -.025em; }
+          .ap-chat-box { height: 490px; }
+          .ap-price-grid { grid-template-columns: 1fr; }
+          .ap-bubble-user { max-width: 84%; }
+          .ap-bubble-ai { max-width: 92%; }
+          .ap-nav { padding: 0 16px; }
         }
       `}</style>
 
-      <div className="ch-root">
+      <div className="ap">
 
-        {/* ── NAV ── */}
-        <nav className="ch-nav">
-          <a href="/" className="ch-logo">
-            <span className="ch-logo-accent">{brand.name.slice(0, 3)}</span>
-            <span className="ch-logo-rest">{brand.name.slice(3)}</span>
+        {/* ── NAV ─────────────────────────────────────────────── */}
+        <nav className="ap-nav">
+          <a href="/" className="ap-logo">
+            <span className="ap-logo-accent">{brand.name.slice(0, 3)}</span>
+            {brand.name.slice(3)}
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-            <a href="/harga" className="ch-nav-link">Harga</a>
-            <a href={waLink} target="_blank" rel="noopener noreferrer" className="ch-nav-link">Konsultasi</a>
+            <a href="/harga" className="ap-nav-link">Harga</a>
+            <a
+              href={waLink} target="_blank" rel="noopener noreferrer"
+              className="ap-nav-link"
+            >
+              Konsultasi
+            </a>
             <div style={{ position: "relative" }}>
-              <button className="ch-nav-link" onClick={() => setMenuOpen(!menuOpen)}>
-                Situs Lain ▾
+              <button
+                className="ap-nav-link"
+                style={{ display: "flex", alignItems: "center", gap: "4px" }}
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                Situs Lain <ChevronIcon />
               </button>
               {menuOpen && (
-                <div className="ch-dropdown">
+                <div className="ap-dropdown">
                   {otherBrands.map((b) => (
                     <a
                       key={b.id}
                       href={`https://${b.id}.com`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ch-dropdown-link"
+                      target="_blank" rel="noopener noreferrer"
+                      className="ap-dropdown-item"
                       onClick={() => setMenuOpen(false)}
                     >
-                      <span style={{ color: b.accentLight, fontWeight: 600 }}>{b.name.slice(0, 4)}</span>
+                      <span style={{ color: b.accentLight, fontWeight: 600 }}>
+                        {b.name.slice(0, 4)}
+                      </span>
                       {b.name.slice(4)}
                     </a>
                   ))}
-                  <div className="ch-dropdown-sep" />
+                  <div className="ap-dropdown-sep" />
                   <a
-                    href="https://hakio.id"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ch-dropdown-link"
+                    href="https://hakio.id" target="_blank" rel="noopener noreferrer"
+                    className="ap-dropdown-item"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <span style={{ color: "#3b5fc0", fontWeight: 600 }}>Hakio</span>.id — Portal Utama
+                    <span style={{ color: "#0066cc", fontWeight: 600 }}>Hakio</span>.id
+                    — Portal Utama
                   </a>
                 </div>
               )}
@@ -497,82 +619,94 @@ export default function ChatPage({ brand }: { brand: Brand }) {
           </div>
         </nav>
 
-        {/* ── MAIN ── */}
-        <main style={{ paddingTop: "54px" }}>
+        {/* ── MAIN ────────────────────────────────────────────── */}
+        <main style={{ paddingTop: "48px" }}>
 
-          {/* ── HERO + CHAT ── */}
-          <section style={{ maxWidth: "760px", margin: "0 auto", padding: "44px 20px 0" }}>
-
-            {/* Headline */}
+          {/* ── HERO + CHAT ─────────────────────────────────── */}
+          <section style={{
+            maxWidth: "760px", margin: "0 auto",
+            padding: "52px 20px 0",
+          }}>
             <div style={{ textAlign: "center", marginBottom: "28px" }}>
-              <div className="ch-badge">
-                <span className="ch-badge-dot" />
-                Konsultasi Gratis · AI-Powered · Garansi Termurah
-              </div>
-              <h1 className="ch-h1">{landing.heroTitle}</h1>
-              <p className="ch-subtitle" style={{ maxWidth: "520px", margin: "0 auto" }}>
+              <p className="ap-eyebrow">{landing.eyebrow}</p>
+              <h1 className="ap-h1">{landing.heroTitle}</h1>
+              <p className="ap-subtitle" style={{ maxWidth: "540px", margin: "0 auto" }}>
                 {landing.heroSubtitle}
               </p>
             </div>
 
-            {/* ── CHAT BOX (always expanded) ── */}
-            <div className="ch-box">
+            {/* ── CHAT BOX ──────────────────────────────────── */}
+            <div className="ap-chat-box">
 
               {/* Header */}
-              <div className="ch-box-header">
-                <div className="ch-ai-avatar">AI</div>
-                <div>
-                  <div style={{ fontSize: ".875rem", fontWeight: 600, color: "#111" }}>
+              <div className="ap-chat-header">
+                <div className="ap-avatar">AI</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    fontSize: ".875rem", fontWeight: 600,
+                    color: "#1d1d1f", lineHeight: 1.3,
+                  }}>
                     Asisten Merek AI
                   </div>
-                  <div style={{ fontSize: ".7rem", color: "#22c55e", display: "flex", alignItems: "center", gap: "5px" }}>
-                    <span className="ch-online-dot" />
+                  <div className="ap-online">
+                    <span className="ap-online-dot" />
                     Online sekarang
                   </div>
                 </div>
-                <div style={{ marginLeft: "auto", fontSize: ".7rem", color: "#ccc", fontWeight: 400 }}>
-                  Ditenagai GPT-4o
+                <div style={{ fontSize: ".6875rem", color: "#aeaeb2" }}>
+                  GPT-4o
                 </div>
               </div>
 
               {/* Messages */}
-              <div ref={msgsRef} className="ch-msgs">
+              <div ref={msgsRef} className="ap-msgs">
                 {messages.map((msg, i) => (
-                  <div key={i} className={`ch-up ${msg.role === "user" ? "ch-msg-user" : "ch-msg-ai"}`}>
+                  <div
+                    key={i}
+                    className={`ap-up ${msg.role === "user" ? "ap-msg-user" : "ap-msg-ai"}`}
+                  >
                     {msg.role === "assistant" && (
-                      <div className="ch-ai-avatar" style={{ width: "27px", height: "27px", borderRadius: "7px", fontSize: ".58rem", flexShrink: 0 }}>
-                        AI
-                      </div>
+                      <div className={`ap-avatar ap-avatar-sm`}>AI</div>
                     )}
-                    <div className={msg.role === "user" ? "ch-bubble-user" : "ch-bubble-ai"}>
+                    <div className={
+                      msg.role === "user" ? "ap-bubble-user" : "ap-bubble-ai"
+                    }>
                       {msg.content}
 
                       {/* WA CTA on last AI message */}
-                      {msg.role === "assistant" && showWA && i === messages.length - 1 && !waClicked && (
-                        <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {msg.role === "assistant" && showWA &&
+                        i === messages.length - 1 && !waClicked && (
+                        <div style={{
+                          marginTop: "14px",
+                          display: "flex", flexDirection: "column", gap: "9px",
+                        }}>
                           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                             <button
-                              className="ch-action-chip"
-                              onClick={() => sendMessage("Bagaimana cara cek apakah nama merek saya sudah terdaftar?")}
+                              className="ap-action-chip"
+                              onClick={() =>
+                                sendMessage(
+                                  "Bagaimana cara cek apakah nama merek saya sudah terdaftar?"
+                                )
+                              }
                             >
                               Cara cek nama merek
                             </button>
                             <button
-                              className="ch-action-chip"
-                              onClick={() => sendMessage("Berapa total biaya yang harus saya bayar?")}
+                              className="ap-action-chip"
+                              onClick={() =>
+                                sendMessage("Berapa total biaya yang harus saya bayar?")
+                              }
                             >
                               Total biaya?
                             </button>
                           </div>
                           <a
                             href={waLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            target="_blank" rel="noopener noreferrer"
                             onClick={handleWaClick}
-                            className="ch-wa-inline"
+                            className="ap-wa-inline"
                           >
-                            <WaIcon />
-                            Lanjut ke WhatsApp
+                            <WaIcon /> Lanjut ke WhatsApp
                           </a>
                         </div>
                       )}
@@ -581,24 +715,37 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                 ))}
 
                 {loading && (
-                  <div className="ch-up ch-msg-ai">
-                    <div className="ch-ai-avatar" style={{ width: "27px", height: "27px", borderRadius: "7px", fontSize: ".58rem", flexShrink: 0 }}>
-                      AI
-                    </div>
-                    <div style={{ display: "flex", gap: "4px", alignItems: "center", paddingTop: "8px" }}>
-                      <span className="ch-dot" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ccc", display: "inline-block" }} />
-                      <span className="ch-dot" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ccc", display: "inline-block" }} />
-                      <span className="ch-dot" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ccc", display: "inline-block" }} />
+                  <div className="ap-up ap-msg-ai">
+                    <div className="ap-avatar ap-avatar-sm">AI</div>
+                    <div style={{
+                      display: "flex", gap: "4px",
+                      alignItems: "center", paddingTop: "7px",
+                    }}>
+                      {[0, 1, 2].map((n) => (
+                        <span
+                          key={n}
+                          className="ap-dot"
+                          style={{
+                            width: "6px", height: "6px", borderRadius: "50%",
+                            background: "#d2d2d7", display: "inline-block",
+                            animationDelay: `${n * 0.2}s`,
+                          }}
+                        />
+                      ))}
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Chips — only when no conversation yet */}
+              {/* Chips — only before first user message */}
               {!hasConversation && (
-                <div className="ch-chips">
+                <div className="ap-chips">
                   {brand.chips.map((chip) => (
-                    <button key={chip} className="ch-chip" onClick={() => sendMessage(chip)}>
+                    <button
+                      key={chip}
+                      className="ap-chip"
+                      onClick={() => sendMessage(chip)}
+                    >
                       {chip}
                     </button>
                   ))}
@@ -606,24 +753,23 @@ export default function ChatPage({ brand }: { brand: Brand }) {
               )}
 
               {/* Input area */}
-              <div className="ch-input-area">
+              <div className="ap-input-area">
                 {showWA && (
                   <a
                     href={waLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target="_blank" rel="noopener noreferrer"
                     onClick={handleWaClick}
-                    className={`ch-wa-sticky ${waClicked ? "ch-wa-dark" : "ch-wa-green"}`}
+                    className={`ap-wa ${waClicked ? "ap-wa-done" : "ap-wa-green"}`}
                   >
                     <WaIcon />
                     {waClicked
-                      ? "WhatsApp Terbuka ✓"
+                      ? "WhatsApp Terbuka"
                       : leadData?.user
                       ? `Lanjut ke WhatsApp, ${leadData.user}`
                       : "Lanjut ke WhatsApp"}
                   </a>
                 )}
-                <div className="ch-input-wrap">
+                <div className="ap-input-wrap">
                   <textarea
                     ref={inputRef}
                     value={input}
@@ -632,65 +778,74 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                     placeholder="Tanya seputar merek dagang..."
                     rows={1}
                     disabled={loading}
-                    className="ch-textarea"
+                    className="ap-textarea"
                     style={{ scrollbarWidth: "none" }}
                     onInput={(e) => {
                       const t = e.currentTarget;
                       t.style.height = "auto";
-                      t.style.height = Math.min(t.scrollHeight, 108) + "px";
+                      t.style.height =
+                        Math.min(t.scrollHeight, 108) + "px";
                     }}
                   />
                   <button
                     onClick={() => sendMessage(input)}
                     disabled={loading || !input.trim()}
-                    className={`ch-send ${loading || !input.trim() ? "ch-send-disabled" : "ch-send-active"}`}
+                    className={`ap-send ${
+                      !loading && input.trim() ? "ap-send-on" : "ap-send-off"
+                    }`}
                   >
-                    <SendIcon active={!loading && !!input.trim()} />
+                    <ArrowUpIcon active={!loading && !!input.trim()} />
                   </button>
                 </div>
               </div>
             </div>
 
-            <p className="ch-caption">Gratis · Instan · Ditenagai GPT-4o · Dilanjut via WhatsApp</p>
+            <p className="ap-caption">
+              Gratis · Instan · Ditenagai GPT-4o · Dilanjut via WhatsApp
+            </p>
           </section>
 
-          {/* ── TRUST BAR ── */}
-          <div className="ch-trust" style={{ marginTop: "48px" }}>
-            <div className="ch-trust-inner">
-              <div className="ch-trust-item">
-                <div className="ch-trust-num">5.000+</div>
-                <div className="ch-trust-label">merek terdaftar</div>
+          {/* ── TRUST BAR ───────────────────────────────────── */}
+          <div className="ap-trust" style={{ marginTop: "48px" }}>
+            <div className="ap-trust-inner">
+              <div className="ap-trust-item">
+                <div className="ap-trust-num">5.000+</div>
+                <div className="ap-trust-label">merek terdaftar</div>
               </div>
-              <div className="ch-trust-sep" />
-              <div className="ch-trust-item">
-                <div className="ch-trust-num">7 tahun</div>
-                <div className="ch-trust-label">pengalaman</div>
+              <div className="ap-trust-sep" />
+              <div className="ap-trust-item">
+                <div className="ap-trust-num">7 tahun</div>
+                <div className="ap-trust-label">pengalaman</div>
               </div>
-              <div className="ch-trust-sep" />
-              <div className="ch-trust-item">
-                <div className="ch-trust-num">Garansi</div>
-                <div className="ch-trust-label">harga termurah</div>
+              <div className="ap-trust-sep" />
+              <div className="ap-trust-item">
+                <div className="ap-trust-num">Garansi</div>
+                <div className="ap-trust-label">harga termurah</div>
               </div>
             </div>
           </div>
 
-          {/* ── PRICING ── */}
-          <section style={{ maxWidth: "720px", margin: "0 auto", padding: "64px 20px" }}>
-            <div style={{ textAlign: "center", marginBottom: "32px" }}>
-              <h2 className="ch-section-title">Harga Pendaftaran Merek</h2>
-              <p className="ch-section-sub">
-                Semua sudah termasuk biaya resmi DJKI + pendampingan hingga sertifikat terbit
+          {/* ── PRICING ─────────────────────────────────────── */}
+          <section style={{
+            maxWidth: "720px", margin: "0 auto",
+            padding: "72px 20px",
+          }}>
+            <div style={{ textAlign: "center", marginBottom: "36px" }}>
+              <h2 className="ap-sec-title">Harga Pendaftaran Merek</h2>
+              <p className="ap-sec-sub">
+                Semua sudah termasuk biaya resmi DJKI dan pendampingan hingga sertifikat terbit.
+                Tanpa biaya tersembunyi.
               </p>
             </div>
 
-            <div className="ch-price-grid">
+            <div className="ap-price-grid">
               {/* UMKM */}
-              <div className="ch-price-card ch-price-featured" style={{ position: "relative" }}>
-                <div className="ch-price-badge">Paling Laris</div>
-                <div className="ch-price-label" style={{ color: a }}>UMKM / Perorangan</div>
-                <div className="ch-price-amount">Rp 1.299.000</div>
-                <div className="ch-price-per">per kelas NICE</div>
-                <ul className="ch-price-list">
+              <div className="ap-price-card ap-price-featured">
+                <div className="ap-price-badge">Paling Laris</div>
+                <div className="ap-price-label">UMKM / Perorangan</div>
+                <div className="ap-price-amount">Rp&nbsp;1.299.000</div>
+                <div className="ap-price-per">per kelas NICE</div>
+                <ul className="ap-price-list">
                   {[
                     "Biaya PNBP DJKI termasuk",
                     "Pemeriksaan nama merek",
@@ -699,23 +854,28 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                     "Nomor permohonan resmi",
                     "Pendampingan hingga sertifikat",
                   ].map((item) => (
-                    <li key={item} className="ch-price-item">
-                      <CheckIcon color={a} />
+                    <li key={item} className="ap-price-item">
+                      <span className="ap-price-item-icon">
+                        <CheckIcon color={a} />
+                      </span>
                       {item}
                     </li>
                   ))}
                 </ul>
-                <a href={waLink} target="_blank" rel="noopener noreferrer" className="ch-btn-primary">
+                <a
+                  href={waLink} target="_blank" rel="noopener noreferrer"
+                  className="ap-btn-primary"
+                >
                   Daftar Sekarang
                 </a>
               </div>
 
               {/* PT */}
-              <div className="ch-price-card">
-                <div className="ch-price-label" style={{ color: "#bbb" }}>Perusahaan / PT / CV</div>
-                <div className="ch-price-amount">Rp 2.490.000</div>
-                <div className="ch-price-per">per kelas NICE</div>
-                <ul className="ch-price-list">
+              <div className="ap-price-card">
+                <div className="ap-price-label-muted">Perusahaan / PT / CV</div>
+                <div className="ap-price-amount">Rp&nbsp;2.490.000</div>
+                <div className="ap-price-per">per kelas NICE</div>
+                <ul className="ap-price-list">
                   {[
                     "Biaya PNBP DJKI termasuk",
                     "Pemeriksaan nama merek",
@@ -724,47 +884,61 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                     "Nomor permohonan resmi",
                     "Pendampingan hingga sertifikat",
                   ].map((item) => (
-                    <li key={item} className="ch-price-item">
-                      <CheckIcon color="#ccc" />
+                    <li key={item} className="ap-price-item">
+                      <span className="ap-price-item-icon">
+                        <CheckIcon color="#d2d2d7" />
+                      </span>
                       {item}
                     </li>
                   ))}
                 </ul>
-                <a href={waLink} target="_blank" rel="noopener noreferrer" className="ch-btn-secondary">
+                <a
+                  href={waLink} target="_blank" rel="noopener noreferrer"
+                  className="ap-btn-secondary"
+                >
                   Konsultasi Dulu
                 </a>
               </div>
             </div>
 
-            <div style={{ textAlign: "center", marginTop: "16px" }}>
-              <a href="/harga" style={{ fontSize: ".8125rem", color: a, textDecoration: "none", fontWeight: 500 }}>
-                Lihat rincian biaya lengkap →
+            <div style={{ textAlign: "center", marginTop: "18px" }}>
+              <a
+                href="/harga"
+                style={{
+                  fontSize: ".8125rem", color: a,
+                  textDecoration: "none", fontWeight: 500,
+                }}
+              >
+                Lihat rincian biaya dan metode pembayaran →
               </a>
             </div>
           </section>
 
-          {/* ── GUARANTEE ── */}
-          <div className="ch-guarantee">
-            <div className="ch-guarantee-inner">
-              <span className="ch-guarantee-icon"><ShieldIcon /></span>
-              <strong>Garansi harga termurah se-Indonesia</strong>
-              <span style={{ color: "#888", fontSize: ".875rem" }}>
-                — ada yang lebih murah? Kami ganti selisihnya.
+          {/* ── GUARANTEE ───────────────────────────────────── */}
+          <div className="ap-guarantee">
+            <div className="ap-guarantee-inner">
+              <span className="ap-guarantee-icon"><ShieldIcon /></span>
+              <span>
+                <span className="ap-guarantee-strong">
+                  Garansi harga termurah se-Indonesia
+                </span>
+                {" "}— ada yang lebih murah? Kami ganti selisihnya.
               </span>
             </div>
           </div>
 
-          {/* ── FOOTER ── */}
-          <footer className="ch-footer">
+          {/* ── FOOTER ──────────────────────────────────────── */}
+          <footer className="ap-footer">
             <div style={{ maxWidth: "720px", margin: "0 auto" }}>
-              <div className="ch-footer-links">
+              <div className="ap-footer-links">
                 {Object.values(BRANDS).map((b) => (
                   <a
                     key={b.id}
                     href={`https://${b.id}.com`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`ch-footer-link ${b.id === brand.id ? "ch-footer-link-active" : ""}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className={`ap-footer-link ${
+                      b.id === brand.id ? "ap-footer-link-active" : ""
+                    }`}
                     style={b.id === brand.id ? { color: a } : undefined}
                   >
                     {b.name}
@@ -772,18 +946,20 @@ export default function ChatPage({ brand }: { brand: Brand }) {
                 ))}
                 <a
                   href="https://hakio.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ch-footer-link"
+                  target="_blank" rel="noopener noreferrer"
+                  className="ap-footer-link"
                 >
                   Hakio.id
                 </a>
               </div>
-              <p className="ch-footer-copy">
-                © {new Date().getFullYear()} {brand.name} · Layanan pendaftaran merek dagang di Indonesia ·{" "}
+              <p className="ap-footer-copy">
+                &copy; {new Date().getFullYear()} {brand.name}
+                {" · "}
                 <a href="/harga">Harga</a>
                 {" · "}
-                <a href={waLink} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href={waLink} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
               </p>
             </div>
           </footer>
