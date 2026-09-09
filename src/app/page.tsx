@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import { getBrandById } from "@/lib/brands";
 import ChatPage from "@/components/ChatPage";
+import CekHakiHeroPage from "@/components/CekHakiHeroPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   const hdrs = await headers();
@@ -30,5 +31,10 @@ export default async function Page() {
   const brandId = hdrs.get("x-brand-id") ?? "hakimerek";
   const brand = getBrandById(brandId);
 
+  // CekHaki gets the premium redesign (navy + gold + cream, robot mascot).
+  // Other brands stay on the shared ChatPage until their turn.
+  if (brand.id === "cekhaki") {
+    return <CekHakiHeroPage brand={brand} />;
+  }
   return <ChatPage brand={brand} />;
 }
