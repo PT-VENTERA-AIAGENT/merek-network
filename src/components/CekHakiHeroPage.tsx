@@ -36,6 +36,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
   const [showWA, setShowWA] = useState(false);
   const [waClicked, setWaClicked] = useState(false);
   const [activePill, setActivePill] = useState<string>(QUICK_PILLS[0].label);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [leadData, setLeadData] = useState<{
     nama?: string; kelas?: string; entitas?: string; user?: string;
   } | null>(null);
@@ -188,7 +189,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         .hk-app{
           width:min(1460px,calc(100vw - 92px));
           min-height:900px;margin:0 auto;
-          display:grid;grid-template-columns:86px 1fr;
+          display:block;
           background:rgba(255,255,255,.76);
           border:8px solid rgba(255,255,255,.95);
           border-radius:40px;
@@ -197,30 +198,61 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           backdrop-filter:blur(20px);
           -webkit-backdrop-filter:blur(20px);
         }
-        /* ============ Sidebar ============ */
-        .hk-sidebar{
+        /* ============ Navbar (menggantikan sidebar) ============ */
+        .hk-navbar{
           background:linear-gradient(180deg,#172f66 0%,#0d2457 100%);
-          border-radius:28px 0 0 28px;
-          display:flex;flex-direction:column;align-items:center;
-          padding:22px 12px 18px;gap:15px;position:relative;
-          box-shadow:inset -1px 0 0 rgba(255,255,255,.08);
+          border-radius:28px 28px 0 0;
+          display:flex;align-items:center;justify-content:space-between;
+          padding:14px 22px;gap:16px;
+          box-shadow:inset 0 -1px 0 rgba(255,255,255,.08);
         }
-        .hk-brand-mark{
-          width:48px;height:48px;border-radius:14px;
+        .hk-nav-brand{
+          display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;
+        }
+        .hk-nav-brand-mark{
+          width:44px;height:44px;border-radius:12px;
           display:grid;place-items:center;background:#0d1d48;
           box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), 0 8px 20px rgba(0,0,0,.18);
-          margin-bottom:10px;text-decoration:none;
         }
-        .hk-side-btn{
-          width:44px;height:44px;border-radius:50%;
-          display:grid;place-items:center;color:#dbe5ff;
-          background:transparent;border:1px solid transparent;
-          cursor:pointer;transition:.2s ease;text-decoration:none;
+        .hk-nav-brand-text{
+          display:flex;flex-direction:column;line-height:1.05;
         }
-        .hk-side-btn:hover{background:rgba(255,255,255,.09);transform:translateY(-1px)}
-        .hk-side-btn.active{background:#fff;color:var(--navy);box-shadow:0 7px 16px rgba(5,19,55,.22)}
-        .hk-side-spacer{flex:1}
-        .hk-side-rule{width:42px;height:1px;background:rgba(255,255,255,.15);margin:6px 0}
+        .hk-nav-brand-name{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;color:#fff}
+        .hk-nav-brand-sub{font-size:.7rem;color:#8fa4d1;font-weight:500;margin-top:2px}
+        .hk-nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;flex-wrap:wrap}
+        .hk-nav-link{
+          font-size:.9rem;font-weight:600;color:#dbe5ff;text-decoration:none;
+          padding:9px 16px;border-radius:10px;position:relative;
+          transition:background .15s,color .15s;
+        }
+        .hk-nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+        .hk-nav-link.active{background:#fff;color:var(--navy);box-shadow:0 4px 12px rgba(5,19,55,.22)}
+        .hk-nav-right{display:flex;align-items:center;gap:10px}
+        .hk-nav-bell{
+          width:42px;height:42px;border-radius:12px;
+          display:grid;place-items:center;background:rgba(255,255,255,.08);
+          border:1px solid rgba(255,255,255,.1);position:relative;cursor:pointer;color:#fff;
+          transition:background .15s;
+        }
+        .hk-nav-bell:hover{background:rgba(255,255,255,.14)}
+        .hk-nav-bell::after{
+          content:"";position:absolute;width:8px;height:8px;border-radius:50%;
+          background:var(--gold);right:9px;top:8px;border:2px solid #172f66;
+        }
+        .hk-nav-cta{
+          display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 22px;
+          border-radius:12px;background:linear-gradient(180deg,var(--gold-2),var(--gold));
+          color:#0d2457;font-weight:800;font-size:.9rem;text-decoration:none;
+          box-shadow:0 8px 18px rgba(214,166,74,.35);
+          transition:transform .1s,filter .15s;
+        }
+        .hk-nav-cta:hover{filter:brightness(1.05)}
+        .hk-nav-cta:active{transform:translateY(1px)}
+        .hk-nav-menu-btn{
+          display:none;width:42px;height:42px;border-radius:12px;
+          background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+          color:#fff;cursor:pointer;align-items:center;justify-content:center;
+        }
         .hk-ico{width:19px;height:19px;display:block}
 
         /* ============ Workspace ============ */
@@ -230,7 +262,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
             radial-gradient(circle at 75% 39%, rgba(195,216,255,.48), transparent 32%),
             radial-gradient(circle at 24% 72%, rgba(255,229,176,.23), transparent 28%),
             linear-gradient(180deg,rgba(255,255,255,.98),rgba(249,251,255,.98));
-          border-radius:0 28px 28px 0;
+          border-radius:0 0 28px 28px;
         }
         .hk-workspace::before{
           content:"";position:absolute;inset:0;
@@ -239,38 +271,19 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
             radial-gradient(circle at 100% 0, rgba(255,222,167,.23), transparent 33%);
           pointer-events:none;
         }
-        /* ============ Topbar ============ */
-        .hk-topbar{
-          height:96px;display:grid;grid-template-columns:1fr auto 1fr;
-          align-items:center;padding:0 28px 0 30px;position:relative;z-index:3;
+        /* Model-select sub-header (di dalam workspace, di bawah navbar) */
+        .hk-subhead-bar{
+          display:flex;align-items:center;justify-content:space-between;
+          padding:20px 30px 0;position:relative;z-index:3;
         }
         .hk-model-select{
-          justify-self:start;height:54px;padding:0 18px 0 14px;
-          display:flex;align-items:center;gap:10px;
-          border-radius:16px;background:rgba(255,255,255,.88);
+          height:48px;padding:0 16px 0 12px;
+          display:inline-flex;align-items:center;gap:10px;
+          border-radius:14px;background:rgba(255,255,255,.88);
           border:1px solid #e5e9f2;box-shadow:0 8px 18px rgba(30,48,93,.07);
-          font-weight:700;color:#22345d;font-size:15px;
+          font-weight:700;color:#22345d;font-size:14px;
         }
-        .hk-mini-logo{width:27px;height:27px;border-radius:8px;background:#112859;display:grid;place-items:center}
-        .hk-brand-title{font-size:24px;font-weight:800;letter-spacing:-.02em;color:#0f2455}
-        .hk-top-actions{justify-self:end;display:flex;align-items:center;gap:14px}
-        .hk-notification{
-          width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
-          background:rgba(255,255,255,.65);border:1px solid rgba(222,228,240,.8);
-          position:relative;cursor:pointer;
-        }
-        .hk-notification::after{
-          content:"";position:absolute;width:8px;height:8px;border-radius:50%;
-          background:var(--gold);right:8px;top:7px;border:2px solid #fff;
-        }
-        .hk-consult-btn{
-          border:0;color:#fff;background:linear-gradient(180deg,#17366f,#10285d);
-          min-width:165px;height:52px;padding:0 24px;border-radius:14px;
-          font-size:16px;font-weight:700;display:flex;gap:10px;align-items:center;
-          justify-content:center;box-shadow:0 12px 24px rgba(16,40,93,.20);
-          cursor:pointer;text-decoration:none;
-        }
-        .hk-consult-btn:hover{filter:brightness(1.05)}
+        .hk-mini-logo{width:26px;height:26px;border-radius:8px;background:#112859;display:grid;place-items:center}
 
         /* ============ Hero ============ */
         .hk-hero{
@@ -463,22 +476,35 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         /* ============ Responsive ============ */
         @media (max-width:1100px){
           .hk-page{padding:20px}
-          .hk-app{width:100%;grid-template-columns:72px 1fr;min-height:830px}
+          .hk-app{width:100%;min-height:830px}
+          .hk-nav-link{padding:8px 12px;font-size:.85rem}
           .hk-hero{padding:30px 26px 40px}
           .hk-headline{font-size:56px}
           .hk-quick-actions{grid-template-columns:repeat(2,1fr)}
           .hk-scribble,.hk-micro{display:none}
         }
+        @media (max-width:900px){
+          .hk-nav-links{display:none}
+          .hk-nav-menu-btn{display:flex}
+          .hk-nav-brand-sub{display:none}
+          .hk-mobile-menu{
+            display:none;position:absolute;top:76px;left:22px;right:22px;
+            background:#122b62;border-radius:16px;padding:12px;
+            flex-direction:column;gap:2px;z-index:20;
+            box-shadow:0 20px 40px rgba(0,0,0,.3);
+          }
+          .hk-mobile-menu.open{display:flex}
+          .hk-mobile-menu .hk-nav-link{width:100%;text-align:left}
+        }
         @media (max-width:760px){
           .hk-page{padding:0}
-          .hk-app{width:100%;min-height:100vh;border:0;border-radius:0;grid-template-columns:1fr}
-          .hk-sidebar{display:none}
+          .hk-app{width:100%;min-height:100vh;border:0;border-radius:0}
+          .hk-navbar{border-radius:0;padding:12px 16px}
           .hk-workspace{border-radius:0}
-          .hk-topbar{height:76px;padding:0 16px;grid-template-columns:1fr auto}
-          .hk-brand-title{display:none}
-          .hk-top-actions{grid-column:2}
-          .hk-notification{display:none}
-          .hk-consult-btn{min-width:auto;padding:0 16px}
+          .hk-nav-cta{padding:0 14px;height:40px;font-size:.85rem}
+          .hk-nav-cta span:last-child{display:none}
+          .hk-nav-bell{display:none}
+          .hk-subhead-bar{padding:14px 16px 0}
           .hk-hero{padding:28px 14px 36px;min-height:auto}
           .hk-headline{font-size:42px}
           .hk-subhead{font-size:17px}
@@ -500,47 +526,57 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
       <div className="hk-page">
         <main className="hk-app">
-          {/* ============ SIDEBAR ============ */}
-          <aside className="hk-sidebar" aria-label="Navigasi utama">
-            <a href="/" className="hk-brand-mark" aria-label="Hakio beranda">
-              <svg viewBox="0 0 32 32" fill="none" width="30" height="30"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+          {/* ============ NAVBAR (menggantikan sidebar untuk SEO + branding Hakio) ============ */}
+          <nav className="hk-navbar" role="navigation" aria-label="Navigasi utama Hakio">
+            <a href="/" className="hk-nav-brand" aria-label="Hakio beranda">
+              <div className="hk-nav-brand-mark">
+                <svg viewBox="0 0 32 32" fill="none" width="28" height="28"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+              </div>
+              <div className="hk-nav-brand-text">
+                <span className="hk-nav-brand-name">Hakio AI</span>
+                <span className="hk-nav-brand-sub">Chat AI Merek Dagang</span>
+              </div>
             </a>
 
-            <a href="/" className="hk-side-btn active" title="Beranda" aria-label="Beranda">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5v9A1.5 1.5 0 0 1 19.5 21h-15A1.5 1.5 0 0 1 3 19.5v-9Z" stroke="currentColor" strokeWidth="1.8"/><path d="M9 21v-6h6v6" stroke="currentColor" strokeWidth="1.8"/></svg>
-            </a>
-            <a href="https://hakio.id/cek-merek" className="hk-side-btn" title="Cek Merek" aria-label="Cek Merek">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8"/><path d="m16 16 5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </a>
-            <a href="https://hakio.id/kelas-nice" className="hk-side-btn" title="Kelas NICE" aria-label="Kelas NICE">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </a>
-            <a href="https://hakio.id/oposisi-merek" className="hk-side-btn" title="Keamanan Merek" aria-label="Keamanan Merek">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3Z" stroke="currentColor" strokeWidth="1.8"/><path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </a>
-            <a href="https://hakio.id/konsultasi-merek" className="hk-side-btn" title="Konsultasi" aria-label="Konsultasi">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4.5 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="1.8"/><path d="M7 9h10M7 13h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </a>
-            <a href="https://hakio.id/biaya-merek" className="hk-side-btn" title="Biaya" aria-label="Biaya">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M5 20V12M10 20V8M15 20V5M20 20V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </a>
-            <a href="https://hakio.id/tim" className="hk-side-btn" title="Tim" aria-label="Tim">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="1.8"/><circle cx="17" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.8"/><path d="M3 20c0-4 2.6-6.5 6-6.5S15 16 15 20M14 15c3.6 0 6 2 7 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </a>
+            <div className="hk-nav-links">
+              <a className="hk-nav-link active" href="/">Beranda</a>
+              <a className="hk-nav-link" href="https://hakio.id/cek-merek">Cek Merek</a>
+              <a className="hk-nav-link" href="https://hakio.id/daftar-merek">Daftar Merek</a>
+              <a className="hk-nav-link" href="https://hakio.id/kelas-nice">Kelas NICE</a>
+              <a className="hk-nav-link" href="https://hakio.id/biaya-merek">Biaya</a>
+              <a className="hk-nav-link" href="https://hakio.id/perpanjang-merek">Perpanjang</a>
+              <a className="hk-nav-link" href="https://hakio.id/blog">Blog</a>
+              <a className="hk-nav-link" href="https://hakio.id/contact">Kontak</a>
+            </div>
 
-            <div className="hk-side-spacer"></div>
-            <div className="hk-side-rule"></div>
-            <a href="https://hakio.id/about" className="hk-side-btn" title="Tentang" aria-label="Tentang">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8"/><path d="M19 13.5v-3l2-1.5-2-3.4-2.4 1a8 8 0 0 0-2.6-1.5L13.5 2h-3L10 5.1a8 8 0 0 0-2.6 1.5L5 5.6 3 9l2 1.5v3L3 15l2 3.4 2.4-1A8 8 0 0 0 10 18.9l.5 3.1h3l.5-3.1a8 8 0 0 0 2.6-1.5l2.4 1 2-3.4-2-1.5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>
-            </a>
-            <a href="https://hakio.id/faq" className="hk-side-btn" title="Bantuan" aria-label="Bantuan / FAQ">
-              <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/><path d="M9.7 9.3a2.5 2.5 0 1 1 4.7 1.2c-.8 1.2-2.4 1.4-2.4 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
-            </a>
-          </aside>
+            <div className="hk-nav-right">
+              <button className="hk-nav-bell" aria-label="Notifikasi" type="button">
+                <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9Z" stroke="currentColor" strokeWidth="1.8"/><path d="M10 19h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              </button>
+              <a className="hk-nav-cta" href={waLink} target="_blank" rel="noopener noreferrer">
+                <span>♛</span>
+                <span>Konsultasi</span>
+              </a>
+              <button className="hk-nav-menu-btn" aria-label="Menu" type="button" onClick={() => setMobileMenuOpen((v) => !v)}>
+                <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><line x1="4" y1="7" x2="20" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="4" y1="17" x2="20" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </button>
+            </div>
+
+            <div className={`hk-mobile-menu${mobileMenuOpen ? " open" : ""}`}>
+              <a className="hk-nav-link active" href="/">Beranda</a>
+              <a className="hk-nav-link" href="https://hakio.id/cek-merek">Cek Merek</a>
+              <a className="hk-nav-link" href="https://hakio.id/daftar-merek">Daftar Merek</a>
+              <a className="hk-nav-link" href="https://hakio.id/kelas-nice">Kelas NICE</a>
+              <a className="hk-nav-link" href="https://hakio.id/biaya-merek">Biaya</a>
+              <a className="hk-nav-link" href="https://hakio.id/perpanjang-merek">Perpanjang</a>
+              <a className="hk-nav-link" href="https://hakio.id/blog">Blog</a>
+              <a className="hk-nav-link" href="https://hakio.id/contact">Kontak</a>
+            </div>
+          </nav>
 
           {/* ============ WORKSPACE ============ */}
           <section className="hk-workspace">
-            <header className="hk-topbar">
+            <div className="hk-subhead-bar">
               <div className="hk-model-select">
                 <div className="hk-mini-logo">
                   <svg viewBox="0 0 32 32" fill="none" width="18" height="18"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
@@ -548,17 +584,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                 <span>Hakio AI Pro</span>
                 <span style={{ fontSize: 12 }}>⌄</span>
               </div>
-              <div className="hk-brand-title">Hakio AI</div>
-              <div className="hk-top-actions">
-                <div className="hk-notification" aria-label="Notifikasi">
-                  <svg className="hk-ico" viewBox="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9Z" stroke="#22365f" strokeWidth="1.8"/><path d="M10 19h4" stroke="#22365f" strokeWidth="1.8" strokeLinecap="round"/></svg>
-                </div>
-                <a className="hk-consult-btn" href={waLink} target="_blank" rel="noopener noreferrer">
-                  <span>♛</span>
-                  <span>Konsultasi</span>
-                </a>
-              </div>
-            </header>
+            </div>
 
             <div className="hk-hero">
               <div className="hk-ghost-h" aria-hidden="true">H</div>
