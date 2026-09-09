@@ -253,6 +253,10 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
           color:#fff;cursor:pointer;align-items:center;justify-content:center;
         }
+        /* Mobile drawer hidden by default at all breakpoints — only revealed
+           when the hamburger toggles .open at <900px. Without this, the drawer
+           renders as a visible vertical list on desktop right next to the nav. */
+        .hk-mobile-menu{display:none}
         .hk-ico{width:19px;height:19px;display:block}
 
         /* ============ Workspace ============ */
