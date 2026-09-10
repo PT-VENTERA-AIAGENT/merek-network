@@ -211,9 +211,10 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         }
         .hk-nav-brand-mark{
           width:44px;height:44px;border-radius:12px;
-          display:grid;place-items:center;background:#0d1d48;
-          box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), 0 8px 20px rgba(0,0,0,.18);
+          display:grid;place-items:center;overflow:hidden;
+          box-shadow:0 8px 20px rgba(0,0,0,.18);
         }
+        .hk-nav-brand-mark img{width:100%;height:100%;object-fit:cover;display:block}
         .hk-nav-brand-text{
           display:flex;flex-direction:column;line-height:1.05;
         }
@@ -287,7 +288,8 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           border:1px solid #e5e9f2;box-shadow:0 8px 18px rgba(30,48,93,.07);
           font-weight:700;color:#22345d;font-size:14px;
         }
-        .hk-mini-logo{width:26px;height:26px;border-radius:8px;background:#112859;display:grid;place-items:center}
+        .hk-mini-logo{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;overflow:hidden}
+        .hk-mini-logo img{width:100%;height:100%;object-fit:cover;display:block}
 
         /* ============ Hero ============ */
         .hk-hero{
@@ -319,7 +321,8 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         .hk-bubble-left{left:13%;top:42%;animation-delay:.3s}
         .hk-bubble-right{right:9%;top:54%;animation-delay:1.2s}
         @keyframes hkFloatBubble{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-        .hk-bmark{width:26px;height:26px;border-radius:8px;background:#132b63;display:grid;place-items:center}
+        .hk-bmark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;overflow:hidden}
+        .hk-bmark img{width:100%;height:100%;object-fit:cover;display:block}
         .hk-scribble{
           position:absolute;left:-20px;bottom:8px;transform:rotate(-3deg);
           color:#7f889b;font-family:"Segoe Script","Bradley Hand",cursive;
@@ -534,7 +537,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           <nav className="hk-navbar" role="navigation" aria-label="Navigasi utama Hakio">
             <a href="/" className="hk-nav-brand" aria-label="Hakio beranda">
               <div className="hk-nav-brand-mark">
-                <svg viewBox="0 0 32 32" fill="none" width="28" height="28"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+                <img src="/hakio-mark.png" alt="" width="44" height="44" />
               </div>
               <div className="hk-nav-brand-text">
                 <span className="hk-nav-brand-name">Hakio AI</span>
@@ -583,7 +586,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
             <div className="hk-subhead-bar">
               <div className="hk-model-select">
                 <div className="hk-mini-logo">
-                  <svg viewBox="0 0 32 32" fill="none" width="18" height="18"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+                  <img src="/hakio-mark.png" alt="" width="26" height="26" />
                 </div>
                 <span>Hakio AI Pro</span>
                 <span style={{ fontSize: 12 }}>⌄</span>
@@ -609,7 +612,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
                     <div className="hk-chat-bubble hk-bubble-left">
                       <span className="hk-bmark">
-                        <svg viewBox="0 0 32 32" width="17" height="17" fill="none"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+                        <img src="/hakio-mark.png" alt="" width="26" height="26" />
                       </span>
                       Halo! Mau cek merek?
                     </div>
@@ -638,7 +641,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                                 </div>
                               </div>
                               <div class="body">
-                                <div class="chest"><svg viewBox="0 0 32 32" width="26" height="26" fill="none"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg></div>
+                                <div class="chest"><img src="/hakio-mark.png" alt="" width="30" height="30" style="border-radius:6px" /></div>
                               </div>
                               <div class="arm l"><div class="hand"></div></div>
                               <div class="arm r"><div class="hand"></div></div>
@@ -651,7 +654,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
                     <div className="hk-chat-bubble hk-bubble-right">
                       <span className="hk-bmark">
-                        <svg viewBox="0 0 32 32" width="17" height="17" fill="none"><path d="M7 7h6v7l6-7h6v18h-6v-7l-6 7H7V7Z" fill="#E4B658"/></svg>
+                        <img src="/hakio-mark.png" alt="" width="26" height="26" />
                       </span>
                       Nama brand Anda apa?
                     </div>
