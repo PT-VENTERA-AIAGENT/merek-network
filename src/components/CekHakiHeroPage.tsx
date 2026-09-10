@@ -10,11 +10,11 @@ interface Message {
 }
 
 const INITIAL_MESSAGE =
-  "Halo! 👋 Saya Hakio AI. Ketik nama brand yang ingin dicek — **100% gratis** dan instan!\n\nSaya bantu cek ketersediaan di database PDKI/DJKI, rekomendasi kelas NICE, dan estimasi biaya.\n\nSetelah itu tim Hakio siap lanjut via WhatsApp untuk proses pendaftaran resminya.";
+  "Halo! 👋 Saya Hakio AI. Ketik nama brand yang ingin dicek — **100% gratis** dan instan!\n\nSaya bantu cek ketersediaan di database PDKI/DJKI, rekomendasi kelas produk/jasa (klasifikasi NICE), dan estimasi biaya.\n\nSetelah itu tim Hakio siap lanjut via WhatsApp untuk proses pendaftaran resminya.";
 
 const QUICK_PILLS = [
   { label: "Cek Nama Merek", template: "Saya mau cek nama merek: ", icon: "search", primary: true },
-  { label: "Kelas NICE", template: "Tolong rekomendasikan kelas NICE untuk bisnis saya ", icon: "grid", primary: false },
+  { label: "Rekomendasi Kelas", template: "Tolong rekomendasikan kelas produk/jasa yang tepat untuk bisnis saya, yaitu: ", icon: "grid", primary: false },
   { label: "Analisa Kemiripan", template: "Tolong analisa kemiripan merek ", icon: "file", primary: false },
   { label: "Biaya Pendaftaran", template: "Berapa biaya pendaftaran merek untuk ", icon: "coin", primary: false },
 ] as const;
@@ -47,7 +47,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
   const hasConversation = messages.length > 0;
 
   const waText = leadData?.nama
-    ? `Halo Hakio!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah cek merek via Hakio AI dan ingin lanjut pendaftaran:\n- Nama Merek: ${leadData.nama}\n- Kelas NICE: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
+    ? `Halo Hakio!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah cek merek via Hakio AI dan ingin lanjut pendaftaran:\n- Nama Merek: ${leadData.nama}\n- Kelas Produk/Jasa: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
     : `Halo Hakio! Saya ingin konsultasi merek dagang via Hakio AI. Mohon dibantu.`;
   const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(waText)}`;
 
@@ -185,9 +185,9 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
             radial-gradient(circle at 60% 42%, rgba(191,214,255,.42), transparent 31%),
             linear-gradient(180deg,#fbfbfe 0%,#f4f6fb 100%);
         }
-        .hk-page{min-height:100vh;padding:56px 46px}
+        .hk-page{min-height:100vh;padding:28px 22px}
         .hk-app{
-          width:min(1460px,calc(100vw - 92px));
+          width:min(1520px,calc(100vw - 44px));
           min-height:900px;margin:0 auto;
           display:block;
           background:rgba(255,255,255,.76);
@@ -405,7 +405,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         .hk-input{
           flex:1;border:0;outline:0;background:transparent;
           font:inherit;font-size:18px;color:#27395f;line-height:1.55;
-          min-height:64px;max-height:200px;resize:none;padding:4px 0;
+          min-height:96px;max-height:280px;resize:none;padding:4px 0;
         }
         .hk-input::placeholder{color:#9aa5bc}
         .hk-send{
@@ -521,6 +521,10 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         .hk-price-note{
           margin-top:8px;font-size:12px;color:#8794AE;font-weight:500;
         }
+        .hk-price-djki{color:#16a34a;font-weight:700}
+        .hk-trust-icon-rp{
+          font-weight:800;color:#0f2455;font-size:18px;letter-spacing:-.02em;
+        }
 
         /* ============ Footer (SEO deep links) ============ */
         .hk-seo-footer{
@@ -533,7 +537,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
         /* ============ Responsive ============ */
         @media (max-width:1100px){
-          .hk-page{padding:20px}
+          .hk-page{padding:12px}
           .hk-app{width:100%;min-height:830px}
           .hk-nav-link{padding:8px 12px;font-size:.85rem}
           .hk-hero{padding:30px 26px 40px}
@@ -602,13 +606,13 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
             <div className="hk-nav-links">
               <a className="hk-nav-link active" href="/">Beranda</a>
-              <a className="hk-nav-link" href="https://hakio.id/cek-merek">Cek Merek</a>
-              <a className="hk-nav-link" href="https://hakio.id/daftar-merek">Daftar Merek</a>
-              <a className="hk-nav-link" href="https://hakio.id/kelas-nice">Kelas NICE</a>
-              <a className="hk-nav-link" href="https://hakio.id/biaya-merek">Biaya</a>
-              <a className="hk-nav-link" href="https://hakio.id/perpanjang-merek">Perpanjang</a>
-              <a className="hk-nav-link" href="https://hakio.id/blog">Blog</a>
-              <a className="hk-nav-link" href="https://hakio.id/contact">Kontak</a>
+              <a className="hk-nav-link" href="/cek-merek">Cek Merek</a>
+              <a className="hk-nav-link" href="/daftar-merek">Daftar Merek</a>
+              <a className="hk-nav-link" href="/kelas-produk-jasa">Kelas Produk/Jasa</a>
+              <a className="hk-nav-link" href="/biaya">Biaya</a>
+              <a className="hk-nav-link" href="/perpanjang">Perpanjang</a>
+              <a className="hk-nav-link" href="/blog">Blog</a>
+              <a className="hk-nav-link" href="/kontak">Kontak</a>
             </div>
 
             <div className="hk-nav-right">
@@ -626,13 +630,13 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
             <div className={`hk-mobile-menu${mobileMenuOpen ? " open" : ""}`}>
               <a className="hk-nav-link active" href="/">Beranda</a>
-              <a className="hk-nav-link" href="https://hakio.id/cek-merek">Cek Merek</a>
-              <a className="hk-nav-link" href="https://hakio.id/daftar-merek">Daftar Merek</a>
-              <a className="hk-nav-link" href="https://hakio.id/kelas-nice">Kelas NICE</a>
-              <a className="hk-nav-link" href="https://hakio.id/biaya-merek">Biaya</a>
-              <a className="hk-nav-link" href="https://hakio.id/perpanjang-merek">Perpanjang</a>
-              <a className="hk-nav-link" href="https://hakio.id/blog">Blog</a>
-              <a className="hk-nav-link" href="https://hakio.id/contact">Kontak</a>
+              <a className="hk-nav-link" href="/cek-merek">Cek Merek</a>
+              <a className="hk-nav-link" href="/daftar-merek">Daftar Merek</a>
+              <a className="hk-nav-link" href="/kelas-produk-jasa">Kelas Produk/Jasa</a>
+              <a className="hk-nav-link" href="/biaya">Biaya</a>
+              <a className="hk-nav-link" href="/perpanjang">Perpanjang</a>
+              <a className="hk-nav-link" href="/blog">Blog</a>
+              <a className="hk-nav-link" href="/kontak">Kontak</a>
             </div>
           </nav>
 
@@ -658,7 +662,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                     Halo! Siap Amankan<br /><span className="gold">Merek Anda?</span>
                   </h1>
                   <p className="hk-subhead">
-                    Cek nama merek, analisa kemiripan, rekomendasi kelas NICE,<br />
+                    Cek nama merek, analisa kemiripan, rekomendasi kelas produk/jasa,<br />
                     lalu lanjut via WhatsApp.
                   </p>
 
@@ -673,11 +677,10 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                     </div>
 
                     <div className="hk-mascot-wrap" aria-label="Maskot Hakio AI">
-                      {/* TODO: replace /mascot.png with final 3D robot mascot (1024x1024 transparent bg).
-                          Kalau file belum ada, fallback ke SVG mascot muncul otomatis. */}
+                      {/* Mascot: webp (smaller); fallback SVG DIY-robot muncul otomatis via onError */}
                       <img
                         className="hk-mascot-img"
-                        src="/mascot.png"
+                        src="/mascot.webp"
                         alt="Maskot robot Hakio AI"
                         onError={(e) => {
                           const img = e.currentTarget as HTMLImageElement;
@@ -821,10 +824,8 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                 </div>
 
                 <div className="hk-trust-card hk-trust-price">
-                  <div className="hk-trust-icon" aria-hidden="true">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2v20M17 6H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6" stroke="#0F1E3C" strokeWidth="1.8" strokeLinecap="round"/>
-                    </svg>
+                  <div className="hk-trust-icon hk-trust-icon-rp" aria-hidden="true">
+                    <span>Rp</span>
                   </div>
                   <div className="hk-trust-body">
                     <div className="hk-trust-title">Harga Pendaftaran Merek</div>
@@ -838,7 +839,9 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                         <span className="hk-price-value">Rp 2.490.000<span className="hk-price-unit">/kelas</span></span>
                       </div>
                     </div>
-                    <div className="hk-price-note">Sudah termasuk biaya DJKI + jasa pengurusan.</div>
+                    <div className="hk-price-note">
+                      Sudah termasuk <span className="hk-price-djki">biaya DJKI / PNBP resmi</span> + jasa pengurusan.
+                    </div>
                   </div>
                 </div>
               </section>
@@ -848,22 +851,22 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
 
         {/* SEO deep-link footer — text links crawler bisa baca (sidebar icon-only) */}
         <nav className="hk-seo-footer" aria-label="Peta situs Hakio">
-          <a href="https://hakio.id/">Hakio.id</a><span className="sep">·</span>
-          <a href="https://hakio.id/cek-merek">Cek Merek</a><span className="sep">·</span>
-          <a href="https://hakio.id/daftar-merek">Daftar Merek</a><span className="sep">·</span>
-          <a href="https://hakio.id/biaya-merek">Biaya</a><span className="sep">·</span>
-          <a href="https://hakio.id/kelas-nice">Kelas NICE</a><span className="sep">·</span>
-          <a href="https://hakio.id/perpanjang-merek">Perpanjang</a><span className="sep">·</span>
-          <a href="https://hakio.id/oposisi-merek">Oposisi</a><span className="sep">·</span>
-          <a href="https://hakio.id/sertifikat-merek">Sertifikat</a><span className="sep">·</span>
-          <a href="https://hakio.id/konsultasi-merek">Konsultasi</a><span className="sep">·</span>
-          <a href="https://hakio.id/merek-umkm">Merek UMKM</a><span className="sep">·</span>
-          <a href="https://hakio.id/jasa-merek-jakarta">Jasa Merek Jakarta</a><span className="sep">·</span>
-          <a href="https://hakio.id/blog">Blog</a><span className="sep">·</span>
-          <a href="https://hakio.id/faq">FAQ</a><span className="sep">·</span>
-          <a href="https://hakio.id/about">Tentang</a><span className="sep">·</span>
-          <a href="https://hakio.id/tim">Tim</a><span className="sep">·</span>
-          <a href="https://hakio.id/contact">Kontak</a>
+          <a href="/">Hakio.id</a><span className="sep">·</span>
+          <a href="/cek-merek">Cek Merek</a><span className="sep">·</span>
+          <a href="/daftar-merek">Daftar Merek</a><span className="sep">·</span>
+          <a href="/biaya">Biaya</a><span className="sep">·</span>
+          <a href="/kelas-produk-jasa">Kelas Produk/Jasa</a><span className="sep">·</span>
+          <a href="/perpanjang">Perpanjang</a><span className="sep">·</span>
+          <a href="/oposisi">Oposisi</a><span className="sep">·</span>
+          <a href="/sertifikat">Sertifikat</a><span className="sep">·</span>
+          <a href="/konsultasi">Konsultasi</a><span className="sep">·</span>
+          <a href="/merek-umkm">Merek UMKM</a><span className="sep">·</span>
+          <a href="/jasa-merek-jakarta">Jasa Merek Jakarta</a><span className="sep">·</span>
+          <a href="/blog">Blog</a><span className="sep">·</span>
+          <a href="/faq">FAQ</a><span className="sep">·</span>
+          <a href="/tentang">Tentang</a><span className="sep">·</span>
+          <a href="/tim">Tim</a><span className="sep">·</span>
+          <a href="/kontak">Kontak</a>
           <div style={{ marginTop: 14, fontSize: 12, color: "#7c85a5", lineHeight: 1.65, maxWidth: 720, margin: "14px auto 0" }}>
             <strong style={{ color: "#5a6889" }}>Hakio</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
             {" "}— berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
