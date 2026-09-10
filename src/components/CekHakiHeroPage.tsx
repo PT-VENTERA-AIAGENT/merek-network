@@ -471,6 +471,37 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
         .hk-wa-btn:hover{opacity:.9}
         .hk-wa-btn:active{transform:scale(.97)}
 
+        /* ============ Trust bar (garansi + PT Ventera) ============ */
+        .hk-trust{
+          width:min(1000px,94%);margin:24px auto 0;
+          display:grid;grid-template-columns:1fr 1fr;gap:16px;
+          position:relative;z-index:3;
+        }
+        .hk-trust-card{
+          display:flex;align-items:flex-start;gap:16px;
+          padding:22px 24px;background:#fff;border:1px solid #e2e7f0;
+          border-radius:22px;box-shadow:0 12px 28px rgba(24,48,99,.08);
+        }
+        .hk-trust-guarantee{
+          background:linear-gradient(180deg,#fffbf1,#fdf3d9);
+          border-color:#eed8aa;
+        }
+        .hk-trust-icon{
+          width:44px;height:44px;border-radius:12px;
+          background:#fff;border:1px solid #e2e7f0;
+          display:grid;place-items:center;flex-shrink:0;
+          box-shadow:0 4px 10px rgba(24,48,99,.06);
+        }
+        .hk-trust-body{flex:1}
+        .hk-trust-title{
+          font-size:16px;font-weight:800;color:#0f2455;
+          letter-spacing:-.015em;margin-bottom:4px;
+        }
+        .hk-trust-desc{
+          font-size:13.5px;color:#5d6a8d;line-height:1.55;
+        }
+        .hk-trust-desc strong{color:#22345d;font-weight:700}
+
         /* ============ Footer (SEO deep links) ============ */
         .hk-seo-footer{
           max-width:1460px;margin:16px auto 0;padding:20px 12px;
@@ -528,6 +559,10 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           .hk-quick{font-size:13px;min-height:52px}
           .hk-ghost-h{font-size:220px;right:-20%}
           .hk-chat-view{max-height:60vh;padding:20px}
+          .hk-trust{grid-template-columns:1fr;width:100%;padding:0 4px}
+          .hk-trust-card{padding:18px 20px;border-radius:18px}
+          .hk-trust-title{font-size:15px}
+          .hk-trust-desc{font-size:13px}
         }
       `}</style>
 
@@ -746,6 +781,41 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                   ))}
                 </div>
               </section>
+
+              {/* ============ TRUST BAR: garansi + perusahaan pengelola ============ */}
+              <section className="hk-trust" aria-label="Jaminan & pengelola">
+                <div className="hk-trust-card hk-trust-guarantee">
+                  <div className="hk-trust-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z" stroke="#D6A64A" strokeWidth="1.8" strokeLinejoin="round"/>
+                      <path d="m9 12 2 2 4-4" stroke="#D6A64A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="hk-trust-body">
+                    <div className="hk-trust-title">Garansi Termurah se-Indonesia</div>
+                    <div className="hk-trust-desc">
+                      Kalau Anda menemukan jasa pendaftaran merek dagang yang lebih murah dari harga kami,
+                      <strong> selisih harganya kami ganti</strong>. Berlaku untuk paket setara dengan cakupan layanan yang sama.
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hk-trust-card hk-trust-company">
+                  <div className="hk-trust-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <rect x="4" y="4" width="16" height="16" rx="3" stroke="#0F1E3C" strokeWidth="1.8"/>
+                      <path d="M8 12h8M8 8h5M8 16h6" stroke="#0F1E3C" strokeWidth="1.8" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div className="hk-trust-body">
+                    <div className="hk-trust-title">Dikelola PT Ventera Intellix Group</div>
+                    <div className="hk-trust-desc">
+                      Hakio dikelola oleh <strong>PT Ventera Intellix Group</strong> —
+                      berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
           </section>
         </main>
@@ -768,8 +838,15 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           <a href="https://hakio.id/about">Tentang</a><span className="sep">·</span>
           <a href="https://hakio.id/tim">Tim</a><span className="sep">·</span>
           <a href="https://hakio.id/contact">Kontak</a>
+          <div style={{ marginTop: 14, fontSize: 12, color: "#7c85a5", lineHeight: 1.65, maxWidth: 720, margin: "14px auto 0" }}>
+            <strong style={{ color: "#5a6889" }}>Hakio</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
+            {" "}— berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
+            <br />
+            <span style={{ color: "#d6a64a", fontWeight: 700 }}>🏆 Garansi Termurah se-Indonesia</span>
+            {" "}— jika ada jasa pendaftaran merek lebih murah dengan cakupan setara, selisih harganya kami ganti.
+          </div>
           <div style={{ marginTop: 10, fontSize: 11, color: "#8f97b3" }}>
-            © 2026 Hakio AI · Dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
+            © 2026 Hakio AI · info@hakio.id · 0851-4841-6800
           </div>
         </nav>
       </div>
