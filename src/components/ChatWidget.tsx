@@ -132,11 +132,41 @@ export default function ChatWidget({
   return (
     <>
       <style>{`
+        @property --cw-angle {
+          syntax:'<angle>'; initial-value:0deg; inherits:false;
+        }
+        .cw-glow-wrap {
+          position:relative; border-radius:24px;
+          padding:2px;
+          background: conic-gradient(from var(--cw-angle),
+            color-mix(in srgb, var(--accent) 0%, transparent) 0%,
+            color-mix(in srgb, var(--accent) 65%, transparent) 12%,
+            color-mix(in srgb, var(--accent) 100%, transparent) 20%,
+            color-mix(in srgb, var(--accent) 55%, transparent) 30%,
+            color-mix(in srgb, var(--accent) 0%, transparent) 40%,
+            color-mix(in srgb, var(--accent) 0%, transparent) 100%);
+          animation: cwSpin 4s linear infinite;
+          box-shadow:0 24px 60px color-mix(in srgb, var(--accent) 18%, transparent);
+        }
+        @keyframes cwSpin {
+          0% { --cw-angle:0deg; }
+          100% { --cw-angle:360deg; }
+        }
+        /* Safari / browsers tanpa @property support: fallback dengan background-position spin */
+        @supports not (background: conic-gradient(from 0deg, red, blue)) {
+          .cw-glow-wrap {
+            background:linear-gradient(90deg, transparent, var(--accent), transparent);
+            background-size:200% 100%;
+            animation:cwShine 3s linear infinite;
+          }
+          @keyframes cwShine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        }
         .cw {
           display:flex; flex-direction:column;
           background:#fff; border:1px solid #e7ebf3; border-radius:22px;
           box-shadow:0 20px 50px rgba(18,39,82,.08);
           overflow:hidden;
+          position:relative; z-index:1;
         }
         .cw-head {
           display:flex; align-items:center; justify-content:space-between;
@@ -217,6 +247,7 @@ export default function ChatWidget({
         .cw-hint { padding:0 18px 14px; color:#23a45a; font-size:12px; font-weight:800; }
       `}</style>
 
+      <div className="cw-glow-wrap">
       <section className="cw" style={{ minHeight }}>
         <div className="cw-head">
           <div>
@@ -281,6 +312,7 @@ export default function ChatWidget({
 
         {bottomHint && <div className="cw-hint">{bottomHint}</div>}
       </section>
+      </div>
     </>
   );
 }

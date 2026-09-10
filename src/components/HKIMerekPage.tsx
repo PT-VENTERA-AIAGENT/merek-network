@@ -4,7 +4,8 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
-import TopStrip from "./TopStrip";
+import { TopStripBubble } from "./TopStrips";
+import FloatingWA from "./FloatingWA";
 
 const ACCENT = "#7657ff";
 const ACCENT_2 = "#eee8ff";
@@ -45,20 +46,19 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
           background:#f5f7fb; color:var(--dark);
         }
         .hk-site { min-height:100vh; background:linear-gradient(180deg,#fff,var(--soft)); }
+        /* Navbar HKIMerek: PILL — floating with big rounded corners, gap sides */
         .hk-nav {
-          height:78px; display:flex; align-items:center; justify-content:space-between;
-          padding:0 42px; border-bottom:1px solid rgba(14,34,75,.08);
-          background:rgba(255,255,255,.9); position:sticky; top:0; z-index:20; backdrop-filter:blur(12px);
+          margin:14px 22px 0;
+          height:72px; display:flex; align-items:center; justify-content:space-between;
+          padding:0 26px;
+          background:rgba(255,255,255,.92); border-radius:999px;
+          box-shadow:0 8px 28px rgba(118,87,255,.14), 0 1px 0 rgba(118,87,255,.08) inset;
+          position:sticky; top:14px; z-index:20; backdrop-filter:blur(14px);
         }
         .hk-brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
-        .hk-logo {
-          width:42px; height:42px; border-radius:12px;
-          background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, #17204a));
-          display:grid; place-items:center; color:#fff; font-weight:900; font-size:22px;
-          box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 20%, transparent);
-        }
-        .hk-brand-text strong { display:block; font-size:20px; letter-spacing:-.02em; }
-        .hk-brand-text span { display:block; color:#7a849c; font-size:11px; margin-top:2px; }
+        .hk-wordmark { height:40px; width:auto; display:block; }
+        .hk-btn { border-radius:999px; }
+        .hk-btn.primary { border-radius:999px; }
         .hk-links { display:flex; gap:24px; color:#425173; font-size:14px; font-weight:600; }
         .hk-links a { text-decoration:none; color:inherit; padding:8px 0; }
         .hk-links a:hover { color:var(--accent); }
@@ -213,14 +213,10 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="hk-site">
-        <TopStrip accent={ACCENT} />
+        <TopStripBubble accent={ACCENT} />
         <header className="hk-nav">
-          <a className="hk-brand" href="/">
-            <div className="hk-logo">H</div>
-            <div className="hk-brand-text">
-              <strong>HKIMerek</strong>
-              <span>Analisa & Edukasi HKI</span>
-            </div>
+          <a className="hk-brand" href="/" aria-label="HKIMerek">
+            <img className="hk-wordmark" src="/variants/purple-analisa-merek/logo-wordmark.webp" alt="HKIMerek — Analisa & Edukasi HKI" width="160" height="40" />
           </a>
           <nav className="hk-links">
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
@@ -324,6 +320,7 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
             <a href="/kontak">Kontak</a>
           </div>
         </footer>
+        <FloatingWA domain="hkimerek.com" whatsappNumber={brand.whatsapp} accent={ACCENT} label="Chat HKIMerek" />
       </div>
     </>
   );

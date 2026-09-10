@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Brand } from "@/lib/brands";
 import type { HakioVariant } from "@/lib/variants";
 import JsonLd from "./JsonLd";
-import TopStrip from "./TopStrip";
+import { TopStripDark } from "./TopStrips";
+import FloatingWA from "./FloatingWA";
 
 interface Message {
   role: "user" | "assistant";
@@ -169,7 +170,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
         .hm-checks span::before { content: "✓"; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 14%, white); color: var(--accent); font-size: 13px; font-weight: 900; }
         .hm-visual { position: relative; min-height: 480px; }
         .hm-visual-card { position: absolute; inset: 40px 0 20px 40px; background: radial-gradient(circle at 40% 30%, color-mix(in srgb, var(--accent) 10%, white), transparent 35%), linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82)); border: 1px solid #eef2f8; border-radius: 28px; box-shadow: var(--shadow); }
-        .hm-robot { position: absolute; right: 8px; top: 0; width: min(100%, 380px); height: auto; max-height: 420px; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(16,40,93,.12)); z-index: 2; }
+        .hm-robot { position: absolute; left: 50%; top: 6%; transform: translateX(-58%); width: min(70%, 340px); height: auto; max-height: 420px; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(16,40,93,.12)); z-index: 2; }
         .hm-note { position: absolute; left: 22px; bottom: 40px; font-size: 26px; line-height: 1.22; font-weight: 800; color: var(--dark); max-width: 260px; z-index: 3; }
         .hm-note .accent { color: var(--accent); }
         .hm-minibox { position: absolute; right: -4px; bottom: 32px; width: 220px; padding: 20px 22px; border-radius: 22px; background: rgba(255,255,255,.96); border: 1px solid #edf1f8; box-shadow: 0 16px 34px rgba(16, 40, 93, .10); z-index: 3; }
@@ -262,16 +263,10 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
       `}</style>
 
       <div className="hm-page">
-        <TopStrip accent={v.accent} />
+        <TopStripDark accent={v.accent} />
         <header className="hm-nav">
-          <a href="/" className="hm-brand">
-            <div className="hm-brand-mark" aria-hidden="true">
-              <span>{v.brandName.charAt(0)}</span>
-            </div>
-            <div>
-              <strong>{v.brandName}</strong>
-              <span className="small">{v.brandSub}</span>
-            </div>
+          <a href="/" className="hm-brand" aria-label={v.brandName}>
+            <img src={`${assetBase}/logo-wordmark.webp`} alt={`${v.brandName} — ${v.brandSub}`} height="42" width="168" style={{ display: "block" }} />
           </a>
           <nav className="hm-links">
             <a href="/" className="active">Beranda</a>
@@ -283,8 +278,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
             <a href="/kontak">Kontak</a>
           </nav>
           <div className="hm-right">
-            <a href="/cek-merek" className="hm-icon-btn" aria-label="Cari">⌕</a>
-            <a href={waLink} target="_blank" rel="noopener noreferrer" className="hm-btn">Konsultasi</a>
+            <a href={waLink} target="_blank" rel="noopener noreferrer" className="hm-btn">♛ Konsultasi Gratis</a>
           </div>
         </header>
 
@@ -411,7 +405,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
             </div>
 
             <div className="hm-card hm-pricing">
-              <div className="hm-eyebrow">Mulai dari</div>
+              <div className="hm-eyebrow">🏆 Termurah se-Indonesia</div>
               <h3>{v.pricingHeading}</h3>
               <p>{v.pricingDesc}</p>
               <div className="hm-price-row"><span>UMKM / Perorangan</span><span>Rp 1.299.000<span style={{fontSize:12,color:"#8794AE",fontWeight:600,marginLeft:4}}>/kelas</span></span></div>
@@ -439,6 +433,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
           <span className="warranty">🏆 Garansi Termurah se-Indonesia</span> — jika ada jasa pendaftaran merek lebih murah dengan cakupan setara, selisih diganti.<br />
           <span style={{ color: "#8f97b3" }}>© 2026 {v.brandName} · info@hakio.id · 0851-4841-6800</span>
         </div>
+        <FloatingWA domain="cekhaki.com" whatsappNumber={brand.whatsapp} accent={v.accent} label="Chat CekHaki" />
       </div>
     </>
   );

@@ -4,7 +4,8 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
-import TopStrip from "./TopStrip";
+import { TopStripMarquee } from "./TopStrips";
+import FloatingWA from "./FloatingWA";
 
 const ACCENT = "#0b8d68";
 const ACCENT_2 = "#dff8ef";
@@ -48,20 +49,19 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
           background:#f5f7fb; color:var(--dark);
         }
         .hm-site { min-height:100vh; background:linear-gradient(180deg,#fff,var(--soft)); }
+        /* Navbar HakiMerek: SQUARE, thick underline aksen — corporate-official */
         .hm-nav {
-          height:78px; display:flex; align-items:center; justify-content:space-between;
-          padding:0 42px; border-bottom:1px solid rgba(14,34,75,.08);
-          background:rgba(255,255,255,.9); position:sticky; top:0; z-index:20; backdrop-filter:blur(12px);
+          height:80px; display:flex; align-items:center; justify-content:space-between;
+          padding:0 42px;
+          border-bottom:3px solid var(--accent);
+          background:#fff;
+          position:sticky; top:0; z-index:20;
+          box-shadow:0 4px 20px rgba(11,141,104,.08);
         }
         .hm-brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
-        .hm-logo {
-          width:42px; height:42px; border-radius:12px;
-          background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, #17204a));
-          display:grid; place-items:center; color:#fff; font-weight:900; font-size:22px;
-          box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 20%, transparent);
-        }
-        .hm-brand-text strong { display:block; font-size:20px; letter-spacing:-.02em; }
-        .hm-brand-text span { display:block; color:#7a849c; font-size:11px; margin-top:2px; }
+        .hm-wordmark { height:44px; width:auto; display:block; }
+        .hm-btn { border-radius:6px; }
+        .hm-btn.primary { border-radius:6px; }
         .hm-links { display:flex; gap:26px; color:#425173; font-size:14px; font-weight:600; }
         .hm-links a { text-decoration:none; color:inherit; padding:8px 0; }
         .hm-links a:hover { color:var(--accent); }
@@ -185,14 +185,10 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="hm-site">
-        <TopStrip accent={ACCENT} />
+        <TopStripMarquee accent={ACCENT} />
         <header className="hm-nav">
-          <a className="hm-brand" href="/">
-            <div className="hm-logo">H</div>
-            <div className="hm-brand-text">
-              <strong>HakiMerek</strong>
-              <span>Jasa Pendaftaran Merek</span>
-            </div>
+          <a className="hm-brand" href="/" aria-label="HakiMerek">
+            <img className="hm-wordmark" src="/variants/green-daftar-merek/logo-wordmark.webp" alt="HakiMerek — Jasa Pendaftaran Merek" width="176" height="44" />
           </a>
           <nav className="hm-links">
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
@@ -268,6 +264,7 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
             </div>
             <div className="hm-card">
               <div className="hm-mini-title">Biaya Pendaftaran Merek</div>
+              <div style={{ fontSize: 12, color: ACCENT, fontWeight: 800, letterSpacing: ".04em", marginTop: -4, marginBottom: 12 }}>🏆 TERMURAH — DIJAMIN GANTI SELISIH</div>
               <div className="hm-price"><span>UMKM / Perorangan</span><strong>Rp 1.299.000</strong></div>
               <div className="hm-price"><span>Perusahaan / PT</span><strong>Rp 2.490.000</strong></div>
               <div className="hm-price-djki">Sudah termasuk biaya DJKI / PNBP resmi + jasa pengurusan</div>
@@ -288,6 +285,7 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
             <a href="/kontak">Kontak</a>
           </div>
         </footer>
+        <FloatingWA domain="hakimerek.com" whatsappNumber={brand.whatsapp} accent={ACCENT} label="Chat HakiMerek" />
       </div>
     </>
   );

@@ -4,7 +4,8 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
-import TopStrip from "./TopStrip";
+import { TopStripRibbon } from "./TopStrips";
+import FloatingWA from "./FloatingWA";
 
 const ACCENT = "#ff6a2d";
 const ACCENT_2 = "#fff0e8";
@@ -47,20 +48,20 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
           background:#f5f7fb; color:var(--dark);
         }
         .mr-site { min-height:100vh; background:linear-gradient(180deg,#fff,var(--soft)); }
+        /* Navbar Merekin: PLAYFUL — bottom curved edge with big radius */
         .mr-nav {
-          height:78px; display:flex; align-items:center; justify-content:space-between;
-          padding:0 42px; border-bottom:1px solid rgba(34,27,24,.08);
-          background:rgba(255,255,255,.9); position:sticky; top:0; z-index:20; backdrop-filter:blur(12px);
+          height:82px; display:flex; align-items:center; justify-content:space-between;
+          padding:0 42px;
+          background:linear-gradient(180deg, #fff 0%, #fff9f5 100%);
+          border-radius:0 0 32px 32px;
+          box-shadow:0 8px 24px rgba(255,106,45,.08);
+          position:sticky; top:0; z-index:20;
+          border-bottom:2px solid var(--accent-2);
         }
         .mr-brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
-        .mr-logo {
-          width:42px; height:42px; border-radius:12px;
-          background:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, #4a2a1a));
-          display:grid; place-items:center; color:#fff; font-weight:900; font-size:22px;
-          box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 25%, transparent);
-        }
-        .mr-brand-text strong { display:block; font-size:20px; letter-spacing:-.02em; }
-        .mr-brand-text span { display:block; color:#7a6c62; font-size:11px; margin-top:2px; }
+        .mr-wordmark { height:42px; width:auto; display:block; }
+        .mr-btn { border-radius:18px; }
+        .mr-btn.primary { border-radius:18px; }
         .mr-links { display:flex; gap:22px; color:#524339; font-size:14px; font-weight:600; }
         .mr-links a { text-decoration:none; color:inherit; padding:8px 0; }
         .mr-links a:hover { color:var(--accent); }
@@ -209,14 +210,10 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="mr-site">
-        <TopStrip accent={ACCENT} />
+        <TopStripRibbon accent={ACCENT} />
         <header className="mr-nav">
-          <a className="mr-brand" href="/">
-            <div className="mr-logo">M</div>
-            <div className="mr-brand-text">
-              <strong>Merekin</strong>
-              <span>Merek Dagang untuk UMKM</span>
-            </div>
+          <a className="mr-brand" href="/" aria-label="Merekin">
+            <img className="mr-wordmark" src="/variants/orange-umkm-merek/logo-wordmark.webp" alt="Merekin — Merek Dagang untuk UMKM" width="168" height="42" />
           </a>
           <nav className="mr-links">
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
@@ -299,6 +296,7 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
             </div>
             <div className="mr-card">
               <div className="mr-mini-title">Paket UMKM</div>
+              <div style={{ fontSize: 12, color: ACCENT, fontWeight: 800, letterSpacing: ".04em", marginTop: -4, marginBottom: 12 }}>🏆 TERMURAH KHUSUS UMKM</div>
               <div className="mr-price"><span>UMKM / Perorangan</span><strong>Rp 1.299.000</strong></div>
               <div className="mr-price"><span>Perusahaan / PT</span><strong>Rp 2.490.000</strong></div>
               <div className="mr-price-djki">Sudah termasuk biaya DJKI / PNBP resmi</div>
@@ -319,6 +317,7 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
             <a href="/kontak">Kontak</a>
           </div>
         </footer>
+        <FloatingWA domain="merekin.com" whatsappNumber={brand.whatsapp} accent={ACCENT} label="Chat Merekin" />
       </div>
     </>
   );
