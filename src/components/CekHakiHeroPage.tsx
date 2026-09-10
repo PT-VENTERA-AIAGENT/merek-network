@@ -501,6 +501,26 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
           font-size:13.5px;color:#5d6a8d;line-height:1.55;
         }
         .hk-trust-desc strong{color:#22345d;font-weight:700}
+        .hk-price-grid{
+          display:flex;flex-direction:column;gap:8px;margin-top:8px;
+        }
+        .hk-price-row{
+          display:flex;align-items:baseline;justify-content:space-between;
+          gap:12px;padding:8px 0;border-bottom:1px dashed #e2e7f0;
+        }
+        .hk-price-row:last-child{border-bottom:0}
+        .hk-price-label{
+          font-size:13px;color:#5d6a8d;font-weight:600;
+        }
+        .hk-price-value{
+          font-size:17px;font-weight:800;color:#0f2455;letter-spacing:-.01em;
+        }
+        .hk-price-unit{
+          font-size:12px;font-weight:600;color:#8794AE;margin-left:4px;
+        }
+        .hk-price-note{
+          margin-top:8px;font-size:12px;color:#8794AE;font-weight:500;
+        }
 
         /* ============ Footer (SEO deep links) ============ */
         .hk-seo-footer{
@@ -800,19 +820,25 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
                   </div>
                 </div>
 
-                <div className="hk-trust-card hk-trust-company">
+                <div className="hk-trust-card hk-trust-price">
                   <div className="hk-trust-icon" aria-hidden="true">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <rect x="4" y="4" width="16" height="16" rx="3" stroke="#0F1E3C" strokeWidth="1.8"/>
-                      <path d="M8 12h8M8 8h5M8 16h6" stroke="#0F1E3C" strokeWidth="1.8" strokeLinecap="round"/>
+                      <path d="M12 2v20M17 6H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6" stroke="#0F1E3C" strokeWidth="1.8" strokeLinecap="round"/>
                     </svg>
                   </div>
                   <div className="hk-trust-body">
-                    <div className="hk-trust-title">Dikelola PT Ventera Intellix Group</div>
-                    <div className="hk-trust-desc">
-                      Hakio dikelola oleh <strong>PT Ventera Intellix Group</strong> —
-                      berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
+                    <div className="hk-trust-title">Harga Pendaftaran Merek</div>
+                    <div className="hk-price-grid">
+                      <div className="hk-price-row">
+                        <span className="hk-price-label">UMKM / Perorangan</span>
+                        <span className="hk-price-value">Rp 1.299.000<span className="hk-price-unit">/kelas</span></span>
+                      </div>
+                      <div className="hk-price-row">
+                        <span className="hk-price-label">Perusahaan / PT</span>
+                        <span className="hk-price-value">Rp 2.490.000<span className="hk-price-unit">/kelas</span></span>
+                      </div>
                     </div>
+                    <div className="hk-price-note">Sudah termasuk biaya DJKI + jasa pengurusan.</div>
                   </div>
                 </div>
               </section>
