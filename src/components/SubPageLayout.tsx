@@ -240,7 +240,7 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
           <a href="/blog">Blog</a><span className="sep">·</span>
           <a href="/kontak">Kontak</a>
           <div style={{ marginTop: 14, fontSize: 12, color: "#7c85a5", lineHeight: 1.65, maxWidth: 720, margin: "14px auto 0" }}>
-            <strong style={{ color: "#5a6889" }}>{brandName}</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
+            <strong style={{ color: "#5a6889" }}>{brandName}</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Sellora Optima Teknologi</strong>
             {" "}— berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
             <br />
             <span style={{ color: "#d6a64a", fontWeight: 700 }}>🏆 Garansi Termurah se-Indonesia</span>

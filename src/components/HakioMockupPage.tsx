@@ -429,7 +429,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
           <a href="/kontak">Kontak</a>
         </nav>
         <div className="hm-footer-info">
-          <b>{v.brandName}</b> dikelola oleh <b>PT Ventera Intellix Group</b> — berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.<br />
+          <b>{v.brandName}</b> dikelola oleh <b>PT Sellora Optima Teknologi</b> — berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.<br />
           <span className="warranty">🏆 Garansi Termurah se-Indonesia</span> — jika ada jasa pendaftaran merek lebih murah dengan cakupan setara, selisih diganti.<br />
           <span style={{ color: "#8f97b3" }}>© 2026 {v.brandName} · info@hakio.id · 0851-4841-6800</span>
         </div>

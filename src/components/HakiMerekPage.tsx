@@ -274,7 +274,7 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
 
         <footer className="hm-footer">
           <div>
-            <strong>HakiMerek</strong> dikelola oleh <strong>PT Ventera Intellix Group</strong> · © 2026 · info@hakio.id · 0851-4841-6800
+            <strong>HakiMerek</strong> dikelola oleh <strong>PT Sellora Optima Teknologi</strong> · © 2026 · info@hakio.id · 0851-4841-6800
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
             <a href="/cek-merek">Cek Merek</a><span className="sep">·</span>

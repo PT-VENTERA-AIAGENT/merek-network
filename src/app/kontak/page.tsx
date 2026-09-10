@@ -54,7 +54,7 @@ export default async function Page() {
       <p>Umumnya kurang dari 2 jam pada jam kerja. Untuk pertanyaan di luar jam kerja atau akhir pekan, admin akan follow-up di hari kerja berikutnya.</p>
 
       <h2>Perusahaan pengelola</h2>
-      <p><strong>PT Ventera Intellix Group</strong> — perusahaan penyedia layanan kekayaan intelektual dan pendaftaran merek dagang di Indonesia, yang mengelola Layanan kami dan produk terkait.</p>
+      <p><strong>PT Sellora Optima Teknologi</strong> — perusahaan penyedia layanan kekayaan intelektual dan pendaftaran merek dagang di Indonesia, yang mengelola Layanan kami dan produk terkait.</p>
     </SubPageLayout>
   );
 }
