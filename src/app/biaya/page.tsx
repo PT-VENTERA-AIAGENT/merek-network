@@ -4,7 +4,7 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Biaya Pendaftaran Merek Dagang 2026 — Transparan | Hakio",
+  title: "Biaya Pendaftaran Merek Dagang 2026 — Transparan ",
   description: "Rincian biaya daftar merek dagang di Indonesia: UMKM Rp 1.299.000/kelas, Perusahaan Rp 2.490.000/kelas. Sudah termasuk PNBP resmi DJKI + jasa pengurusan. Garansi termurah.",
   alternates: { canonical: "/biaya" },
 };
@@ -18,7 +18,7 @@ export default async function Page() {
       activeNav="/biaya"
       eyebrow="Harga Transparan"
       title="Biaya Pendaftaran Merek Dagang Tanpa Biaya Tersembunyi"
-      intro="Semua harga di bawah sudah mencakup Penerimaan Negara Bukan Pajak (PNBP) resmi ke DJKI plus jasa pengurusan tim Hakio dari awal sampai sertifikat elektronik terbit."
+      intro="Semua harga di bawah sudah mencakup Penerimaan Negara Bukan Pajak (PNBP) resmi ke DJKI plus jasa pengurusan tim kami dari awal sampai sertifikat elektronik terbit."
     >
       <h2>Paket per kelas</h2>
       <div className="sp-card-grid">
@@ -44,7 +44,7 @@ export default async function Page() {
       </ul>
 
       <h2>Kapan ada biaya tambahan?</h2>
-      <p>Kalau merek Anda mencakup lebih dari 10 jenis barang/jasa dalam satu kelas, DJKI mengenakan biaya tambahan Rp 10.000 per jenis ekstra. Tim Hakio akan menginformasikan sebelum diproses, tidak ada kejutan di tengah jalan.</p>
+      <p>Kalau merek Anda mencakup lebih dari 10 jenis barang/jasa dalam satu kelas, DJKI mengenakan biaya tambahan Rp 10.000 per jenis ekstra. Tim kami akan menginformasikan sebelum diproses, tidak ada kejutan di tengah jalan.</p>
 
       <h2>🏆 Garansi Termurah se-Indonesia</h2>
       <p>Kalau Anda menemukan jasa pendaftaran merek dagang yang lebih murah dari harga kami dengan <strong>cakupan layanan setara</strong> (biaya DJKI sudah masuk, pendampingan sampai sertifikat), <strong>selisih harganya kami ganti</strong>. Kirim bukti penawaran lawan via WhatsApp untuk klaim.</p>
@@ -56,7 +56,7 @@ export default async function Page() {
           <div className="sp-card-desc">Bayar PNBP saja, tapi harus paham istilah hukum, isi form, urus dokumen, dan monitor sendiri. Risiko salah kelas atau salah dokumen tinggi.</div>
         </div>
         <div className="sp-card">
-          <div className="sp-card-title">Via Hakio</div>
+          <div className="sp-card-title">Via kami</div>
           <div className="sp-card-desc">Selisih ~Rp 800rb (UMKM) atau ~Rp 700rb (PT) untuk jasa pendampingan penuh + garansi termurah. Cocok untuk pemilik bisnis yang mau fokus jualan.</div>
         </div>
       </div>

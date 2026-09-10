@@ -4,8 +4,8 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Daftar Merek Dagang ke DJKI — Dibantu Tim Hakio | Hakio",
-  description: "Layanan pendaftaran merek dagang di Indonesia. Dari analisa nama, kelas produk/jasa, sampai keluarnya sertifikat elektronik DJKI — semua dibantu tim Hakio.",
+  title: "Daftar Merek Dagang ke DJKI — Dibantu Tim kami ",
+  description: "Layanan pendaftaran merek dagang di Indonesia. Dari analisa nama, kelas produk/jasa, sampai keluarnya sertifikat elektronik DJKI — semua dibantu tim kami.",
   alternates: { canonical: "/daftar-merek" },
 };
 
@@ -18,7 +18,7 @@ export default async function Page() {
       activeNav="/daftar-merek"
       eyebrow="Pendaftaran Merek"
       title="Daftarkan Merek Dagang Anda Tanpa Ribet"
-      intro="Anda cukup siapkan nama merek dan dokumen dasar. Sisanya — mulai dari pengisian formulir DJKI sampai monitoring status — dikerjakan tim Hakio. Cocok untuk UMKM, perorangan, dan perusahaan."
+      intro="Anda cukup siapkan nama merek dan dokumen dasar. Sisanya — mulai dari pengisian formulir DJKI sampai monitoring status — dikerjakan tim kami. Cocok untuk UMKM, perorangan, dan perusahaan."
     >
       <h2>Yang Anda dapatkan</h2>
       <ul>

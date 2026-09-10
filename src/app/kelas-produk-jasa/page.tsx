@@ -4,7 +4,7 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Kelas Produk/Jasa Merek Dagang — 45 Kelas NICE | Hakio",
+  title: "Kelas Produk/Jasa Merek Dagang — 45 Kelas NICE ",
   description: "Panduan memilih kelas produk/jasa yang tepat untuk pendaftaran merek dagang di Indonesia. Salah kelas = merek tidak terlindungi di bisnis Anda.",
   alternates: { canonical: "/kelas-produk-jasa" },
 };
@@ -43,7 +43,7 @@ export default async function Page() {
       </div>
 
       <h2>Bagaimana kalau bisnis saya mencakup banyak kategori?</h2>
-      <p>Anda bisa daftar merek yang sama di beberapa kelas sekaligus — misalnya restoran yang juga jual kaos merchandise: kelas 43 (restoran) + kelas 25 (pakaian). Biaya dihitung <em>per kelas</em>. Tim Hakio akan bantu identifikasi kelas mana saja yang layak diambil supaya perlindungan maksimal tanpa buang biaya di kelas yang tidak relevan.</p>
+      <p>Anda bisa daftar merek yang sama di beberapa kelas sekaligus — misalnya restoran yang juga jual kaos merchandise: kelas 43 (restoran) + kelas 25 (pakaian). Biaya dihitung <em>per kelas</em>. Tim kami akan bantu identifikasi kelas mana saja yang layak diambil supaya perlindungan maksimal tanpa buang biaya di kelas yang tidak relevan.</p>
 
       <h2>Contoh cepat</h2>
       <ul>
@@ -53,7 +53,7 @@ export default async function Page() {
         <li><strong>Aplikasi mobile</strong>: kelas 42 (jasa software) + opsional kelas 9 (perangkat lunak sebagai barang).</li>
       </ul>
 
-      <p><em>Tidak yakin bisnis Anda masuk kelas apa? Chat AI Hakio di halaman utama — sebutkan produk/jasanya, dapat rekomendasi kelas lengkap dalam hitungan detik.</em></p>
+      <p><em>Tidak yakin bisnis Anda masuk kelas apa? Chat AI kami di halaman utama — sebutkan produk/jasanya, dapat rekomendasi kelas lengkap dalam hitungan detik.</em></p>
     </SubPageLayout>
   );
 }

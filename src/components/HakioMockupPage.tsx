@@ -10,8 +10,9 @@ interface Message {
   content: string;
 }
 
-const INITIAL_MESSAGE =
-  "Halo! 👋 Saya Hakio AI. Ketik nama brand yang ingin dicek — **100% gratis** dan instan!\n\nSaya bantu cek ketersediaan di database PDKI/DJKI, rekomendasi kelas produk/jasa (klasifikasi NICE), dan estimasi biaya.\n\nSetelah itu tim Hakio siap lanjut via WhatsApp untuk proses pendaftaran resminya.";
+function buildInitialMessage(brandName: string): string {
+  return `Halo! 👋 Saya asisten AI ${brandName}. Ketik nama brand yang ingin dicek — **100% gratis** dan instan!\n\nSaya bantu cek ketersediaan di database PDKI/DJKI, rekomendasi kelas produk/jasa (klasifikasi NICE), dan estimasi biaya.\n\nSetelah itu tim kami siap lanjut via WhatsApp untuk proses pendaftaran resminya.`;
+}
 
 function fmt(text: string): string {
   return text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\*(.*?)\*/g, "<em>$1</em>");
@@ -43,8 +44,8 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
   const hasConversation = messages.length > 0;
 
   const waText = leadData?.nama
-    ? `Halo Hakio!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah cek merek via Hakio AI dan ingin lanjut pendaftaran:\n- Nama Merek: ${leadData.nama}\n- Kelas Produk/Jasa: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
-    : `Halo Hakio! Saya ingin konsultasi merek dagang via Hakio AI. Mohon dibantu.`;
+    ? `Halo ${v.brandName}!${leadData.user ? ` Nama saya ${leadData.user}.` : ""} Saya sudah cek merek via chat AI dan ingin lanjut pendaftaran:\n- Nama Merek: ${leadData.nama}\n- Kelas Produk/Jasa: ${leadData.kelas}\n- Jenis Entitas: ${leadData.entitas}\n\nBisa bantu proses selanjutnya?`
+    : `Halo ${v.brandName}! Saya ingin konsultasi merek dagang. Mohon dibantu.`;
   const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(waText)}`;
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
     if (!userText || loading) return;
     const isFirst = messages.length === 0;
     const seeded: Message[] = isFirst
-      ? [{ role: "assistant", content: INITIAL_MESSAGE }, { role: "user", content: userText }]
+      ? [{ role: "assistant", content: buildInitialMessage(v.brandName) }, { role: "user", content: userText }]
       : [...messages, { role: "user", content: userText }];
     setMessages(seeded);
     setInput("");
@@ -108,7 +109,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
   };
   const handleWaClick = () => {
     setWaClicked(true);
-    setMessages((prev) => [...prev, { role: "assistant", content: `Terima kasih${leadData?.user ? `, ${leadData.user}` : ""}! Admin Hakio akan segera membalas via WhatsApp.` }]);
+    setMessages((prev) => [...prev, { role: "assistant", content: `Terima kasih${leadData?.user ? `, ${leadData.user}` : ""}! Admin ${v.brandName} akan segera membalas via WhatsApp.` }]);
   };
 
   const assetBase = `/variants/${v.variantSlug}`;
@@ -141,8 +142,14 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
         .hm-page { max-width: 1380px; margin: 24px auto; background: rgba(255,255,255,.9); border: 1px solid #eef2fb; border-radius: 32px; box-shadow: var(--shadow); overflow: hidden; backdrop-filter: blur(16px); }
         .hm-nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.84); position: sticky; top: 0; z-index: 10; }
         .hm-brand { display: flex; align-items: center; gap: 14px; text-decoration:none; color:inherit; }
-        .hm-brand img { height: 42px; width: auto; display: block; }
-        .hm-brand strong { display:block; font-size:16px; font-weight:800; letter-spacing:-.02em; }
+        .hm-brand-mark {
+          width: 46px; height: 46px; border-radius: 13px;
+          background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+          display: grid; place-items: center; color: #fff;
+          font-weight: 900; font-size: 22px; letter-spacing: -.02em;
+          box-shadow: 0 10px 22px color-mix(in srgb, var(--accent) 30%, transparent);
+        }
+        .hm-brand strong { display:block; font-size:17px; font-weight:800; letter-spacing:-.02em; color: var(--dark); }
         .hm-brand .small { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
         .hm-links { display: flex; align-items: center; gap: 26px; font-size: 14px; font-weight: 600; color: #33456c; }
         .hm-links a { color: inherit; text-decoration: none; padding:11px 14px; border-radius:12px; }
@@ -159,12 +166,12 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
         .hm-subtitle { font-size: 18px; line-height: 1.55; color: #5e6d8f; max-width: 680px; margin-bottom: 24px; }
         .hm-checks { display: flex; flex-wrap: wrap; gap: 16px 24px; color: #32517a; font-weight: 600; margin-bottom: 30px; }
         .hm-checks span::before { content: "✓"; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 10px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 14%, white); color: var(--accent); font-size: 13px; font-weight: 900; }
-        .hm-visual { position: relative; min-height: 420px; }
-        .hm-visual-card { position: absolute; inset: 24px 0 0 54px; background: radial-gradient(circle at 40% 30%, color-mix(in srgb, var(--accent) 10%, white), transparent 35%), linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82)); border: 1px solid #eef2f8; border-radius: 28px; box-shadow: var(--shadow); }
-        .hm-robot { position: absolute; right: 24px; top: 6px; width: min(100%, 360px); filter: drop-shadow(0 24px 30px rgba(16,40,93,.12)); }
-        .hm-note { position: absolute; left: 26px; bottom: 36px; font-size: 28px; line-height: 1.25; font-weight: 800; color: var(--dark); max-width: 300px; }
+        .hm-visual { position: relative; min-height: 480px; }
+        .hm-visual-card { position: absolute; inset: 40px 0 20px 40px; background: radial-gradient(circle at 40% 30%, color-mix(in srgb, var(--accent) 10%, white), transparent 35%), linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82)); border: 1px solid #eef2f8; border-radius: 28px; box-shadow: var(--shadow); }
+        .hm-robot { position: absolute; right: 8px; top: 0; width: min(100%, 380px); height: auto; max-height: 420px; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(16,40,93,.12)); z-index: 2; }
+        .hm-note { position: absolute; left: 22px; bottom: 40px; font-size: 26px; line-height: 1.22; font-weight: 800; color: var(--dark); max-width: 260px; z-index: 3; }
         .hm-note .accent { color: var(--accent); }
-        .hm-minibox { position: absolute; right: -8px; bottom: 40px; width: 220px; padding: 22px; border-radius: 22px; background: rgba(255,255,255,.92); border: 1px solid #edf1f8; box-shadow: 0 16px 34px rgba(16, 40, 93, .08); }
+        .hm-minibox { position: absolute; right: -4px; bottom: 32px; width: 220px; padding: 20px 22px; border-radius: 22px; background: rgba(255,255,255,.96); border: 1px solid #edf1f8; box-shadow: 0 16px 34px rgba(16, 40, 93, .10); z-index: 3; }
         .hm-minibox strong { display: block; margin-bottom: 8px; font-size: 20px; line-height: 1.2; }
         .hm-minibox p { margin: 0; color: #697898; line-height: 1.55; font-size: 14px; }
         .hm-searchcard { margin: 10px 44px 0; border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 28px; box-shadow: var(--shadow); overflow: hidden; }
@@ -256,10 +263,12 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
       <div className="hm-page">
         <header className="hm-nav">
           <a href="/" className="hm-brand">
-            <img src={`${assetBase}/logo.webp`} alt="Hakio logo" />
+            <div className="hm-brand-mark" aria-hidden="true">
+              <span>{v.brandName.charAt(0)}</span>
+            </div>
             <div>
-              <strong>Hakio AI</strong>
-              <span className="small">Chat AI Merek Dagang</span>
+              <strong>{v.brandName}</strong>
+              <span className="small">{v.brandSub}</span>
             </div>
           </a>
           <nav className="hm-links">
@@ -406,9 +415,9 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
           <a href="/kontak">Kontak</a>
         </nav>
         <div className="hm-footer-info">
-          <b>Hakio</b> dikelola oleh <b>PT Ventera Intellix Group</b> — berpengalaman mendaftarkan ribuan merek dagang ke DJKI.<br />
+          <b>{v.brandName}</b> dikelola oleh <b>PT Ventera Intellix Group</b> — berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.<br />
           <span className="warranty">🏆 Garansi Termurah se-Indonesia</span> — jika ada jasa pendaftaran merek lebih murah dengan cakupan setara, selisih diganti.<br />
-          <span style={{ color: "#8f97b3" }}>© 2026 Hakio AI · info@hakio.id · 0851-4841-6800</span>
+          <span style={{ color: "#8f97b3" }}>© 2026 {v.brandName} · info@hakio.id · 0851-4841-6800</span>
         </div>
       </div>
     </>

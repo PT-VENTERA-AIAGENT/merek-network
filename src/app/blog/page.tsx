@@ -4,7 +4,7 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Blog Hakio — Panduan Merek Dagang Indonesia",
+  title: "Blog Kami — Panduan Merek Dagang Indonesia",
   description: "Artikel dan panduan seputar pendaftaran merek dagang, kelas produk/jasa, biaya DJKI, dan tips melindungi brand di Indonesia.",
   alternates: { canonical: "/blog" },
 };
@@ -16,9 +16,9 @@ export default async function Page() {
     <SubPageLayout
       brand={brand}
       activeNav="/blog"
-      eyebrow="Blog Hakio"
+      eyebrow="Blog Kami"
       title="Panduan Merek Dagang Indonesia — Segera Hadir"
-      intro="Kami sedang menyusun artikel-artikel panduan seputar pendaftaran, perlindungan, dan strategi merek dagang di Indonesia. Sementara menunggu, silakan gunakan chat AI Hakio untuk pertanyaan spesifik atau hubungi tim kami via WhatsApp."
+      intro="Kami sedang menyusun artikel-artikel panduan seputar pendaftaran, perlindungan, dan strategi merek dagang di Indonesia. Sementara menunggu, silakan gunakan chat AI kami untuk pertanyaan spesifik atau hubungi tim kami via WhatsApp."
     >
       <h2>Topik yang akan datang</h2>
       <ul>

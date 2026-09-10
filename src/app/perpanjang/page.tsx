@@ -4,8 +4,8 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Perpanjangan Merek Dagang 10 Tahun — Cepat & Aman | Hakio",
-  description: "Merek dagang berlaku 10 tahun dan perlu diperpanjang sebelum expired. Tim Hakio bantu proses perpanjangan sampai sertifikat baru keluar dari DJKI.",
+  title: "Perpanjangan Merek Dagang 10 Tahun — Cepat & Aman ",
+  description: "Merek dagang berlaku 10 tahun dan perlu diperpanjang sebelum expired. Tim kami bantu proses perpanjangan sampai sertifikat baru keluar dari DJKI.",
   alternates: { canonical: "/perpanjang" },
 };
 
@@ -31,7 +31,7 @@ export default async function Page() {
         <li>Kalau ingin merek kembali, harus daftar ulang dari nol — bisa ditolak kalau sudah ada yang mengambil</li>
       </ul>
 
-      <h2>Proses perpanjangan bareng Hakio</h2>
+      <h2>Proses perpanjangan bareng kami</h2>
       <ol>
         <li><strong>Cek tanggal expired</strong> — kirim nomor sertifikat, kami cek ke DJKI.</li>
         <li><strong>Siapkan bukti pemakaian</strong> — foto produk, kemasan, atau website yang menampilkan merek.</li>
@@ -48,7 +48,7 @@ export default async function Page() {
         </div>
         <div className="sp-card">
           <div className="sp-card-title">Kena Grace Period?</div>
-          <div className="sp-card-desc">Ada biaya tambahan sesuai ketentuan DJKI. Tim Hakio bantu hitung total sebelum dijalankan.</div>
+          <div className="sp-card-desc">Ada biaya tambahan sesuai ketentuan DJKI. Tim kami bantu hitung total sebelum dijalankan.</div>
         </div>
       </div>
 

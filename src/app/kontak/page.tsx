@@ -4,21 +4,21 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Kontak Hakio — WhatsApp, Email, Alamat Kantor Jakarta",
-  description: "Hubungi tim Hakio untuk konsultasi pendaftaran merek dagang. WhatsApp 0851-4841-6800, email info@hakio.id, kantor Jakarta Selatan.",
+  title: "Kontak Kami — WhatsApp, Email, Alamat Kantor Jakarta",
+  description: "Hubungi tim kami untuk konsultasi pendaftaran merek dagang. WhatsApp 0851-4841-6800, email info@hakio.id, kantor Jakarta Selatan.",
   alternates: { canonical: "/kontak" },
 };
 
 export default async function Page() {
   const hdrs = await headers();
   const brand = getBrandById(hdrs.get("x-brand-id") ?? "cekhaki");
-  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent("Halo Hakio! Saya ingin konsultasi merek dagang.")}`;
+  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent("Halo Admin! Saya ingin konsultasi merek dagang.")}`;
   return (
     <SubPageLayout
       brand={brand}
       activeNav="/kontak"
       eyebrow="Hubungi Kami"
-      title="Tim Hakio Siap Bantu — Pilih Cara Kontak yang Paling Nyaman"
+      title="Tim Kami Siap Bantu — Pilih Cara Kontak yang Paling Nyaman"
       intro="Untuk pertanyaan cepat, WhatsApp adalah cara tercepat — admin standby jam kerja Senin–Jumat WIB. Untuk urusan formal atau dokumen resmi, kirim email ke tim kami."
     >
       <div className="sp-card-grid">
@@ -54,7 +54,7 @@ export default async function Page() {
       <p>Umumnya kurang dari 2 jam pada jam kerja. Untuk pertanyaan di luar jam kerja atau akhir pekan, admin akan follow-up di hari kerja berikutnya.</p>
 
       <h2>Perusahaan pengelola</h2>
-      <p><strong>PT Ventera Intellix Group</strong> — perusahaan penyedia layanan kekayaan intelektual dan pendaftaran merek dagang di Indonesia, yang mengelola Hakio.id dan produk terkait.</p>
+      <p><strong>PT Ventera Intellix Group</strong> — perusahaan penyedia layanan kekayaan intelektual dan pendaftaran merek dagang di Indonesia, yang mengelola Layanan kami dan produk terkait.</p>
     </SubPageLayout>
   );
 }

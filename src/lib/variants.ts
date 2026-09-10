@@ -4,6 +4,8 @@ export interface HakioVariant {
   variantSlug: "blue-check-merek" | "green-daftar-merek" | "purple-analisa-merek" | "orange-umkm-merek";
   accent: string;
   accentDeep: string;
+  brandName: string;
+  brandSub: string;
   tag: string;
   h1Line1: string;
   h1Line2Accent: string;
@@ -37,6 +39,8 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     variantSlug: "blue-check-merek",
     accent: "#2f9cff",
     accentDeep: "#1a6fc0",
+    brandName: "CekHaki",
+    brandSub: "Cek Merek Dagang Gratis",
     tag: "✦ Cek Merek Gratis & Instan",
     h1Line1: "Cek Nama Merek Anda",
     h1Line2Accent: "dalam Hitungan Detik",
@@ -44,7 +48,7 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     checks: ["Data resmi DJKI", "Analisa cepat dengan AI", "Konsultasi via WhatsApp"],
     ctaLabel: "Cek Merek Sekarang",
     ctaSubLabel: "Gratis • Cepat • Akurat",
-    noteMain: "Hakio membantu",
+    noteMain: "Kami bantu",
     noteAccent: "merek Anda",
     noteEnd: "melangkah lebih jauh.",
     miniBoxTitle: "Lebih Aman untuk Bisnis Anda",
@@ -72,6 +76,8 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     variantSlug: "green-daftar-merek",
     accent: "#0e9b72",
     accentDeep: "#087557",
+    brandName: "HakiMerek",
+    brandSub: "Jasa Pendaftaran Merek",
     tag: "✦ Solusi Lengkap Hak Merek di Indonesia",
     h1Line1: "Daftarkan Merek Anda",
     h1Line2Accent: "dengan Pendampingan Hakio",
@@ -79,7 +85,7 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     checks: ["Konsultan berpengalaman", "Dokumen dibantu", "Update status DJKI"],
     ctaLabel: "Mulai Pendaftaran",
     ctaSubLabel: "Didampingi tim ahli",
-    noteMain: "Hakio membantu",
+    noteMain: "Kami bantu",
     noteAccent: "brand Anda",
     noteEnd: "terlindungi resmi.",
     miniBoxTitle: "Pendampingan Penuh",
@@ -107,6 +113,8 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     variantSlug: "purple-analisa-merek",
     accent: "#7a63ff",
     accentDeep: "#5a44d6",
+    brandName: "HKIMerek",
+    brandSub: "Analisa & Edukasi HKI",
     tag: "✦ AI untuk Perlindungan Merek Anda",
     h1Line1: "Analisa Merek Anda",
     h1Line2Accent: "dengan Hakio AI",
@@ -114,7 +122,7 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     checks: ["Data resmi DJKI", "Insight AI mendalam", "Laporan tertulis"],
     ctaLabel: "Mulai Analisa",
     ctaSubLabel: "Analisa mendalam berbasis AI",
-    noteMain: "Hakio membantu",
+    noteMain: "Kami bantu",
     noteAccent: "keputusan HKI",
     noteEnd: "berbasis data.",
     miniBoxTitle: "Analisa Mendalam",
@@ -142,6 +150,8 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     variantSlug: "orange-umkm-merek",
     accent: "#ff6b2c",
     accentDeep: "#d1521b",
+    brandName: "Merekin",
+    brandSub: "Merek Dagang untuk UMKM",
     tag: "✦ Solusi Merek untuk UMKM Indonesia",
     h1Line1: "Mulai Lindungi",
     h1Line2Accent: "Merek Anda Hari Ini",
@@ -149,7 +159,7 @@ export const VARIANT_BY_BRAND: Partial<Record<BrandId, HakioVariant>> = {
     checks: ["Harga UMKM terjangkau", "Panduan step-by-step", "Chat AI 24/7"],
     ctaLabel: "Mulai Cek Merek",
     ctaSubLabel: "Gratis untuk UMKM",
-    noteMain: "Hakio membantu",
+    noteMain: "Kami bantu",
     noteAccent: "UMKM Indonesia",
     noteEnd: "punya brand resmi.",
     miniBoxTitle: "Ramah UMKM",

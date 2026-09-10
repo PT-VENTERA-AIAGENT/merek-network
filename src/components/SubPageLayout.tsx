@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { Brand } from "@/lib/brands";
+import { VARIANT_BY_BRAND } from "@/lib/variants";
 
 export interface PageBreadcrumb {
   label: string;
@@ -30,64 +31,73 @@ const NAV = [
 
 export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro, breadcrumb, children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const waText = `Halo Hakio! Saya baru baca halaman \"${title}\" di CekHaki. Boleh minta bantuan lebih lanjut?`;
+  const variant = VARIANT_BY_BRAND[brand.id];
+  const brandName = variant?.brandName ?? brand.name;
+  const brandSub = variant?.brandSub ?? "Chat AI Merek Dagang";
+  const accent = variant?.accent ?? brand.accent;
+  const accentDeep = variant?.accentDeep ?? brand.accentLight;
+  const waText = `Halo ${brandName}! Saya baru baca halaman "${title}". Boleh minta bantuan lebih lanjut?`;
   const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(waText)}`;
 
   return (
     <>
       <style>{`
         :root{
-          --navy:#10285d;--gold:#d6a64a;--gold-2:#f3cf78;--ink:#0f224d;
-          --muted:#6c7897;--line:#dce3f0;--soft:#eef4ff;
-          --shadow:0 28px 70px rgba(15,34,77,.12);
+          --accent:${accent};--accent-deep:${accentDeep};
+          --dark:#10285d;--ink:#0f224d;
+          --muted:#6c7897;--line:#e8edf7;--soft:color-mix(in srgb, ${accent} 8%, white);
+          --shadow:0 22px 50px rgba(16,40,93,.10);
         }
         html,body{margin:0;padding:0;overflow-x:hidden}
         body{
           min-height:100vh;color:var(--ink);
           font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
           background:
-            radial-gradient(circle at 76% 10%, rgba(245,211,139,.30), transparent 26%),
-            radial-gradient(circle at 60% 42%, rgba(191,214,255,.42), transparent 31%),
-            linear-gradient(180deg,#fbfbfe 0%,#f4f6fb 100%);
+            radial-gradient(circle at 90% 0%, rgba(255,255,255,.75), transparent 32%),
+            radial-gradient(circle at 5% 100%, color-mix(in srgb, ${accent} 14%, white), transparent 25%),
+            linear-gradient(180deg,#f7f9fd,#f2f5fb);
         }
-        .sp-page{min-height:100vh;padding:28px 22px}
+        .sp-page{min-height:100vh;padding:24px 22px}
         .sp-app{
-          width:min(1520px,calc(100vw - 44px));min-height:900px;margin:0 auto;
-          background:rgba(255,255,255,.76);border:8px solid rgba(255,255,255,.95);
-          border-radius:40px;box-shadow:0 22px 70px rgba(36,47,80,.14);
-          overflow:hidden;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+          max-width:1380px;margin:0 auto;
+          background:rgba(255,255,255,.9);border:1px solid #eef2fb;
+          border-radius:32px;box-shadow:var(--shadow);
+          overflow:hidden;backdrop-filter:blur(16px);
         }
         .sp-navbar{
-          background:linear-gradient(180deg,#172f66 0%,#0d2457 100%);
-          border-radius:28px 28px 0 0;
           display:flex;align-items:center;justify-content:space-between;
-          padding:14px 22px;gap:16px;
+          padding:18px 28px;background:rgba(255,255,255,.84);
+          border-bottom:1px solid var(--line);
+          position:sticky;top:0;z-index:10;
         }
-        .sp-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+        .sp-brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
         .sp-brand-mark{
-          width:44px;height:44px;border-radius:12px;overflow:hidden;
-          box-shadow:0 8px 20px rgba(0,0,0,.18);display:grid;place-items:center;
+          width:46px;height:46px;border-radius:13px;
+          background:linear-gradient(135deg,var(--accent),var(--accent-deep));
+          display:grid;place-items:center;color:#fff;
+          font-weight:900;font-size:22px;letter-spacing:-.02em;
+          box-shadow:0 10px 22px color-mix(in srgb, var(--accent) 30%, transparent);
         }
-        .sp-brand-mark img{width:100%;height:100%;object-fit:cover}
-        .sp-brand-text{display:flex;flex-direction:column;line-height:1.05}
-        .sp-brand-name{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;color:#fff}
-        .sp-brand-sub{font-size:.7rem;color:#8fa4d1;font-weight:500;margin-top:2px}
-        .sp-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;flex-wrap:wrap}
+        .sp-brand-text{display:flex;flex-direction:column;line-height:1.1}
+        .sp-brand-name{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--dark)}
+        .sp-brand-sub{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+        .sp-links{display:flex;align-items:center;gap:4px;flex:1;justify-content:center;flex-wrap:wrap}
         .sp-link{
-          font-size:.9rem;font-weight:600;color:#dbe5ff;text-decoration:none;
-          padding:9px 16px;border-radius:10px;transition:background .15s,color .15s;
+          font-size:.9rem;font-weight:600;color:#33456c;text-decoration:none;
+          padding:11px 14px;border-radius:12px;transition:background .15s,color .15s;
         }
-        .sp-link:hover{background:rgba(255,255,255,.08);color:#fff}
-        .sp-link.active{background:#fff;color:var(--navy);box-shadow:0 4px 12px rgba(5,19,55,.22)}
+        .sp-link:hover{background:rgba(0,0,0,.04)}
+        .sp-link.active{background:color-mix(in srgb, var(--accent) 12%, white);color:color-mix(in srgb, var(--accent) 82%, var(--dark))}
         .sp-cta{
-          display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 22px;
-          border-radius:12px;background:linear-gradient(180deg,var(--gold-2),var(--gold));
-          color:#0d2457;font-weight:800;font-size:.9rem;text-decoration:none;
-          box-shadow:0 8px 18px rgba(214,166,74,.35);
+          display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 22px;
+          border-radius:14px;
+          background:linear-gradient(135deg,var(--accent),color-mix(in srgb, var(--accent) 70%, var(--accent-deep)));
+          color:#fff;font-weight:800;font-size:.9rem;text-decoration:none;
+          box-shadow:0 14px 26px color-mix(in srgb, var(--accent) 22%, transparent);
         }
         .sp-menu-btn{display:none;width:42px;height:42px;border-radius:12px;
-          background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
-          color:#fff;cursor:pointer;align-items:center;justify-content:center;
+          background:#fff;border:1px solid var(--line);
+          color:var(--dark);cursor:pointer;align-items:center;justify-content:center;
         }
         .sp-mobile-menu{display:none}
         .sp-workspace{padding:40px 48px 60px;position:relative}
@@ -96,9 +106,9 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
         .sp-breadcrumb a:hover{color:var(--navy)}
         .sp-eyebrow{
           display:inline-block;font-size:.75rem;font-weight:800;letter-spacing:.15em;
-          text-transform:uppercase;color:var(--gold);padding:6px 14px;
-          border:1px solid rgba(214,166,74,.35);border-radius:999px;
-          background:rgba(214,166,74,.08);margin-bottom:14px;
+          text-transform:uppercase;color:var(--accent);padding:6px 14px;
+          border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);border-radius:999px;
+          background:color-mix(in srgb, var(--accent) 8%, white);margin-bottom:14px;
         }
         .sp-title{
           font-size:clamp(36px,3.8vw,58px);font-weight:850;letter-spacing:-.03em;
@@ -128,7 +138,10 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
         .sp-card-desc{font-size:13.5px;color:var(--muted);line-height:1.55}
         .sp-cta-block{
           margin-top:36px;padding:28px 30px;border-radius:22px;
-          background:linear-gradient(180deg,#fffbf1,#fdf3d9);border:1px solid #eed8aa;
+          background:
+            radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--accent) 12%, white), transparent 40%),
+            linear-gradient(180deg, color-mix(in srgb, var(--accent) 5%, white), white);
+          border:1px solid color-mix(in srgb, var(--accent) 24%, white);
           display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
         }
         .sp-cta-text{flex:1;min-width:220px}
@@ -147,10 +160,10 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
           .sp-menu-btn{display:flex}
           .sp-brand-sub{display:none}
           .sp-mobile-menu{
-            display:none;position:absolute;top:76px;left:22px;right:22px;
-            background:#122b62;border-radius:16px;padding:12px;
+            display:none;position:absolute;top:80px;left:22px;right:22px;
+            background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;
             flex-direction:column;gap:2px;z-index:20;
-            box-shadow:0 20px 40px rgba(0,0,0,.3);
+            box-shadow:0 20px 40px rgba(16,40,93,.10);
           }
           .sp-mobile-menu.open{display:flex}
           .sp-mobile-menu .sp-link{width:100%;text-align:left}
@@ -167,12 +180,12 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
 
       <div className="sp-page">
         <div className="sp-app">
-          <nav className="sp-navbar" role="navigation" aria-label="Navigasi Hakio">
+          <nav className="sp-navbar" role="navigation" aria-label="Navigasi utama">
             <a href="/" className="sp-brand">
-              <div className="sp-brand-mark"><img src="/hakio-mark.png" alt="" width="44" height="44" /></div>
+              <div className="sp-brand-mark" aria-hidden="true">{brandName.charAt(0)}</div>
               <div className="sp-brand-text">
-                <span className="sp-brand-name">Hakio AI</span>
-                <span className="sp-brand-sub">Chat AI Merek Dagang</span>
+                <span className="sp-brand-name">{brandName}</span>
+                <span className="sp-brand-sub">{brandSub}</span>
               </div>
             </a>
             <div className="sp-links">
@@ -207,7 +220,7 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
 
             <div className="sp-cta-block">
               <div className="sp-cta-text">
-                <b>Mau langsung dibantu tim Hakio?</b>
+                <b>Mau langsung dibantu tim kami?</b>
                 <span>Chat admin via WhatsApp — respon cepat di jam kerja WIB.</span>
               </div>
               <a className="sp-cta" href={waLink} target="_blank" rel="noopener noreferrer">
@@ -227,13 +240,13 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
           <a href="/blog">Blog</a><span className="sep">·</span>
           <a href="/kontak">Kontak</a>
           <div style={{ marginTop: 14, fontSize: 12, color: "#7c85a5", lineHeight: 1.65, maxWidth: 720, margin: "14px auto 0" }}>
-            <strong style={{ color: "#5a6889" }}>Hakio</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
+            <strong style={{ color: "#5a6889" }}>{brandName}</strong> dikelola oleh <strong style={{ color: "#5a6889" }}>PT Ventera Intellix Group</strong>
             {" "}— berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
             <br />
             <span style={{ color: "#d6a64a", fontWeight: 700 }}>🏆 Garansi Termurah se-Indonesia</span>
             {" "}— jika ada jasa pendaftaran merek lebih murah dengan cakupan setara, selisih harganya kami ganti.
           </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: "#8f97b3" }}>© 2026 Hakio AI · info@hakio.id · 0851-4841-6800</div>
+          <div style={{ marginTop: 10, fontSize: 11, color: "#8f97b3" }}>© 2026 {brandName} · info@hakio.id · 0851-4841-6800</div>
         </nav>
       </div>
     </>

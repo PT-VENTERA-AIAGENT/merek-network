@@ -4,8 +4,8 @@ import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
 
 export const metadata: Metadata = {
-  title: "Cek Nama Merek Dagang Gratis — Instan via AI | Hakio",
-  description: "Periksa ketersediaan nama merek dagang Anda sebelum daftar ke DJKI. AI Hakio bantu cek kemiripan di database PDKI plus rekomendasi kelas produk/jasa — semua gratis.",
+  title: "Cek Nama Merek Dagang Gratis — Instan via AI ",
+  description: "Periksa ketersediaan nama merek dagang Anda sebelum daftar ke DJKI. AI kami bantu cek kemiripan di database PDKI plus rekomendasi kelas produk/jasa — semua gratis.",
   alternates: { canonical: "/cek-merek" },
 };
 
@@ -26,7 +26,7 @@ export default async function Page() {
       <div className="sp-card-grid">
         <div className="sp-card">
           <div className="sp-card-title">Instan & 100% Gratis</div>
-          <div className="sp-card-desc">Chat AI Hakio menelusuri PDKI/DJKI dalam hitungan detik. Tidak perlu buat akun.</div>
+          <div className="sp-card-desc">Chat AI kami menelusuri PDKI/DJKI dalam hitungan detik. Tidak perlu buat akun.</div>
         </div>
         <div className="sp-card">
           <div className="sp-card-title">Analisa Kemiripan</div>
@@ -40,10 +40,10 @@ export default async function Page() {
 
       <h2>Cara kerjanya</h2>
       <ol className="sp-content">
-        <li><strong>Ketik nama brand</strong> di kolom chat AI Hakio di halaman utama.</li>
+        <li><strong>Ketik nama brand</strong> di kolom chat AI kami di halaman utama.</li>
         <li><strong>AI cek database</strong> PDKI/DJKI dan menampilkan potensi konflik.</li>
         <li><strong>Dapatkan rekomendasi</strong> kelas produk/jasa yang paling relevan.</li>
-        <li><strong>Lanjut ke WhatsApp</strong> kalau ingin diproses langsung oleh tim Hakio.</li>
+        <li><strong>Lanjut ke WhatsApp</strong> kalau ingin diproses langsung oleh tim kami.</li>
       </ol>
 
       <h2>Apa yang tidak dijamin oleh pengecekan awal?</h2>
