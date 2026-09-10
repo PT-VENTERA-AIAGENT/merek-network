@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
+import TopStrip from "./TopStrip";
 
 const ACCENT = "#0b8d68";
 const ACCENT_2 = "#dff8ef";
@@ -78,7 +79,37 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
 
         .hm-wrap { max-width:1240px; margin:0 auto; padding:44px 28px 60px; }
 
-        .hm-intro-center { text-align:center; display:flex; flex-direction:column; align-items:center; margin-bottom:30px; }
+        .hm-hero-wrap {
+          display:grid; grid-template-columns:1.15fr .85fr; gap:32px;
+          align-items:center; margin-bottom:16px;
+        }
+        .hm-intro-center { text-align:left; display:flex; flex-direction:column; align-items:flex-start; }
+        .hm-mascot-col { position:relative; display:grid; place-items:center; }
+        .hm-mascot-img {
+          width:100%; max-width:340px; height:auto;
+          filter:drop-shadow(0 22px 40px rgba(11,141,104,.25));
+          animation:hmFloat 4.5s ease-in-out infinite;
+        }
+        @keyframes hmFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .hm-price-pill {
+          display:inline-flex; align-items:center; gap:14px;
+          padding:12px 20px; border-radius:16px;
+          background:linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 8%, white));
+          border:1px solid color-mix(in srgb, var(--accent) 24%, white);
+          margin:22px 0 6px;
+          font-size:14px; font-weight:700;
+        }
+        .hm-price-pill .p { display:flex; flex-direction:column; }
+        .hm-price-pill .p small { color:#4a6c62; font-size:11px; letter-spacing:.02em; font-weight:600; }
+        .hm-price-pill .p strong { color:var(--accent); font-size:17px; letter-spacing:-.01em; }
+        .hm-price-pill .div { width:1px; height:32px; background:color-mix(in srgb, var(--accent) 24%, white); }
+        .hm-price-pill .djki { color:#16a34a; font-size:11px; font-weight:800; margin-left:auto; }
+        @media (max-width:900px) {
+          .hm-hero-wrap { grid-template-columns:1fr; }
+          .hm-mascot-col { order:2; }
+          .hm-mascot-img { max-width:240px; }
+        }
+
         .hm-eyebrow {
           display:inline-flex; padding:8px 14px; border-radius:999px;
           background:var(--accent-2); color:var(--accent);
@@ -154,6 +185,7 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="hm-site">
+        <TopStrip accent={ACCENT} />
         <header className="hm-nav">
           <a className="hm-brand" href="/">
             <div className="hm-logo">H</div>
@@ -166,8 +198,7 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
           </nav>
           <div className="hm-actions">
-            <a className="hm-btn" href="/kontak">Masuk</a>
-            <a className="hm-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi</a>
+            <a className="hm-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi Gratis</a>
             <button className="hm-menu-btn" onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Menu">☰</button>
           </div>
         </header>
@@ -178,11 +209,28 @@ export default function HakiMerekPage({ brand }: { brand: Brand }) {
         )}
 
         <div className="hm-wrap">
-          <section className="hm-intro-center">
-            <span className="hm-eyebrow">Pendampingan Pendaftaran Merek</span>
-            <h1 className="hm-h1">Daftarkan Merek Anda<br />dengan Pendampingan Ahli</h1>
-            <p className="hm-lead">Cek ketersediaan nama, analisa risiko, rekomendasi kelas produk/jasa, hingga pendaftaran ke DJKI — semua didampingi konsultan berpengalaman. Anda cukup fokus jualan.</p>
-          </section>
+          <div className="hm-hero-wrap">
+            <section className="hm-intro-center">
+              <span className="hm-eyebrow">Pendampingan Pendaftaran Merek</span>
+              <h1 className="hm-h1">Daftar Merek <span style={{ color: ACCENT }}>Termurah</span><br />Didampingi Konsultan Ahli</h1>
+              <p className="hm-lead">Cek nama, analisa risiko, rekomendasi kelas produk/jasa, sampai pendaftaran ke DJKI — semua diurus tim HakiMerek. Anda fokus jualan.</p>
+              <div className="hm-price-pill">
+                <div className="p">
+                  <small>UMKM / Perorangan</small>
+                  <strong>Rp 1.299.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <div className="div"></div>
+                <div className="p">
+                  <small>Perusahaan / PT</small>
+                  <strong>Rp 2.490.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <span className="djki">✓ Termasuk DJKI</span>
+              </div>
+            </section>
+            <div className="hm-mascot-col">
+              <img className="hm-mascot-img" src="/variants/green-daftar-merek/robot.webp" alt="Maskot HakiMerek — konsultan robot dengan clipboard" width="340" height="340" />
+            </div>
+          </div>
 
           <section className="hm-process-row">
             {PROCESS.map((p, i) => (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
+import TopStrip from "./TopStrip";
 
 const ACCENT = "#ff6a2d";
 const ACCENT_2 = "#fff0e8";
@@ -82,7 +83,30 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
           align-items:start;
         }
 
-        .mr-story { padding-top:8px; }
+        .mr-story { padding-top:8px; position:relative; }
+        .mr-mascot-float {
+          position:absolute; right:-40px; top:-40px;
+          width:160px; height:160px; z-index:1;
+          filter:drop-shadow(0 20px 32px rgba(255,106,45,.28));
+          animation:mrFloat 4.5s ease-in-out infinite;
+          pointer-events:none;
+        }
+        @keyframes mrFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-10px) rotate(3deg)} }
+        .mr-price-pill {
+          display:inline-flex; align-items:center; gap:14px;
+          padding:12px 18px; border-radius:14px;
+          background:linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 6%, white));
+          border:1px solid color-mix(in srgb, var(--accent) 24%, white);
+          margin:8px 0 24px;
+          font-size:14px; font-weight:700;
+        }
+        .mr-price-pill .p { display:flex; flex-direction:column; }
+        .mr-price-pill .p small { color:#7c6f65; font-size:11px; font-weight:600; }
+        .mr-price-pill .p strong { color:var(--accent); font-size:16px; letter-spacing:-.01em; }
+        .mr-price-pill .div { width:1px; height:30px; background:color-mix(in srgb, var(--accent) 24%, white); }
+        .mr-price-pill .djki { color:#16a34a; font-size:11px; font-weight:800; margin-left:auto; }
+        @media (max-width:900px) { .mr-mascot-float { width:110px; right:-10px; top:-10px; } }
+
         .mr-eyebrow {
           display:inline-flex; padding:8px 14px; border-radius:999px;
           background:var(--accent-2); color:var(--accent);
@@ -185,6 +209,7 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="mr-site">
+        <TopStrip accent={ACCENT} />
         <header className="mr-nav">
           <a className="mr-brand" href="/">
             <div className="mr-logo">M</div>
@@ -197,8 +222,7 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
           </nav>
           <div className="mr-actions">
-            <a className="mr-btn" href="/kontak">Masuk</a>
-            <a className="mr-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi</a>
+            <a className="mr-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi Gratis</a>
             <button className="mr-menu-btn" onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Menu">☰</button>
           </div>
         </header>
@@ -211,9 +235,22 @@ export default function MerekinPage({ brand }: { brand: Brand }) {
         <div className="mr-wrap">
           <div className="mr-friendly">
             <section className="mr-story">
+              <img className="mr-mascot-float" src="/variants/orange-umkm-merek/robot.webp" alt="" aria-hidden="true" width="160" height="160" />
               <span className="mr-eyebrow">Merek Kuat, UMKM Maju</span>
-              <h1 className="mr-h1">Mulai Lindungi <span className="accent">Merek Anda</span><br />Hari Ini Juga</h1>
-              <p className="mr-lead">Cek nama merek, dapatkan analisa, rekomendasi kelas produk/jasa, dan panduan pendaftaran — dibuat khusus untuk UMKM Indonesia. Cepat, mudah, dan terjangkau.</p>
+              <h1 className="mr-h1">Daftar Merek UMKM <span className="accent">Termurah</span><br />Mulai Rp 1,3 Juta</h1>
+              <p className="mr-lead">Cek nama, dapatkan analisa, rekomendasi kelas produk/jasa, dan panduan pendaftaran — khusus UMKM Indonesia. Cepat, mudah, murah.</p>
+              <div className="mr-price-pill">
+                <div className="p">
+                  <small>UMKM / Perorangan</small>
+                  <strong>Rp 1.299.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <div className="div"></div>
+                <div className="p">
+                  <small>Perusahaan / PT</small>
+                  <strong>Rp 2.490.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <span className="djki">✓ Termasuk DJKI</span>
+              </div>
 
               <div className="mr-benefits">
                 {BENEFITS.map((b) => (

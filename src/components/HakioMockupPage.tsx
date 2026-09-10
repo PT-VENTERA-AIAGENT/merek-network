@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Brand } from "@/lib/brands";
 import type { HakioVariant } from "@/lib/variants";
 import JsonLd from "./JsonLd";
+import TopStrip from "./TopStrip";
 
 interface Message {
   role: "user" | "assistant";
@@ -261,6 +262,7 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
       `}</style>
 
       <div className="hm-page">
+        <TopStrip accent={v.accent} />
         <header className="hm-nav">
           <a href="/" className="hm-brand">
             <div className="hm-brand-mark" aria-hidden="true">
@@ -293,6 +295,24 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
             <div className="hm-subtitle">{v.subtitle}</div>
             <div className="hm-checks">
               {v.checks.map((c) => <span key={c}>{c}</span>)}
+            </div>
+            <div className="hm-price-pill" style={{
+              display: "inline-flex", alignItems: "center", gap: 14,
+              padding: "12px 18px", borderRadius: 14,
+              background: `linear-gradient(135deg, color-mix(in srgb, ${v.accent} 12%, white), color-mix(in srgb, ${v.accent} 5%, white))`,
+              border: `1px solid color-mix(in srgb, ${v.accent} 25%, white)`,
+              marginTop: 20, fontSize: 14, fontWeight: 700,
+            }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <small style={{ color: "#5a6889", fontSize: 11, fontWeight: 600 }}>UMKM / Perorangan</small>
+                <strong style={{ color: v.accent, fontSize: 16, letterSpacing: "-.01em" }}>Rp 1.299.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+              </div>
+              <div style={{ width: 1, height: 30, background: `color-mix(in srgb, ${v.accent} 22%, white)` }}></div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <small style={{ color: "#5a6889", fontSize: 11, fontWeight: 600 }}>Perusahaan / PT</small>
+                <strong style={{ color: v.accent, fontSize: 16, letterSpacing: "-.01em" }}>Rp 2.490.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+              </div>
+              <span style={{ color: "#16a34a", fontSize: 11, fontWeight: 800, marginLeft: "auto" }}>✓ Termasuk DJKI</span>
             </div>
           </div>
           <div className="hm-visual">

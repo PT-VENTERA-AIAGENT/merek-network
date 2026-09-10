@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
+import TopStrip from "./TopStrip";
 
 const ACCENT = "#7657ff";
 const ACCENT_2 = "#eee8ff";
@@ -80,7 +81,30 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
           align-items:start;
         }
 
-        .hk-left { display:flex; flex-direction:column; }
+        .hk-left { display:flex; flex-direction:column; position:relative; }
+        .hk-mascot-float {
+          position:absolute; right:-40px; top:-24px;
+          width:140px; height:140px; z-index:2;
+          filter:drop-shadow(0 18px 30px rgba(118,87,255,.28));
+          animation:hkFloat 4.5s ease-in-out infinite;
+          pointer-events:none;
+        }
+        @keyframes hkFloat { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-8px) rotate(3deg)} }
+        .hk-price-pill {
+          display:inline-flex; align-items:center; gap:14px;
+          padding:12px 18px; border-radius:14px;
+          background:linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 6%, white));
+          border:1px solid color-mix(in srgb, var(--accent) 24%, white);
+          margin:12px 0 24px;
+          font-size:14px; font-weight:700;
+        }
+        .hk-price-pill .p { display:flex; flex-direction:column; }
+        .hk-price-pill .p small { color:#5a5480; font-size:11px; font-weight:600; }
+        .hk-price-pill .p strong { color:var(--accent); font-size:16px; letter-spacing:-.01em; }
+        .hk-price-pill .div { width:1px; height:30px; background:color-mix(in srgb, var(--accent) 22%, white); }
+        .hk-price-pill .djki { color:#16a34a; font-size:11px; font-weight:800; margin-left:auto; }
+        @media (max-width:900px) { .hk-mascot-float { width:100px; right:-10px; top:-10px; } }
+
         .hk-eyebrow {
           display:inline-flex; padding:8px 14px; border-radius:999px;
           background:var(--accent-2); color:var(--accent);
@@ -189,6 +213,7 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
       `}</style>
 
       <div className="hk-site">
+        <TopStrip accent={ACCENT} />
         <header className="hk-nav">
           <a className="hk-brand" href="/">
             <div className="hk-logo">H</div>
@@ -201,8 +226,7 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
             {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
           </nav>
           <div className="hk-actions">
-            <a className="hk-btn" href="/kontak">Masuk</a>
-            <a className="hk-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi</a>
+            <a className="hk-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi Gratis</a>
             <button className="hk-menu-btn" onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Menu">☰</button>
           </div>
         </header>
@@ -215,9 +239,22 @@ export default function HKIMerekPage({ brand }: { brand: Brand }) {
         <div className="hk-wrap">
           <div className="hk-dash">
             <div className="hk-left">
+              <img className="hk-mascot-float" src="/variants/purple-analisa-merek/robot.webp" alt="" aria-hidden="true" width="140" height="140" />
               <span className="hk-eyebrow">Analisa Merek Berbasis AI</span>
-              <h1 className="hk-h1">Analisa Merek Anda<br /><span className="accent">dengan Data Resmi DJKI</span></h1>
-              <p className="hk-lead">Cek nama merek, analisa kemiripan visual & fonetik, rekomendasi kelas produk/jasa, dan insight strategis berdasarkan database resmi DJKI — semua dalam satu platform, lebih cepat, lebih akurat.</p>
+              <h1 className="hk-h1">Analisa & Daftar Merek <span className="accent">Termurah</span><br />Berbasis Data Resmi DJKI</h1>
+              <p className="hk-lead">Cek nama merek, analisa kemiripan visual & fonetik, rekomendasi kelas produk/jasa, dan insight strategis berdasarkan database resmi DJKI — semua dalam satu platform.</p>
+              <div className="hk-price-pill">
+                <div className="p">
+                  <small>UMKM / Perorangan</small>
+                  <strong>Rp 1.299.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <div className="div"></div>
+                <div className="p">
+                  <small>Perusahaan / PT</small>
+                  <strong>Rp 2.490.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
+                </div>
+                <span className="djki">✓ Termasuk DJKI</span>
+              </div>
 
               <ChatWidget
                 brand={brand}
