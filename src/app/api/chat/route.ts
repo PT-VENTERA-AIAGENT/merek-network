@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkLimits } from "@/lib/rate-limit";
 
 const SYSTEM_PROMPT = `Kamu adalah Asisten Merek AI dari Hakio — konsultan pendaftaran merek dagang terpercaya di Indonesia.
 
@@ -66,20 +67,6 @@ Token ini tidak terlihat oleh user — hanya diproses sistem untuk membuka tombo
 - Jika ada pertanyaan hukum kompleks, arahkan ke konsultasi langsung
 - Jaga konteks percakapan — ingat info yang sudah disebutkan user`;
 
-const RATE_LIMIT: Map<string, number[]> = new Map();
-const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const windowStart = now - RATE_LIMIT_WINDOW_MS;
-  const hits = (RATE_LIMIT.get(ip) ?? []).filter((t) => t > windowStart);
-  hits.push(now);
-  RATE_LIMIT.set(ip, hits);
-  const remaining = Math.max(0, RATE_LIMIT_MAX - hits.length);
-  return { allowed: hits.length <= RATE_LIMIT_MAX, remaining };
-}
-
 interface Lead {
   nama?: string;
   kelas?: string;
@@ -132,19 +119,18 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const ip =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      req.headers.get("x-real-ip") ??
-      "unknown";
     const brand = (body.brand as string) ?? "unknown";
 
-    const { allowed, remaining } = checkRateLimit(ip);
+    // Layered rate limit: global daily cap → per-IP → per-fingerprint.
+    // Persistent lewat Upstash (fallback in-memory kalau Upstash env belum diset).
+    const { allowed, remaining, reason } = await checkLimits(req);
     if (!allowed) {
+      const errorMsg =
+        reason === "global-daily"
+          ? "Sistem sedang sibuk. Silakan hubungi kami langsung via WhatsApp."
+          : "Batas percakapan tercapai. Silakan hubungi kami langsung via WhatsApp.";
       return NextResponse.json(
-        {
-          error: "Batas percakapan tercapai. Silakan hubungi kami langsung via WhatsApp.",
-          rate_limited: true,
-        },
+        { error: errorMsg, rate_limited: true, reason },
         { status: 429 }
       );
     }
