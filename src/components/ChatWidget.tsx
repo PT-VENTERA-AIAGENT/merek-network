@@ -208,22 +208,24 @@ export default function ChatWidget({
         }
         .cw-wa:hover { filter:brightness(1.05); }
         .cw-quick {
-          display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;
-          padding:12px 18px 12px;
+          display:flex; flex-wrap:wrap; gap:6px;
+          padding:8px 18px 10px;
           border-top:1px solid #eef1f6;
           background:#fafbfe;
         }
         .cw-quick button {
           border:1px solid #e1e6ef; background:#fff;
-          border-radius:12px; padding:11px 12px;
-          color:#354464; font-weight:700; font-size:13px;
+          border-radius:999px; padding:5px 12px;
+          color:#354464; font-weight:600; font-size:12px;
           cursor:pointer; text-align:left;
-          transition:border-color .12s, background .12s;
+          transition:border-color .12s, background .12s, color .12s;
           font-family:inherit;
+          line-height:1.35;
         }
         .cw-quick button:hover {
           border-color:color-mix(in srgb, var(--accent) 40%, transparent);
           background:color-mix(in srgb, var(--accent) 6%, white);
+          color:var(--accent);
         }
         .cw-composer {
           display:grid; grid-template-columns:1fr auto; gap:10px;

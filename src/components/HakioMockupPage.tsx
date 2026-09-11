@@ -177,9 +177,10 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
         .hm-minibox strong { display: block; margin-bottom: 8px; font-size: 20px; line-height: 1.2; }
         .hm-minibox p { margin: 0; color: #697898; line-height: 1.55; font-size: 14px; }
         .hm-searchcard { margin: 10px 44px 0; border: 1px solid var(--line); background: rgba(255,255,255,.92); border-radius: 28px; box-shadow: var(--shadow); overflow: hidden; }
-        .hm-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 18px 18px 0; }
-        .hm-tab { min-height: 56px; padding: 12px 16px; border-radius: 16px 16px 0 0; color: #697796; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 3px solid transparent; background:transparent; border-left:0; border-right:0; border-top:0; cursor:pointer; font-family:inherit; font-size:14px; }
-        .hm-tab.active { color: var(--dark); border-bottom-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, white); }
+        .hm-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 6px; }
+        .hm-tab { padding: 5px 12px; border-radius: 999px; color: #697796; font-weight: 600; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background:#fff; cursor:pointer; font-family:inherit; transition: border-color .12s, background .12s, color .12s; line-height:1.35; }
+        .hm-tab:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); background:color-mix(in srgb, var(--accent) 6%, white); }
+        .hm-tab.active { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, white); font-weight: 700; }
         .hm-search-inner { display: grid; grid-template-columns: 1fr 270px; gap: 16px; padding: 18px; align-items: center; }
         .hm-search-box { border: 1px solid var(--line); background: #fff; min-height: 94px; border-radius: 18px; padding: 18px 20px; display:flex; flex-direction:column; justify-content:center; transition:border-color .15s; }
         .hm-search-box:focus-within { border-color: var(--accent); }
@@ -189,8 +190,8 @@ export default function HakioMockupPage({ brand, variant: v }: Props) {
         .hm-cta { min-height: 94px; border: 0; border-radius: 20px; color: #fff; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, var(--accent-deep))); box-shadow: 0 18px 32px color-mix(in srgb, var(--accent) 22%, transparent); font-size: 16px; font-weight: 800; padding: 0 20px; cursor:pointer; font-family:inherit; }
         .hm-cta:disabled { opacity:.55; cursor:not-allowed; }
         .hm-cta small { display: block; opacity: .9; font-weight: 600; margin-top: 4px; font-size:13px; }
-        .hm-chips { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 18px 18px; align-items: center; color: #6b7995; font-size: 14px; }
-        .hm-chip { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor:pointer; font-family:inherit; font-size:14px; color:inherit; }
+        .hm-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 18px 16px; align-items: center; color: #6b7995; font-size: 12px; }
+        .hm-chip { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: #fff; cursor:pointer; font-family:inherit; font-size:12px; color:inherit; font-weight:600; line-height:1.35; }
         .hm-chip:hover { background: color-mix(in srgb, var(--accent) 6%, white); border-color: color-mix(in srgb, var(--accent) 24%, white); }
         .hm-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 24px 44px 0; }
         .hm-stat { border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.88); padding: 22px; min-height: 104px; }
