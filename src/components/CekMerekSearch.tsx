@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 
-const SEARCH_API = "https://api.hakimerek.com/api/search";
-const DETAIL_API = "https://api.hakimerek.com/api/detail";
+const API = "https://api.hakimerek.com/api/search";
 
 interface Result {
   brand_name: string;
@@ -15,26 +13,6 @@ interface Result {
   filing_date_iso: string;
   status: string;
   image_url: string;
-  brand_slug: string;
-}
-
-interface Detail {
-  serial_number: string;
-  brand_name: string;
-  nice_class: string;
-  goods_services: string;
-  status: string;
-  image_url: string;
-  owner: string | null;
-  representative: string | null;
-  filing_date: string | null;
-  registration_number: string | null;
-  registration_date: string | null;
-  expiration_date: string | null;
-  remaining_protection_days: number | null;
-  colours: string | null;
-  publication_number: string | null;
-  publication_date: string | null;
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -45,168 +23,17 @@ function StatusBadge({ status }: { status: string }) {
   return <span className="cmk-badge cmk-badge-active">Terdaftar</span>;
 }
 
-function LogoImg({ src, alt, size = 64 }: { src: string; alt: string; size?: number }) {
+function LogoImg({ src, alt }: { src: string; alt: string }) {
   const [err, setErr] = useState(false);
-  const base = { width: size, height: size, borderRadius: 10, objectFit: "contain" as const, background: "#f7f9fd", border: "1px solid var(--line,#e8edf7)", display: "block" };
-  if (err) return <div style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center", background: "#f0f4ff", fontSize: size * 0.35, color: "var(--muted,#6c7897)" }}>™</div>;
+  const base = { width: 64, height: 64, borderRadius: 10, objectFit: "contain" as const, background: "#f7f9fd", border: "1px solid var(--line,#e8edf7)", display: "block" };
+  if (err) return <div style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center", background: "#f0f4ff", fontSize: 22, color: "var(--muted,#6c7897)" }}>™</div>;
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt={alt} style={base} onError={() => setErr(true)} />;
 }
 
-function formatDate(s: string | null | undefined) {
-  if (!s) return "—";
-  const d = new Date(s);
-  if (isNaN(d.getTime())) return s;
-  return d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
-}
-
-function RemainingDays({ days }: { days: number | null }) {
-  if (days === null) return <span>—</span>;
-  if (days <= 0) return <span style={{ color: "#dc2626", fontWeight: 700 }}>Kadaluwarsa</span>;
-  const years = Math.floor(days / 365);
-  const rem = days % 365;
-  const label = years > 0 ? `${years} thn ${Math.floor(rem / 30)} bln` : `${days} hari`;
-  const color = days < 365 ? "#d97706" : "#16a34a";
-  return <span style={{ color, fontWeight: 700 }}>{label}</span>;
-}
-
-function DetailModal({ serial, brandSlug, onClose }: { serial: string; brandSlug: string; onClose: () => void }) {
-  const [detail, setDetail] = useState<Detail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch(`${DETAIL_API}?id=${encodeURIComponent(serial)}&brand=${encodeURIComponent(brandSlug)}`);
-        const data = await res.json();
-        if (!cancelled) {
-          if (data.ok && data.detail) setDetail(data.detail);
-          else setError("Data tidak ditemukan.");
-        }
-      } catch {
-        if (!cancelled) setError("Gagal terhubung. Coba lagi.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-    load();
-    return () => { cancelled = true; };
-  }, [serial, brandSlug]);
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  if (!mounted) return null;
-
-  const modal = (
-    <div className="cmk-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="cmk-modal" role="dialog" aria-modal="true">
-        <button className="cmk-modal-close" onClick={onClose} aria-label="Tutup">×</button>
-
-        {loading && (
-          <div style={{ padding: "48px 24px", textAlign: "center", color: "var(--muted,#6c7897)" }}>
-            <span className="cmk-spin" style={{ borderTopColor: "#1e3a8a", borderColor: "rgba(30,58,138,.2)" }} />
-            Memuat data…
-          </div>
-        )}
-
-        {error && !loading && (
-          <div style={{ padding: "32px 24px", textAlign: "center", color: "#dc2626" }}>{error}</div>
-        )}
-
-        {detail && !loading && (
-          <>
-            <div className="cmk-modal-header">
-              <LogoImg src={detail.image_url} alt={detail.brand_name} size={80} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="cmk-modal-brand">{detail.brand_name || serial}</div>
-                <div className="cmk-serial" style={{ marginBottom: 6 }}>{detail.serial_number}</div>
-                <StatusBadge status={detail.status} />
-              </div>
-            </div>
-
-            <div className="cmk-modal-grid">
-              {detail.owner && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Nama Pemilik</div>
-                  <div className="cmk-modal-value">{detail.owner}</div>
-                </div>
-              )}
-              {detail.representative && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Kuasa Hukum</div>
-                  <div className="cmk-modal-value">{detail.representative}</div>
-                </div>
-              )}
-              {detail.registration_number && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Nomor Pendaftaran</div>
-                  <div className="cmk-modal-value" style={{ fontFamily: "monospace", fontWeight: 700 }}>{detail.registration_number}</div>
-                </div>
-              )}
-              {detail.nice_class && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Kelas NICE</div>
-                  <div className="cmk-modal-value">
-                    <span className="cmk-class-pill" style={{ width: "auto", padding: "0 14px", borderRadius: 8, fontSize: 13 }}>{detail.nice_class}</span>
-                  </div>
-                </div>
-              )}
-              {detail.colours && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Warna</div>
-                  <div className="cmk-modal-value">{detail.colours}</div>
-                </div>
-              )}
-              <div className="cmk-modal-field">
-                <div className="cmk-modal-label">Sisa Perlindungan</div>
-                <div className="cmk-modal-value"><RemainingDays days={detail.remaining_protection_days} /></div>
-              </div>
-              <div className="cmk-modal-field">
-                <div className="cmk-modal-label">Tgl Permohonan</div>
-                <div className="cmk-modal-value">{formatDate(detail.filing_date)}</div>
-              </div>
-              {detail.registration_date && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Tgl Pendaftaran</div>
-                  <div className="cmk-modal-value">{formatDate(detail.registration_date)}</div>
-                </div>
-              )}
-              {detail.expiration_date && (
-                <div className="cmk-modal-field">
-                  <div className="cmk-modal-label">Tgl Berakhir</div>
-                  <div className="cmk-modal-value">{formatDate(detail.expiration_date)}</div>
-                </div>
-              )}
-            </div>
-
-            {detail.goods_services && (
-              <div style={{ marginTop: 16, padding: "14px 16px", background: "var(--soft,#f0f4ff)", borderRadius: 10 }}>
-                <div className="cmk-modal-label" style={{ marginBottom: 6 }}>Barang / Jasa</div>
-                <div style={{ fontSize: 13, color: "#3a4666", lineHeight: 1.65 }}>{detail.goods_services}</div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-
-  return createPortal(modal, document.body);
+function formatDate(iso: string, fallback: string) {
+  if (!iso) return fallback || "—";
+  return new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
 }
 
 export default function CekMerekSearch() {
@@ -217,14 +44,13 @@ export default function CekMerekSearch() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
-  const [activeDetail, setActiveDetail] = useState<{ serial: string; brandSlug: string } | null>(null);
 
   async function doSearch(q: string, p = 1) {
     if (!q.trim()) return;
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${SEARCH_API}?q=${encodeURIComponent(q)}&page=${p}`);
+      const res = await fetch(`${API}?q=${encodeURIComponent(q)}&page=${p}`);
       const data = await res.json();
       if (data.code === "RATE_LIMITED") throw new Error(data.error);
       if (!data.ok) throw new Error("Gagal mengambil data");
@@ -270,32 +96,17 @@ export default function CekMerekSearch() {
         .cmk-class-pill{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;background:var(--accent,#1e3a8a);color:#fff;font-weight:800;font-size:14px}
         .cmk-goods{max-width:340px;color:var(--muted,#6c7897);font-size:12.5px;line-height:1.55}
         .cmk-date{white-space:nowrap;font-size:12.5px}
-        .cmk-detail-btn{padding:5px 12px;border-radius:8px;border:1.5px solid var(--line,#e8edf7);background:#fff;color:var(--ink,#0f224d);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:border-color .15s}
-        .cmk-detail-btn:hover{border-color:var(--accent,#1e3a8a);color:var(--accent,#1e3a8a)}
         .cmk-more{margin-top:20px;text-align:center}
         .cmk-more-btn{padding:11px 28px;border-radius:10px;border:1.5px solid var(--line,#e8edf7);background:#fff;color:var(--ink,#0f224d);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:border-color .15s}
         .cmk-more-btn:hover{border-color:var(--accent,#1e3a8a)}
         .cmk-empty{text-align:center;padding:40px 20px;color:var(--muted,#6c7897);font-size:15px}
         .cmk-spin{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:cmk-rotate .7s linear infinite;vertical-align:middle;margin-right:6px}
         @keyframes cmk-rotate{to{transform:rotate(360deg)}}
-        .cmk-disclaimer{font-size:12px;color:var(--muted,#6c7897);line-height:1.65;margin-top:16px;padding:12px 16px;background:var(--soft,#f0f4ff);border-radius:10px;border:1px solid var(--line,#e8edf7)}
-        .cmk-overlay{position:fixed;inset:0;background:rgba(15,34,77,.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-        .cmk-modal{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:28px;position:relative;box-shadow:0 32px 64px rgba(15,34,77,.22)}
-        .cmk-modal-close{position:absolute;top:16px;right:18px;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line,#e8edf7);background:#fff;font-size:20px;line-height:1;cursor:pointer;color:var(--muted,#6c7897);display:flex;align-items:center;justify-content:center}
-        .cmk-modal-close:hover{background:#f7f9fd}
-        .cmk-modal-header{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line,#e8edf7)}
-        .cmk-modal-brand{font-size:20px;font-weight:800;color:var(--ink,#0f224d);letter-spacing:-.01em;margin-bottom:4px}
-        .cmk-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        .cmk-modal-field{background:var(--soft,#f0f4ff);border-radius:10px;padding:10px 12px}
-        .cmk-modal-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted,#6c7897);margin-bottom:4px}
-        .cmk-modal-value{font-size:13.5px;font-weight:600;color:var(--ink,#0f224d)}
         @media(max-width:760px){
           .cmk-row{flex-direction:column}
           .cmk-btn{width:100%;height:48px}
           .cmk-input{height:48px}
           .cmk-goods{max-width:180px}
-          .cmk-modal-grid{grid-template-columns:1fr}
-          .cmk-modal{padding:20px}
         }
       `}</style>
 
@@ -334,7 +145,7 @@ export default function CekMerekSearch() {
 
           {results.length === 0 ? (
             <div className="cmk-empty">
-              Tidak ada merek terdaftar dengan nama ini.<br />
+              ✅ Tidak ada merek terdaftar dengan nama ini.<br />
               <span style={{ fontSize: 13 }}>Nama tersedia — pertimbangkan segera mendaftarkan merek Anda.</span>
             </div>
           ) : (
@@ -349,7 +160,6 @@ export default function CekMerekSearch() {
                       <th>Barang / Jasa</th>
                       <th>Tgl Daftar</th>
                       <th>Status</th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -372,22 +182,8 @@ export default function CekMerekSearch() {
                               : "—"}
                           </div>
                         </td>
-                        <td>
-                          <div className="cmk-date">
-                            {r.filing_date_iso
-                              ? new Date(r.filing_date_iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })
-                              : r.filing_date || "—"}
-                          </div>
-                        </td>
+                        <td><div className="cmk-date">{formatDate(r.filing_date_iso, r.filing_date)}</div></td>
                         <td><StatusBadge status={r.status} /></td>
-                        <td>
-                          <button
-                            className="cmk-detail-btn"
-                            onClick={() => setActiveDetail({ serial: r.serial_number, brandSlug: r.brand_slug })}
-                          >
-                            Detail
-                          </button>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -401,21 +197,9 @@ export default function CekMerekSearch() {
                   </button>
                 </div>
               )}
-
-              <p className="cmk-disclaimer">
-                <strong>Disclaimer:</strong> Data bersumber dari database publik DJKI. Layanan ini tidak menjamin keakuratan maupun kelengkapan informasi yang tersedia. Pembaruan, koreksi, atau perubahan terkini mungkin belum tercakup. Hasil pencarian ini tidak dapat dijadikan dasar nasihat hukum secara langsung. Untuk kepastian hukum, konsultasikan dengan Konsultan KI Indonesia yang bersertifikat.
-              </p>
             </>
           )}
         </div>
-      )}
-
-      {activeDetail && (
-        <DetailModal
-          serial={activeDetail.serial}
-          brandSlug={activeDetail.brandSlug}
-          onClose={() => setActiveDetail(null)}
-        />
       )}
     </>
   );
