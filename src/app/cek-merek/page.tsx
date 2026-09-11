@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 import { getBrandById } from "@/lib/brands";
 import SubPageLayout from "@/components/SubPageLayout";
+import CekMerekSearch from "@/components/CekMerekSearch";
 
 export const metadata: Metadata = {
   title: "Cek Nama Merek Dagang Gratis — Instan via AI ",
@@ -20,6 +21,8 @@ export default async function Page() {
       title="Pastikan Nama Merek Anda Bebas dari Bentrok Sebelum Daftar"
       intro="Setiap tahun ratusan permohonan ditolak DJKI karena mirip merek terdaftar. Sebelum keluar uang untuk pendaftaran, cek dulu nama Anda di sini — instan, gratis, dan langsung dianalisa AI."
     >
+      <CekMerekSearch />
+
       <h2>Kenapa harus dicek dulu?</h2>
       <p>Merek yang sudah dipakai (baik terdaftar maupun dalam masa pengumuman) berhak menolak permohonan baru yang dianggap serupa. Ini bukan sekadar tulisan yang sama persis — pemeriksa DJKI juga mempertimbangkan cara pengucapan, tampilan visual, dan makna kata. Pengecekan awal menghemat waktu berbulan-bulan dan biaya yang bisa hangus.</p>
 
