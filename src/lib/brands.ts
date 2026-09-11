@@ -1,4 +1,4 @@
-export type BrandId = "hakimerek" | "cekhaki" | "merekin" | "hkimerek" | "daftarmerekmu";
+export type BrandId = "hakimerek" | "cekhaki" | "merekin" | "hkimerek" | "daftarmerekmu" | "hakioai";
 
 export interface Brand {
   id: BrandId;
@@ -166,6 +166,35 @@ export const BRANDS: Record<string, Brand> = {
         "Cara paling mudah daftar merek dagang di Indonesia. Panduan AI langkah demi langkah untuk UMKM dan perusahaan.",
     },
   },
+  "hakioai.com": {
+    id: "hakioai",
+    name: "Hakio AI",
+    tagline: "Amankan Merek Anda dengan AI",
+    description:
+      "Hakio AI — chat AI premium untuk cek merek, analisa kemiripan, dan pendampingan pendaftaran merek dagang ke DJKI. Dikelola PT Sellora Optima Teknologi.",
+    accent: "#0F1E3C",
+    accentLight: "#D5A34A",
+    accentRgb: "15,30,60",
+    whatsapp: WHATSAPP,
+    chips: [
+      "Cek nama merek saya",
+      "Analisa kemiripan merek",
+      "Rekomendasi kelas produk/jasa",
+      "Estimasi biaya pendaftaran",
+    ],
+    keywords: [
+      "hakio ai",
+      "hakio",
+      "ai merek dagang",
+      "cek merek ai",
+      "daftar merek ai",
+    ],
+    schema: {
+      name: "Hakio AI — Chat AI Merek Dagang Premium",
+      description:
+        "Chat AI premium untuk cek merek, analisa kemiripan, dan pendampingan pendaftaran merek dagang. Navy + gold, mascot 3D robot Hakio.",
+    },
+  },
 };
 
 export const DOMAIN_ALIASES: Record<string, string> = {
@@ -174,6 +203,7 @@ export const DOMAIN_ALIASES: Record<string, string> = {
   "merekin.id": "merekin.com",
   "hkimerek.id": "hkimerek.com",
   "daftarmerekmu.id": "daftarmerekmu.com",
+  "hakioai.id": "hakioai.com",
 };
 
 export const DEFAULT_BRAND_ID = "hakimerek";

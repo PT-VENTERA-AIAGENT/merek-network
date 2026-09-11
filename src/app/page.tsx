@@ -8,6 +8,7 @@ import HakiMerekPage from "@/components/HakiMerekPage";
 import HKIMerekPage from "@/components/HKIMerekPage";
 import MerekinPage from "@/components/MerekinPage";
 import DaftarMerekmuPage from "@/components/DaftarMerekmuPage";
+import CekHakiHeroPage from "@/components/CekHakiHeroPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   const hdrs = await headers();
@@ -48,5 +49,6 @@ export default async function Page() {
   if (brand.id === "hkimerek") return <HKIMerekPage brand={brand} />;
   if (brand.id === "merekin") return <MerekinPage brand={brand} />;
   if (brand.id === "daftarmerekmu") return <DaftarMerekmuPage brand={brand} />;
+  if (brand.id === "hakioai") return <CekHakiHeroPage brand={brand} />;
   return <ChatPage brand={brand} />;
 }

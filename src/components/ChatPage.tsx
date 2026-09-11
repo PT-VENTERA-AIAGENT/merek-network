@@ -50,6 +50,12 @@ const LANDING: Record<BrandId, LandingContent> = {
     heroSubtitle:
       "Tidak perlu paham hukum. AI konsultan kami pandu langkah demi langkah hingga sertifikat jadi.",
   },
+  hakioai: {
+    eyebrow: "Hakio AI Premium",
+    heroTitle: "Amankan Merek Anda dengan AI",
+    heroSubtitle:
+      "Chat AI premium untuk cek merek, analisa kemiripan, dan pendampingan pendaftaran merek dagang.",
+  },
 };
 
 /* ── Icons ──────────────────────────────────────────────────── */
