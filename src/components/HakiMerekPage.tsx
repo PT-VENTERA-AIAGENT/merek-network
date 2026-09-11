@@ -1,291 +1,986 @@
 "use client";
 
+/**
+ * HakiMerek — Editorial Monograph edition.
+ *
+ * Design POV: "Practice note dari jurnal hukum kekayaan intelektual",
+ * bukan lagi chatbot landing. Referensi vibe:
+ *  - The Economist / WSJ typography
+ *  - Aesop web micro-site
+ *  - Studio arsitek/hukum monograph
+ *
+ * Yang berubah dari versi AI-generic sebelumnya:
+ *  - Font Inter → Instrument Serif (display italic thin) + IBM Plex Sans body
+ *  - Palette pastel emerald → INK #163D33 + PAPER #F4EFE4 + SIENNA #A13E21
+ *  - Mascot chibi 3D robot dihapus → ganti monochrome ink illustration
+ *  - Rounded 20px cards + gradient wash → sharp corners + hairline rules
+ *  - Conic-glow chat container → editorial "Q&A" framed box
+ *  - "Eyebrow pill" capsule → byline metadata mono
+ *  - Grid symmetric 4-col process → numbered spreads asimetris 01/04-04/04
+ *  - Center-aligned tegak → 8-col grid dengan breakout illustration
+ *
+ * Aset yang di-generate lewat Codex nanti (fallback graceful kalau missing):
+ *  - /hakimerek/hero-illustration.webp
+ *  - /hakimerek/process-01.webp .. process-04.webp
+ *  - /hakimerek/grain.png (subtle noise overlay)
+ */
+
 import { useState } from "react";
 import type { Brand } from "@/lib/brands";
 import JsonLd from "./JsonLd";
 import ChatWidget from "./ChatWidget";
-import { TopStripMarquee } from "./TopStrips";
 import FloatingWA from "./FloatingWA";
 
-const ACCENT = "#0b8d68";
-const ACCENT_2 = "#dff8ef";
+const INK = "#163D33";
+const PAPER = "#F4EFE4";
+const SIENNA = "#A13E21";
+const OFFWHITE = "#FEFCF6";
+const CHARCOAL = "#262523";
 
 const NAV = [
-  { label: "Beranda", href: "/" },
-  { label: "Cek Merek", href: "/cek-merek" },
-  { label: "Daftar Merek", href: "/daftar-merek" },
-  { label: "Kelas Produk/Jasa", href: "/kelas-produk-jasa" },
-  { label: "Harga", href: "/biaya" },
-  { label: "Panduan", href: "/perpanjang" },
+  { label: "Cek", href: "/cek-merek" },
+  { label: "Daftar", href: "/daftar-merek" },
+  { label: "Kelas", href: "/kelas-produk-jasa" },
+  { label: "Biaya", href: "/biaya" },
+  { label: "Perpanjang", href: "/perpanjang" },
   { label: "Blog", href: "/blog" },
 ];
 
 const PROCESS = [
-  { n: 1, title: "Konsultasi & Cek Nama", desc: "Pastikan nama merek tersedia sebelum daftar." },
-  { n: 2, title: "Analisa Risiko", desc: "Cek kemiripan dan risiko penolakan." },
-  { n: 3, title: "Rekomendasi Kelas", desc: "Pilih kelas produk/jasa yang tepat." },
-  { n: 4, title: "Daftar Merek", desc: "Tim bantu sampai permohonan masuk DJKI." },
+  {
+    n: "01",
+    title: "Konsultasi & Cek Nama",
+    body:
+      "Kami cek dulu nama Anda di database resmi DJKI dan indikator kemiripan visual+fonetik. Kalau ada risiko, kami sampaikan sebelum Anda bayar.",
+  },
+  {
+    n: "02",
+    title: "Analisa Risiko",
+    body:
+      "Analisa perbandingan merek terdaftar yang berpotensi konflik, argumen kelas produk/jasa, dan strategi peluang lolos pemeriksaan substantif.",
+  },
+  {
+    n: "03",
+    title: "Rekomendasi Kelas",
+    body:
+      "Rekomendasi kelas NICE (Kelas Produk/Jasa) yang mencakup cakupan bisnis Anda tanpa buang biaya di kelas irelevan.",
+  },
+  {
+    n: "04",
+    title: "Pendaftaran ke DJKI",
+    body:
+      "Kami susun dokumen sesuai format DJKI, ajukan lewat sistem resmi, dan monitor status permohonan sampai sertifikat elektronik keluar.",
+  },
 ];
 
 const QUICK_ACTIONS = [
-  { label: "Daftar Merek", template: "Saya ingin daftar merek dagang, tolong bantu prosesnya untuk bisnis: " },
-  { label: "Cek Nama", template: "Saya mau cek ketersediaan nama merek: " },
-  { label: "Rekomendasi Kelas", template: "Tolong rekomendasikan kelas produk/jasa untuk bisnis saya: " },
-  { label: "Estimasi Biaya", template: "Berapa estimasi biaya total untuk mendaftarkan merek dagang saya?" },
+  { label: "Cek ketersediaan nama", template: "Cek ketersediaan nama merek: " },
+  { label: "Rekomendasi kelas", template: "Rekomendasi kelas produk/jasa untuk bisnis: " },
+  { label: "Analisa kemiripan", template: "Analisa kemiripan merek: " },
+  { label: "Estimasi biaya", template: "Estimasi biaya total pendaftaran merek: " },
 ];
 
 export default function HakiMerekPage({ brand }: { brand: Brand }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent("Halo HakiMerek! Saya ingin konsultasi pendaftaran merek dagang.")}`;
+  const waLink = `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(
+    "Halo hakimerek.com, saya mau konsultasi pendaftaran merek saya \"...\""
+  )}`;
 
   return (
     <>
       <JsonLd brand={brand} />
       <style>{`
-        :root { --accent:${ACCENT}; --accent-2:${ACCENT_2}; --dark:#0b2a27; --soft:#f7fffb; --line:#e7ebf3; }
-        html,body{margin:0;padding:0;overflow-x:hidden}
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+          --ink: ${INK};
+          --paper: ${PAPER};
+          --sienna: ${SIENNA};
+          --offwhite: ${OFFWHITE};
+          --charcoal: ${CHARCOAL};
+          --rule: rgba(22,61,51,.14);
+          --rule-strong: rgba(22,61,51,.35);
+          --serif: 'Instrument Serif', 'PT Serif', Georgia, serif;
+          --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+          --mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, monospace;
+        }
+        html, body { margin:0; padding:0; overflow-x:hidden; }
         body {
-          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          background:#f5f7fb; color:var(--dark);
-        }
-        .hm-site { min-height:100vh; background:linear-gradient(180deg,#fff,var(--soft)); }
-        /* Navbar HakiMerek: SQUARE, thick underline aksen — corporate-official */
-        .hm-nav {
-          height:80px; display:flex; align-items:center; justify-content:space-between;
-          padding:0 42px;
-          border-bottom:3px solid var(--accent);
-          background:#fff;
-          position:sticky; top:0; z-index:20;
-          box-shadow:0 4px 20px rgba(11,141,104,.08);
-        }
-        .hm-brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
-        .hm-wordmark { height:44px; width:auto; display:block; }
-        .hm-btn { border-radius:6px; }
-        .hm-btn.primary { border-radius:6px; }
-        .hm-links { display:flex; gap:26px; color:#425173; font-size:14px; font-weight:600; }
-        .hm-links a { text-decoration:none; color:inherit; padding:8px 0; }
-        .hm-links a:hover { color:var(--accent); }
-        .hm-actions { display:flex; gap:10px; align-items:center; }
-        .hm-btn {
-          border-radius:12px; padding:11px 16px; border:1px solid #dfe5ef;
-          background:#fff; font-weight:700; text-decoration:none; color:inherit;
-          font-size:14px; display:inline-flex; align-items:center; gap:8px;
-        }
-        .hm-btn.primary {
-          background:var(--accent); border-color:var(--accent); color:#fff;
-          box-shadow:0 10px 20px color-mix(in srgb, var(--accent) 25%, transparent);
-        }
-        .hm-menu-btn { display:none; width:42px; height:42px; border-radius:10px; border:1px solid #dfe5ef; background:#fff; cursor:pointer; }
-
-        .hm-wrap { max-width:1240px; margin:0 auto; padding:44px 28px 60px; }
-
-        .hm-hero-wrap {
-          display:grid; grid-template-columns:1.15fr .85fr; gap:32px;
-          align-items:center; margin-bottom:16px;
-        }
-        .hm-intro-center { text-align:left; display:flex; flex-direction:column; align-items:flex-start; }
-        .hm-mascot-col { position:relative; display:grid; place-items:center; }
-        .hm-mascot-img {
-          width:100%; max-width:340px; height:auto;
-          filter:drop-shadow(0 22px 40px rgba(11,141,104,.25));
-          animation:hmFloat 4.5s ease-in-out infinite;
-        }
-        @keyframes hmFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        .hm-price-pill {
-          display:inline-flex; align-items:center; gap:14px;
-          padding:12px 20px; border-radius:16px;
-          background:linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 8%, white));
-          border:1px solid color-mix(in srgb, var(--accent) 24%, white);
-          margin:22px 0 6px;
-          font-size:14px; font-weight:700;
-        }
-        .hm-price-pill .p { display:flex; flex-direction:column; }
-        .hm-price-pill .p small { color:#4a6c62; font-size:11px; letter-spacing:.02em; font-weight:600; }
-        .hm-price-pill .p strong { color:var(--accent); font-size:17px; letter-spacing:-.01em; }
-        .hm-price-pill .div { width:1px; height:32px; background:color-mix(in srgb, var(--accent) 24%, white); }
-        .hm-price-pill .djki { color:#16a34a; font-size:11px; font-weight:800; margin-left:auto; }
-        @media (max-width:900px) {
-          .hm-hero-wrap { grid-template-columns:1fr; }
-          .hm-mascot-col { order:2; }
-          .hm-mascot-img { max-width:240px; }
+          font-family: var(--sans);
+          background: var(--paper);
+          color: var(--ink);
+          font-weight: 400;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
         }
 
-        .hm-eyebrow {
-          display:inline-flex; padding:8px 14px; border-radius:999px;
-          background:var(--accent-2); color:var(--accent);
-          font-size:12px; font-weight:800; letter-spacing:.05em;
-          margin-bottom:16px;
+        /* Grain overlay — subtle print texture */
+        .hkm-grain::before {
+          content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
+          background-image:url('/hakimerek/grain.png');
+          background-repeat:repeat; background-size:512px;
+          opacity:.045; mix-blend-mode:multiply;
         }
-        .hm-h1 {
-          font-size:clamp(38px, 5vw, 60px); line-height:1;
-          letter-spacing:-.045em; margin:0 0 20px; max-width:900px; font-weight:850;
-        }
-        .hm-lead { font-size:18px; line-height:1.6; color:#5f6c87; max-width:820px; margin:0; }
 
-        .hm-process-row {
-          display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;
-          margin:32px 0 26px;
+        /* ============ TOP STRIP EDITORIAL ============
+           Bukan marquee playful lagi — running ticker editorial style */
+        .hkm-strip {
+          background: var(--ink); color: var(--paper);
+          border-bottom: 1px solid var(--ink);
+          position: relative; overflow: hidden;
+          padding: 8px 0;
+          font-family: var(--mono); font-size: 11.5px;
+          letter-spacing: .06em; text-transform: uppercase;
+          font-weight: 500;
         }
-        .hm-process {
-          display:flex; gap:14px; align-items:flex-start;
-          padding:18px; border-radius:18px; background:#fff; border:1px solid #e7ebf3;
+        .hkm-strip-track {
+          display: flex; gap: 44px; white-space: nowrap;
+          animation: hkmScroll 42s linear infinite;
+          width: max-content;
         }
-        .hm-process-n {
-          width:36px; height:36px; border-radius:50%;
-          display:grid; place-items:center; background:#eef2f7;
-          font-weight:800; flex-shrink:0;
+        .hkm-strip:hover .hkm-strip-track { animation-play-state: paused; }
+        .hkm-strip-item { display: inline-flex; align-items: center; gap: 10px; }
+        .hkm-strip-item::before {
+          content:"§"; color: var(--sienna); font-family: var(--serif);
+          font-style: italic; font-size: 15px; margin-right: 2px;
         }
-        .hm-process.active { background:var(--accent-2); border-color:color-mix(in srgb, var(--accent) 25%, white); }
-        .hm-process.active .hm-process-n { background:var(--accent); color:#fff; }
-        .hm-process b { display:block; font-size:14px; letter-spacing:-.01em; }
-        .hm-process small { display:block; color:#7a849c; margin-top:4px; line-height:1.4; font-size:12.5px; }
+        .hkm-strip-item em {
+          font-style: normal; color: var(--sienna); font-weight: 600;
+        }
+        @keyframes hkmScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        .hm-main-chat { max-width:900px; margin:0 auto; }
+        /* ============ MASTHEAD ============ */
+        .hkm-masthead {
+          border-bottom: 1px solid var(--rule);
+          background: var(--paper);
+          position: sticky; top: 0; z-index: 30;
+          padding: 22px 0 20px;
+        }
+        .hkm-container {
+          max-width: 1180px;
+          margin: 0 auto;
+          padding: 0 40px;
+        }
+        .hkm-masthead-grid {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: 40px;
+        }
+        .hkm-logomark {
+          display: flex; align-items: center; gap: 14px;
+          text-decoration: none; color: var(--ink);
+        }
+        .hkm-logomark-stack {
+          font-family: var(--mono); font-size: 10px;
+          font-weight: 700; letter-spacing: .15em;
+          line-height: 1; text-transform: uppercase;
+          border-right: 1px solid var(--rule-strong);
+          padding-right: 14px;
+        }
+        .hkm-logomark-stack span { display: block; }
+        .hkm-logomark-stack span + span { margin-top: 3px; color: var(--sienna); }
+        .hkm-logomark-wordmark {
+          font-family: var(--serif);
+          font-size: 26px; line-height: 1;
+          letter-spacing: -.02em;
+          font-weight: 400;
+        }
+        .hkm-logomark-wordmark em { font-style: italic; color: var(--sienna); }
+        .hkm-nav {
+          display: flex; align-items: center; justify-content: center;
+          gap: 0; flex-wrap: wrap;
+          font-family: var(--sans); font-size: 13.5px;
+          color: var(--ink); font-weight: 500;
+        }
+        .hkm-nav a {
+          text-decoration: none; color: inherit;
+          padding: 4px 12px;
+          transition: color .12s;
+          position: relative;
+        }
+        .hkm-nav a:hover { color: var(--sienna); }
+        .hkm-nav a + a::before {
+          content:"·"; position: absolute; left: -3px; color: var(--rule-strong);
+        }
+        .hkm-cta-link {
+          font-family: var(--sans); font-size: 13.5px; font-weight: 600;
+          color: var(--ink); text-decoration: none;
+          padding: 6px 0 6px 22px;
+          border-left: 1px solid var(--rule-strong);
+          display: inline-flex; align-items: center; gap: 8px;
+          transition: color .12s;
+        }
+        .hkm-cta-link:hover { color: var(--sienna); }
+        .hkm-cta-link::after {
+          content:"→"; font-family: var(--serif); font-size: 18px; line-height: 1;
+        }
+        .hkm-hamburger {
+          display: none; width: 40px; height: 40px;
+          background: transparent; border: 1px solid var(--rule-strong);
+          border-radius: 0; cursor: pointer; color: var(--ink); font-size: 18px;
+        }
 
-        .hm-below {
-          display:grid; grid-template-columns:1.2fr .8fr; gap:20px;
-          margin-top:26px;
+        /* ============ HERO ============ */
+        .hkm-hero {
+          padding: 64px 0 96px;
+          position: relative;
         }
-        .hm-card {
-          background:#fff; border:1px solid #e7ebf3; border-radius:20px;
-          box-shadow:0 10px 30px rgba(18,39,82,.05);
-          padding:26px 28px;
+        .hkm-hero-grid {
+          display: grid;
+          grid-template-columns: repeat(8, 1fr);
+          gap: 40px;
+          align-items: start;
         }
-        .hm-mini-title { font-weight:800; font-size:18px; margin-bottom:8px; letter-spacing:-.01em; }
-        .hm-info-p { font-size:14.5px; color:#5f6c87; line-height:1.6; margin:0 0 16px; }
-        .hm-price {
-          display:flex; justify-content:space-between; align-items:baseline;
-          padding:14px 0; border-top:1px dashed #dfe4ee;
+        .hkm-hero-text { grid-column: 1 / 6; padding-top: 8px; }
+        .hkm-hero-illus { grid-column: 6 / 9; }
+        .hkm-byline {
+          font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .12em;
+          color: var(--ink); opacity: .78;
+          margin-bottom: 26px;
+          display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
         }
-        .hm-price:first-of-type { border-top:0; }
-        .hm-price strong { font-size:22px; color:var(--dark); letter-spacing:-.01em; }
-        .hm-price-djki { font-size:12px; color:#16a34a; font-weight:700; margin-top:12px; }
+        .hkm-byline em { font-style: italic; color: var(--sienna); font-weight: 600; }
+        .hkm-byline span::after {
+          content:""; display: inline-block; width: 22px; height: 1px;
+          background: var(--rule-strong); vertical-align: middle;
+          margin: 0 8px 3px 8px;
+        }
+        .hkm-byline span:last-child::after { display: none; }
+        .hkm-h1 {
+          font-family: var(--serif); font-weight: 400;
+          font-size: clamp(48px, 6vw, 84px);
+          line-height: .95; letter-spacing: -.025em;
+          color: var(--ink); margin: 0 0 32px;
+        }
+        .hkm-h1 em { font-style: italic; color: var(--sienna); }
+        .hkm-dek {
+          font-family: var(--sans); font-weight: 400;
+          font-size: 17.5px; line-height: 1.55;
+          color: var(--ink); opacity: .82;
+          max-width: 440px; margin: 0 0 32px;
+        }
+        .hkm-dek strong { font-weight: 600; color: var(--ink); opacity: 1; }
+        .hkm-hero-anchor {
+          display: inline-flex; align-items: baseline; gap: 10px;
+          font-family: var(--sans); font-weight: 600; font-size: 14px;
+          color: var(--ink); text-decoration: none;
+          padding-bottom: 4px;
+          border-bottom: 1px solid var(--ink);
+        }
+        .hkm-hero-anchor::after {
+          content:"⌘K"; font-family: var(--mono); font-size: 11px;
+          font-weight: 500; opacity: .5;
+        }
 
-        .hm-footer {
-          padding:28px 42px; border-top:1px solid #e8edf4;
-          color:#7a849c; font-size:12px;
-          display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
+        /* Illustration slot */
+        .hkm-illus-frame {
+          aspect-ratio: 4 / 5;
+          background: var(--offwhite);
+          border: 1px solid var(--rule);
+          position: relative;
+          overflow: hidden;
         }
-        .hm-footer a { color:#5f6b8b; text-decoration:none; margin:0 8px; }
-        .hm-footer .sep { color:#c8cee0; }
-        .hm-footer strong { color:#425173; }
+        .hkm-illus-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hkm-illus-fallback {
+          position: absolute; inset: 0;
+          display: grid; place-items: center;
+          font-family: var(--serif); font-style: italic;
+          font-size: 96px; color: var(--ink); opacity: .12;
+          user-select: none;
+        }
+        .hkm-illus-caption {
+          font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .12em;
+          color: var(--ink); opacity: .55;
+          margin-top: 10px;
+          display: flex; justify-content: space-between; align-items: baseline;
+        }
+        .hkm-illus-caption em { font-style: italic; color: var(--sienna); }
 
-        @media (max-width: 980px) {
-          .hm-links, .hm-actions .hm-btn:first-child { display:none; }
-          .hm-menu-btn { display:inline-flex; align-items:center; justify-content:center; }
-          .hm-nav { padding:0 18px; }
-          .hm-wrap { padding:28px 18px 40px; }
-          .hm-process-row { grid-template-columns:repeat(2,1fr); }
-          .hm-below { grid-template-columns:1fr; }
-          .hm-h1 { font-size:38px; }
+        /* ============ FEES ============ */
+        .hkm-fees {
+          padding: 48px 0 72px;
+          border-top: 1px solid var(--rule);
+          border-bottom: 1px solid var(--rule);
         }
-        @media (max-width: 680px) {
-          .hm-process-row { grid-template-columns:1fr; }
+        .hkm-fees-header {
+          font-family: var(--mono); font-size: 11px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .15em;
+          opacity: .55; margin-bottom: 22px;
+          display: flex; justify-content: space-between;
+        }
+        .hkm-fees-header em { font-style: italic; color: var(--sienna); }
+        .hkm-fees-table {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr auto;
+          gap: 0;
+          font-family: var(--sans);
+        }
+        .hkm-fee-row {
+          display: contents;
+        }
+        .hkm-fee-row > div {
+          padding: 18px 0;
+          border-top: 1px solid var(--rule);
+        }
+        .hkm-fee-label { font-weight: 500; font-size: 15.5px; }
+        .hkm-fee-strike {
+          font-family: var(--mono); font-size: 14.5px;
+          text-decoration: line-through;
+          text-decoration-color: var(--sienna);
+          text-decoration-thickness: 1.5px;
+          color: var(--ink); opacity: .48;
+        }
+        .hkm-fee-price {
+          font-family: var(--serif); font-size: 30px; font-weight: 400;
+          line-height: 1; letter-spacing: -.02em;
+          color: var(--ink);
+          text-align: right;
+        }
+        .hkm-fee-unit {
+          font-family: var(--mono); font-size: 11px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .12em;
+          color: var(--ink); opacity: .55;
+          padding-left: 20px;
+          text-align: right;
+          align-self: end;
+        }
+        .hkm-fees-note {
+          font-family: var(--sans); font-size: 13.5px;
+          opacity: .68; margin-top: 22px; padding-top: 22px;
+          border-top: 1px solid var(--rule);
+          display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+          flex-wrap: wrap;
+        }
+        .hkm-fees-note strong { color: var(--sienna); font-weight: 600; }
+
+        /* ============ PROCESS SPREADS ============ */
+        .hkm-process {
+          padding: 96px 0;
+        }
+        .hkm-section-eyebrow {
+          font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .12em;
+          color: var(--ink); opacity: .7;
+          margin-bottom: 20px;
+          display: flex; align-items: center; gap: 14px;
+        }
+        .hkm-section-eyebrow::after {
+          content:""; flex: 1; height: 1px; background: var(--rule);
+          max-width: 240px;
+        }
+        .hkm-section-eyebrow em { color: var(--sienna); font-style: italic; font-weight: 600; }
+        .hkm-section-title {
+          font-family: var(--serif); font-weight: 400;
+          font-size: clamp(36px, 4vw, 54px);
+          line-height: 1; letter-spacing: -.02em;
+          margin: 0 0 12px; max-width: 720px;
+        }
+        .hkm-section-title em { font-style: italic; color: var(--sienna); }
+        .hkm-section-lead {
+          font-family: var(--sans); font-size: 15.5px;
+          opacity: .78; max-width: 620px; line-height: 1.55;
+          margin: 0 0 56px;
+        }
+        .hkm-spread {
+          display: grid;
+          grid-template-columns: 80px 1fr 1fr;
+          gap: 40px;
+          align-items: start;
+          padding: 40px 0;
+          border-top: 1px solid var(--rule-strong);
+        }
+        .hkm-spread:last-of-type { border-bottom: 1px solid var(--rule-strong); }
+        .hkm-spread.reverse {
+          grid-template-columns: 80px 1fr 1fr;
+        }
+        .hkm-spread.reverse .hkm-spread-text { grid-column: 3 / 4; grid-row: 1; }
+        .hkm-spread.reverse .hkm-spread-illus { grid-column: 2 / 3; grid-row: 1; }
+        .hkm-spread-n {
+          font-family: var(--serif); font-style: italic;
+          font-size: 44px; line-height: 1;
+          color: var(--sienna);
+          padding-top: 4px;
+        }
+        .hkm-spread-n small {
+          display: block;
+          font-family: var(--mono); font-style: normal; font-size: 11px;
+          color: var(--ink); opacity: .55; letter-spacing: .12em;
+          margin-top: 4px; font-weight: 500;
+        }
+        .hkm-spread-text h3 {
+          font-family: var(--serif); font-weight: 400;
+          font-size: 30px; line-height: 1.05; letter-spacing: -.015em;
+          margin: 0 0 14px;
+        }
+        .hkm-spread-text p {
+          font-family: var(--sans); font-size: 15px; line-height: 1.6;
+          opacity: .78; margin: 0; max-width: 460px;
+        }
+        .hkm-spread-illus {
+          aspect-ratio: 1;
+          background: var(--offwhite);
+          border: 1px solid var(--rule);
+          position: relative; overflow: hidden;
+        }
+        .hkm-spread-illus img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hkm-spread-illus-fallback {
+          position: absolute; inset: 0;
+          display: grid; place-items: center;
+          font-family: var(--serif); font-style: italic;
+          font-size: 80px; color: var(--ink); opacity: .1;
+        }
+
+        /* ============ Q&A + STICKY PRICING ============ */
+        .hkm-qa {
+          padding: 96px 0;
+          border-top: 1px solid var(--rule);
+        }
+        .hkm-qa-grid {
+          display: grid;
+          grid-template-columns: 1.4fr .8fr;
+          gap: 60px;
+          align-items: start;
+        }
+        .hkm-qa-header h2 {
+          font-family: var(--serif); font-weight: 400;
+          font-size: clamp(34px, 3.5vw, 50px);
+          line-height: 1; letter-spacing: -.02em;
+          margin: 0 0 16px;
+        }
+        .hkm-qa-header h2 em { font-style: italic; color: var(--sienna); }
+        .hkm-qa-header p {
+          font-family: var(--sans); font-size: 14.5px; line-height: 1.6;
+          opacity: .78; margin: 0 0 32px; max-width: 480px;
+        }
+        /* Overrides untuk ChatWidget supaya masuk vibe editorial */
+        .hkm-chat-frame .cw-glow-wrap {
+          background: transparent !important;
+          animation: none !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+        }
+        .hkm-chat-frame .cw {
+          background: var(--offwhite) !important;
+          border: 1px solid var(--ink) !important;
+          border-radius: 0 !important;
+          box-shadow: none !important;
+        }
+        .hkm-chat-frame .cw-head {
+          background: var(--ink) !important;
+          color: var(--paper) !important;
+          border-bottom: 0 !important;
+          padding: 14px 20px !important;
+          font-family: var(--mono);
+        }
+        .hkm-chat-frame .cw-title {
+          font-family: var(--mono) !important;
+          font-size: 12px !important;
+          font-weight: 500 !important;
+          text-transform: uppercase !important;
+          letter-spacing: .12em !important;
+          color: var(--paper) !important;
+        }
+        .hkm-chat-frame .cw-online {
+          color: rgba(244,239,228,.7) !important;
+          font-family: var(--mono);
+          font-size: 10.5px;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+        }
+        .hkm-chat-frame .cw-online::before { background: var(--sienna) !important; }
+        .hkm-chat-frame .cw-badge {
+          background: transparent !important;
+          color: var(--paper) !important;
+          border: 1px solid rgba(244,239,228,.35);
+          font-family: var(--mono);
+          font-size: 10.5px;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+        }
+        .hkm-chat-frame .cw-msgs { background: var(--offwhite) !important; }
+        .hkm-chat-frame .cw-bubble { font-family: var(--sans) !important; font-size: 14.5px !important; }
+        .hkm-chat-frame .cw-row.bot .cw-bubble {
+          background: transparent !important;
+          border-left: 2px solid var(--sienna) !important;
+          border-radius: 0 !important;
+          padding: 4px 14px 4px 16px !important;
+          color: var(--ink) !important;
+        }
+        .hkm-chat-frame .cw-row.user .cw-bubble {
+          background: var(--ink) !important;
+          border-radius: 0 !important;
+          color: var(--paper) !important;
+        }
+        .hkm-chat-frame .cw-quick {
+          background: var(--offwhite) !important;
+          border-top: 1px solid var(--rule) !important;
+          padding: 12px 20px !important;
+        }
+        .hkm-chat-frame .cw-quick button {
+          border-radius: 0 !important;
+          border: 1px solid var(--rule-strong) !important;
+          background: transparent !important;
+          font-family: var(--mono) !important;
+          font-size: 11px !important;
+          font-weight: 500 !important;
+          text-transform: uppercase !important;
+          letter-spacing: .1em !important;
+          color: var(--ink) !important;
+          padding: 5px 12px !important;
+        }
+        .hkm-chat-frame .cw-quick button:hover {
+          background: var(--ink) !important; color: var(--paper) !important;
+          border-color: var(--ink) !important;
+        }
+        .hkm-chat-frame .cw-composer {
+          background: var(--paper) !important;
+          border-top: 1px solid var(--ink) !important;
+          padding: 16px 20px !important;
+        }
+        .hkm-chat-frame .cw-input {
+          border-radius: 0 !important;
+          border: 1px solid var(--rule-strong) !important;
+          background: var(--offwhite) !important;
+          font-family: var(--sans) !important;
+        }
+        .hkm-chat-frame .cw-input:focus { border-color: var(--ink) !important; }
+        .hkm-chat-frame .cw-send {
+          border-radius: 0 !important;
+          background: var(--ink) !important;
+          box-shadow: none !important;
+          font-family: var(--mono) !important;
+          font-weight: 600 !important;
+          text-transform: uppercase !important;
+          letter-spacing: .08em !important;
+          font-size: 12px !important;
+        }
+        .hkm-chat-frame .cw-hint {
+          font-family: var(--mono); font-size: 10.5px;
+          color: var(--sienna) !important;
+          text-transform: uppercase; letter-spacing: .1em;
+        }
+
+        /* Sticky pricing card */
+        .hkm-sidebar {
+          position: sticky; top: 120px;
+          padding: 28px 30px;
+          background: var(--ink); color: var(--paper);
+          border: 1px solid var(--ink);
+        }
+        .hkm-sidebar-eyebrow {
+          font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .15em;
+          color: rgba(244,239,228,.7); margin-bottom: 20px;
+          padding-bottom: 16px; border-bottom: 1px solid rgba(244,239,228,.2);
+        }
+        .hkm-sidebar-row {
+          display: flex; justify-content: space-between; align-items: baseline;
+          padding: 16px 0; border-bottom: 1px dashed rgba(244,239,228,.2);
+          font-family: var(--sans);
+        }
+        .hkm-sidebar-row:last-of-type { border-bottom: 0; }
+        .hkm-sidebar-row-label {
+          font-size: 13px; font-weight: 500; color: rgba(244,239,228,.85);
+        }
+        .hkm-sidebar-row-value {
+          display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+        }
+        .hkm-sidebar-strike {
+          font-family: var(--mono); font-size: 11.5px;
+          text-decoration: line-through; text-decoration-thickness: 1.5px;
+          text-decoration-color: var(--sienna);
+          opacity: .55;
+        }
+        .hkm-sidebar-final {
+          font-family: var(--serif); font-size: 22px;
+          line-height: 1; letter-spacing: -.02em;
+          color: var(--paper);
+        }
+        .hkm-sidebar-djki {
+          margin-top: 20px; padding-top: 16px;
+          border-top: 1px solid rgba(244,239,228,.2);
+          font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+          text-transform: uppercase; color: var(--sienna); font-weight: 500;
+        }
+
+        /* ============ COLOPHON FOOTER ============ */
+        .hkm-colophon {
+          padding: 80px 0 40px;
+          border-top: 1px solid var(--rule);
+          margin-top: 40px;
+        }
+        .hkm-colophon-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 60px;
+          margin-bottom: 40px;
+        }
+        .hkm-colophon-title {
+          font-family: var(--mono); font-size: 11px; font-weight: 500;
+          text-transform: uppercase; letter-spacing: .15em;
+          margin-bottom: 20px; color: var(--ink); opacity: .55;
+        }
+        .hkm-colophon-body {
+          font-family: var(--sans); font-size: 13.5px;
+          line-height: 1.65; color: var(--ink); opacity: .78;
+          max-width: 620px;
+        }
+        .hkm-colophon-body strong { font-weight: 600; opacity: 1; }
+        .hkm-colophon-body em {
+          font-family: var(--serif); font-style: italic;
+          font-size: 15px; color: var(--sienna);
+        }
+        .hkm-colophon-links {
+          display: flex; flex-direction: column; gap: 8px;
+          font-family: var(--sans); font-size: 13px;
+        }
+        .hkm-colophon-links a {
+          color: var(--ink); text-decoration: none; opacity: .7;
+          transition: opacity .12s, color .12s;
+        }
+        .hkm-colophon-links a:hover { opacity: 1; color: var(--sienna); }
+        .hkm-colophon-rule {
+          border-top: 1px solid var(--rule);
+          padding-top: 20px;
+          display: flex; justify-content: space-between; align-items: baseline;
+          font-family: var(--mono); font-size: 10.5px;
+          text-transform: uppercase; letter-spacing: .12em;
+          color: var(--ink); opacity: .55; font-weight: 500;
+          flex-wrap: wrap; gap: 12px;
+        }
+        .hkm-colophon-rule em { color: var(--sienna); font-style: italic; font-weight: 600; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 900px) {
+          .hkm-container { padding: 0 22px; }
+          .hkm-masthead-grid { grid-template-columns: 1fr auto; gap: 16px; }
+          .hkm-nav, .hkm-cta-link { display: none; }
+          .hkm-hamburger { display: inline-flex; align-items: center; justify-content: center; }
+          .hkm-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+          .hkm-hero-text { grid-column: 1 / -1; }
+          .hkm-hero-illus { grid-column: 1 / -1; }
+          .hkm-fees-table { grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+          .hkm-fees-table > div:nth-child(4n+3) { text-align: left; }
+          .hkm-spread { grid-template-columns: 60px 1fr; gap: 24px; padding: 32px 0; }
+          .hkm-spread.reverse .hkm-spread-text { grid-column: 2; grid-row: 1; }
+          .hkm-spread.reverse .hkm-spread-illus { grid-column: 1 / -1; grid-row: 2; }
+          .hkm-spread-illus { grid-column: 1 / -1; margin-top: 20px; aspect-ratio: 3/2; }
+          .hkm-qa-grid { grid-template-columns: 1fr; gap: 40px; }
+          .hkm-sidebar { position: relative; top: 0; }
+          .hkm-colophon-grid { grid-template-columns: 1fr; gap: 32px; }
+        }
+        @media (max-width: 640px) {
+          .hkm-hero { padding: 44px 0 60px; }
+          .hkm-h1 { font-size: 46px; }
+          .hkm-strip { font-size: 10px; letter-spacing: .04em; }
         }
       `}</style>
 
-      <div className="hm-site">
-        <TopStripMarquee accent={ACCENT} />
-        <header className="hm-nav">
-          <a className="hm-brand" href="/" aria-label="HakiMerek">
-            <img className="hm-wordmark" src="/variants/green-daftar-merek/logo-wordmark.webp" alt="HakiMerek — Jasa Pendaftaran Merek" width="176" height="44" />
-          </a>
-          <nav className="hm-links">
-            {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
-          </nav>
-          <div className="hm-actions">
-            <a className="hm-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">♛ Konsultasi Gratis</a>
-            <button className="hm-menu-btn" onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Menu">☰</button>
-          </div>
-        </header>
-        {mobileMenuOpen && (
-          <nav style={{ padding: "12px 18px", background: "#fff", borderBottom: "1px solid #e8edf4", display: "flex", flexDirection: "column", gap: 8 }}>
-            {NAV.map((n) => <a key={n.href} href={n.href} style={{ padding: "10px 0", textDecoration: "none", color: "#425173", fontWeight: 600 }}>{n.label}</a>)}
-          </nav>
-        )}
-
-        <div className="hm-wrap">
-          <div className="hm-hero-wrap">
-            <section className="hm-intro-center">
-              <span className="hm-eyebrow">Pendampingan Pendaftaran Merek</span>
-              <h1 className="hm-h1">Daftar Merek <span style={{ color: ACCENT }}>Termurah</span><br />Didampingi Konsultan Ahli</h1>
-              <p className="hm-lead">Cek nama, analisa risiko, rekomendasi kelas produk/jasa, sampai pendaftaran ke DJKI — semua diurus tim HakiMerek. Anda fokus jualan.</p>
-              <div className="hm-price-pill">
-                <div className="p">
-                  <small>UMKM / Perorangan</small>
-                  <strong>Rp 1.299.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
-                </div>
-                <div className="div"></div>
-                <div className="p">
-                  <small>Perusahaan / PT</small>
-                  <strong>Rp 2.490.000<span style={{ fontSize: 11, color: "#7a849c", fontWeight: 600, marginLeft: 4 }}>/kelas</span></strong>
-                </div>
-                <span className="djki">✓ Termasuk DJKI</span>
-              </div>
-            </section>
-            <div className="hm-mascot-col">
-              <img className="hm-mascot-img" src="/variants/green-daftar-merek/robot.webp" alt="Maskot HakiMerek — konsultan robot dengan clipboard" width="340" height="340" />
-            </div>
-          </div>
-
-          <section className="hm-process-row">
-            {PROCESS.map((p, i) => (
-              <div key={p.n} className={`hm-process${i === 0 ? " active" : ""}`}>
-                <span className="hm-process-n">{p.n}</span>
-                <div>
-                  <b>{p.title}</b>
-                  <small>{p.desc}</small>
-                </div>
+      <div className="hkm-grain">
+        {/* ==== TOP STRIP editorial ==== */}
+        <div className="hkm-strip" role="banner">
+          <div className="hkm-strip-track">
+            {[...Array(2)].map((_, dupe) => (
+              <div key={dupe} style={{ display: "flex", gap: 44 }}>
+                <span className="hkm-strip-item">Garansi termurah se-Indonesia</span>
+                <span className="hkm-strip-item">UMKM · <em>Rp 1.299.000</em> per kelas</span>
+                <span className="hkm-strip-item">Non-UMK · <em>Rp 2.490.000</em> per kelas</span>
+                <span className="hkm-strip-item">Sudah termasuk biaya DJKI resmi</span>
+                <span className="hkm-strip-item">Ada yang lebih murah? <em>Selisih diganti</em></span>
               </div>
             ))}
-          </section>
-
-          <div className="hm-main-chat">
-            <ChatWidget
-              brand={brand}
-              brandName="HakiMerek"
-              chatTitle="Konsultasi Merek bersama HakiMerek"
-              chatSubtitle="Didampingi Tim Ahli"
-              onlineLabel="Online"
-              initialGreeting={"Halo! 👋 Saya asisten AI HakiMerek. Ketik nama merek yang ingin didaftarkan — **100% gratis** untuk konsultasi awal.\n\nSaya bantu cek ketersediaan di database PDKI/DJKI, rekomendasi kelas produk/jasa, dan estimasi biaya pendaftaran."}
-              seedBubbles={["Atau pilih menu di bawah untuk memulai."]}
-              quickActions={QUICK_ACTIONS}
-              placeholder="Tulis nama merek Anda di sini..."
-              ctaLabel="Mulai"
-              minHeight={620}
-            />
-          </div>
-
-          <div className="hm-below">
-            <div className="hm-card">
-              <div className="hm-mini-title">Tidak yakin merek Anda layak didaftarkan?</div>
-              <p className="hm-info-p">Konsultasikan langsung dengan konsultan kami untuk analisa awal, saran kelas, dan strategi pendaftaran yang paling efektif untuk bisnis Anda.</p>
-              <a className="hm-btn primary" href={waLink} target="_blank" rel="noopener noreferrer">💬 Chat via WhatsApp</a>
-            </div>
-            <div className="hm-card">
-              <div className="hm-mini-title">Biaya Pendaftaran Merek</div>
-              <div style={{ fontSize: 12, color: ACCENT, fontWeight: 800, letterSpacing: ".04em", marginTop: -4, marginBottom: 12 }}>🏆 TERMURAH — DIJAMIN GANTI SELISIH</div>
-              <div className="hm-price"><span>UMKM / Perorangan</span><strong>Rp 1.299.000</strong></div>
-              <div className="hm-price"><span>Perusahaan / PT</span><strong>Rp 2.490.000</strong></div>
-              <div className="hm-price-djki">Sudah termasuk biaya DJKI / PNBP resmi + jasa pengurusan</div>
-            </div>
           </div>
         </div>
 
-        <footer className="hm-footer">
-          <div>
-            <strong>HakiMerek</strong> dikelola oleh <strong>PT Sellora Optima Teknologi</strong> · © 2026 · info@hakio.id · 0851-4841-6800
+        {/* ==== MASTHEAD ==== */}
+        <header className="hkm-masthead">
+          <div className="hkm-container hkm-masthead-grid">
+            <a className="hkm-logomark" href="/">
+              <div className="hkm-logomark-stack">
+                <span>Haki</span>
+                <span>Merek</span>
+              </div>
+              <div className="hkm-logomark-wordmark">
+                Haki<em>Merek</em>
+              </div>
+            </a>
+            <nav className="hkm-nav" aria-label="Navigasi utama">
+              {NAV.map((n) => (
+                <a key={n.href} href={n.href}>{n.label}</a>
+              ))}
+            </nav>
+            <a
+              className="hkm-cta-link"
+              href={waLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Konsultasi
+            </a>
+            <button
+              className="hkm-hamburger"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              aria-label="Menu"
+            >
+              ☰
+            </button>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-            <a href="/cek-merek">Cek Merek</a><span className="sep">·</span>
-            <a href="/daftar-merek">Daftar</a><span className="sep">·</span>
-            <a href="/kelas-produk-jasa">Kelas</a><span className="sep">·</span>
-            <a href="/biaya">Biaya</a><span className="sep">·</span>
-            <a href="/perpanjang">Perpanjang</a><span className="sep">·</span>
-            <a href="/kontak">Kontak</a>
+          {mobileMenuOpen && (
+            <div style={{ borderTop: `1px solid ${INK}20`, padding: "16px 22px", background: PAPER }}>
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  style={{
+                    display: "block",
+                    padding: "10px 0",
+                    fontFamily: "var(--sans)",
+                    fontSize: 15,
+                    color: INK,
+                    textDecoration: "none",
+                    borderBottom: `1px solid ${INK}15`,
+                  }}
+                >
+                  {n.label}
+                </a>
+              ))}
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "block",
+                  marginTop: 14,
+                  padding: "12px 16px",
+                  background: INK,
+                  color: PAPER,
+                  textDecoration: "none",
+                  fontFamily: "var(--mono)",
+                  fontSize: 12,
+                  textTransform: "uppercase",
+                  letterSpacing: ".1em",
+                }}
+              >
+                Konsultasi →
+              </a>
+            </div>
+          )}
+        </header>
+
+        {/* ==== HERO ==== */}
+        <section className="hkm-container hkm-hero">
+          <div className="hkm-hero-grid">
+            <div className="hkm-hero-text">
+              <div className="hkm-byline">
+                <span>Practice Note</span>
+                <span>No. <em>001</em></span>
+                <span>03 min</span>
+                <span>Rev. 2026</span>
+              </div>
+              <h1 className="hkm-h1">
+                Merek dagang<br />
+                yang <em>aman</em><br />
+                didaftarkan.
+              </h1>
+              <p className="hkm-dek">
+                Analisa risiko, rekomendasi kelas produk/jasa, pendaftaran ke DJKI, hingga
+                pendampingan sampai sertifikat terbit. <strong>Didampingi konsultan berpengalaman</strong> —
+                Anda cukup fokus jualan.
+              </p>
+              <a className="hkm-hero-anchor" href="#konsultasi">
+                Mulai konsultasi
+              </a>
+            </div>
+
+            <div className="hkm-hero-illus">
+              <div className="hkm-illus-frame">
+                <img
+                  src="/hakimerek/hero-illustration.webp"
+                  alt="Ilustrasi editorial: sertifikat merek, pena, dan cap DJKI"
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement;
+                    img.style.display = "none";
+                    const fb = document.createElement("div");
+                    fb.className = "hkm-illus-fallback";
+                    fb.textContent = "§";
+                    img.parentElement?.appendChild(fb);
+                  }}
+                />
+              </div>
+              <div className="hkm-illus-caption">
+                <span>Fig. 001 · Editorial illustration</span>
+                <em>Hakim Merek</em>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==== FEES ==== */}
+        <section className="hkm-container hkm-fees">
+          <div className="hkm-fees-header">
+            <span>Fees · Biaya per kelas</span>
+            <em>Termasuk PNBP DJKI resmi</em>
+          </div>
+          <div className="hkm-fees-table">
+            <div className="hkm-fee-row">
+              <div className="hkm-fee-label">UMKM / Perorangan</div>
+              <div className="hkm-fee-strike">Rp 2.500.000</div>
+              <div className="hkm-fee-price">Rp 1.299.000</div>
+              <div className="hkm-fee-unit">per kelas</div>
+            </div>
+            <div className="hkm-fee-row">
+              <div className="hkm-fee-label">Perusahaan / PT</div>
+              <div className="hkm-fee-strike">Rp 3.950.000</div>
+              <div className="hkm-fee-price">Rp 2.490.000</div>
+              <div className="hkm-fee-unit">per kelas</div>
+            </div>
+          </div>
+          <div className="hkm-fees-note">
+            <span>
+              Sudah termasuk biaya <strong>DJKI resmi</strong> + jasa pendampingan sampai sertifikat elektronik terbit.
+              Kalau ada tempat yang lebih murah dengan cakupan setara, kirim penawarannya — selisih diganti.
+            </span>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase" }}>
+              § Ref. Peraturan Menkeu No. 28/2024
+            </span>
+          </div>
+        </section>
+
+        {/* ==== PROCESS SPREADS ==== */}
+        <section className="hkm-container hkm-process">
+          <div className="hkm-section-eyebrow">
+            <span>Practice</span> · <em>Proses pendaftaran</em>
+          </div>
+          <h2 className="hkm-section-title">
+            Empat tahap sampai <em>sertifikat</em> keluar.
+          </h2>
+          <p className="hkm-section-lead">
+            Dokumentasi & pengajuan sesuai standar DJKI. Tim konsultan mendampingi setiap tahap,
+            dari analisa awal sampai monitoring pemeriksaan substantif.
+          </p>
+
+          {PROCESS.map((p, i) => (
+            <div key={p.n} className={`hkm-spread${i % 2 === 1 ? " reverse" : ""}`}>
+              <div className="hkm-spread-n">
+                {p.n}
+                <small>Of 04</small>
+              </div>
+              <div className="hkm-spread-text">
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </div>
+              <div className="hkm-spread-illus">
+                <img
+                  src={`/hakimerek/process-${p.n}.webp`}
+                  alt={`Ilustrasi ${p.title}`}
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement;
+                    img.style.display = "none";
+                    const fb = document.createElement("div");
+                    fb.className = "hkm-spread-illus-fallback";
+                    fb.textContent = p.n;
+                    img.parentElement?.appendChild(fb);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* ==== Q&A + STICKY PRICING ==== */}
+        <section id="konsultasi" className="hkm-container hkm-qa">
+          <div className="hkm-qa-grid">
+            <div className="hkm-chat-frame">
+              <div className="hkm-section-eyebrow" style={{ marginBottom: 24 }}>
+                <span>Reader Q&A</span> · <em>Chat AI</em>
+              </div>
+              <div className="hkm-qa-header">
+                <h2>
+                  Ketik nama merek Anda.<br />
+                  Kami <em>jawab langsung</em>.
+                </h2>
+                <p>
+                  Cek ketersediaan di database PDKI/DJKI, indikator kemiripan visual+fonetik,
+                  rekomendasi kelas produk/jasa. Kalau siap lanjut, admin arahkan ke WhatsApp.
+                </p>
+              </div>
+              <ChatWidget
+                brand={brand}
+                brandName="HakiMerek"
+                chatTitle="Q&A · HakiMerek"
+                chatSubtitle="Practice desk"
+                onlineLabel="Online · Senin–Jumat WIB"
+                initialGreeting={
+                  "Halo. Saya asisten AI HakiMerek. Ketik nama merek yang ingin didaftarkan — saya cek ketersediaan di database PDKI/DJKI + rekomendasi kelas produk/jasa.\n\nKalau siap lanjut, admin akan bantu proses ke DJKI langsung dari WhatsApp."
+                }
+                quickActions={QUICK_ACTIONS}
+                placeholder="Nama merek Anda…"
+                ctaLabel="Kirim"
+                minHeight={580}
+              />
+            </div>
+
+            <aside className="hkm-sidebar">
+              <div className="hkm-sidebar-eyebrow">Fees Summary</div>
+              <div className="hkm-sidebar-row">
+                <span className="hkm-sidebar-row-label">UMKM / Perorangan</span>
+                <span className="hkm-sidebar-row-value">
+                  <span className="hkm-sidebar-strike">Rp 2.500.000</span>
+                  <span className="hkm-sidebar-final">Rp 1.299.000</span>
+                </span>
+              </div>
+              <div className="hkm-sidebar-row">
+                <span className="hkm-sidebar-row-label">Perusahaan / PT</span>
+                <span className="hkm-sidebar-row-value">
+                  <span className="hkm-sidebar-strike">Rp 3.950.000</span>
+                  <span className="hkm-sidebar-final">Rp 2.490.000</span>
+                </span>
+              </div>
+              <div className="hkm-sidebar-djki">✓ Termasuk PNBP DJKI resmi</div>
+            </aside>
+          </div>
+        </section>
+
+        {/* ==== COLOPHON FOOTER ==== */}
+        <footer className="hkm-container hkm-colophon">
+          <div className="hkm-colophon-grid">
+            <div>
+              <div className="hkm-colophon-title">Colophon</div>
+              <p className="hkm-colophon-body">
+                <em>HakiMerek</em> adalah layanan pendaftaran merek dagang yang dikelola <strong>PT Sellora Optima Teknologi</strong> —
+                berpengalaman mendaftarkan ribuan merek dagang ke DJKI untuk UMKM dan perusahaan Indonesia.
+                Set dengan <em>Instrument Serif</em> untuk display, <em>IBM Plex Sans</em> untuk body,
+                dan <em>IBM Plex Mono</em> untuk metadata. Grain overlay <strong>4%</strong>.
+              </p>
+            </div>
+            <div>
+              <div className="hkm-colophon-title">Navigasi</div>
+              <div className="hkm-colophon-links">
+                <a href="/cek-merek">Cek Merek</a>
+                <a href="/daftar-merek">Daftar Merek</a>
+                <a href="/kelas-produk-jasa">Kelas Produk/Jasa</a>
+                <a href="/biaya">Biaya</a>
+                <a href="/perpanjang">Perpanjang</a>
+                <a href="/kontak">Kontak</a>
+              </div>
+            </div>
+          </div>
+          <div className="hkm-colophon-rule">
+            <span>© 2026 HakiMerek</span>
+            <span><em>info@hakio.id</em> · 0851-4841-6800</span>
+            <span>Set in Cream #F4EFE4 & Ink #163D33</span>
           </div>
         </footer>
-        <FloatingWA domain="hakimerek.com" whatsappNumber={brand.whatsapp} accent={ACCENT} label="Chat HakiMerek" />
+
+        <FloatingWA
+          domain="hakimerek.com"
+          whatsappNumber={brand.whatsapp}
+          accent={SIENNA}
+          label="Chat"
+        />
       </div>
     </>
   );
