@@ -20,8 +20,8 @@ export default async function Page() {
       eyebrow="Cek Merek Gratis"
       title="Pastikan Nama Merek Anda Bebas dari Bentrok Sebelum Daftar"
       intro="Setiap tahun ratusan permohonan ditolak DJKI karena mirip merek terdaftar. Sebelum keluar uang untuk pendaftaran, cek dulu nama Anda di sini — instan, gratis, dan langsung dianalisa AI."
+      wideContent={<CekMerekSearch />}
     >
-      <CekMerekSearch />
 
       <h2>Kenapa harus dicek dulu?</h2>
       <p>Merek yang sudah dipakai (baik terdaftar maupun dalam masa pengumuman) berhak menolak permohonan baru yang dianggap serupa. Ini bukan sekadar tulisan yang sama persis — pemeriksa DJKI juga mempertimbangkan cara pengucapan, tampilan visual, dan makna kata. Pengecekan awal menghemat waktu berbulan-bulan dan biaya yang bisa hangus.</p>

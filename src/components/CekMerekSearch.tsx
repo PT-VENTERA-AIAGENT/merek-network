@@ -174,8 +174,8 @@ export default function CekMerekSearch() {
         .cmk-hint{margin-top:10px;font-size:12.5px;color:var(--muted,#6c7897)}
         .cmk-hint b{color:var(--ink,#0f224d);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
         .cmk-meta{font-size:13px;color:var(--muted,#6c7897);margin-bottom:14px}
-        /* Table: break out of sp-content (max-width 920px) and sp-workspace padding (48px) */
-        .cmk-wrap{margin:0 -48px;width:calc(100% + 96px);overflow-x:auto;border-top:1px solid var(--line,#e8edf7);border-bottom:1px solid var(--line,#e8edf7);margin-bottom:20px}
+        /* Table: full width of sp-workspace (already outside sp-content's 920px max-width) */
+        .cmk-wrap{width:100%;overflow-x:auto;border-top:1px solid var(--line,#e8edf7);border-bottom:1px solid var(--line,#e8edf7);margin-bottom:20px}
         .cmk-table{width:100%;min-width:700px;border-collapse:collapse;font-size:13.5px}
         .cmk-table th{background:var(--soft,#f0f4ff);color:var(--muted,#6c7897);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 16px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line,#e8edf7)}
         .cmk-table td{padding:14px 16px;border-bottom:1px solid var(--line,#e8edf7);vertical-align:middle;color:var(--ink,#0f224d)}
@@ -194,7 +194,6 @@ export default function CekMerekSearch() {
         .cmk-spin{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:cmk-rotate .7s linear infinite;vertical-align:middle;margin-right:6px}
         @keyframes cmk-rotate{to{transform:rotate(360deg)}}
         @media(max-width:760px){
-          .cmk-wrap{margin:0 -20px;width:calc(100% + 40px)}
           .cmk-row{flex-direction:column}
           .cmk-btn{width:100%;height:48px}
           .cmk-input{height:48px}

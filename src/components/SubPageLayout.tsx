@@ -15,6 +15,7 @@ interface Props {
   eyebrow?: string;
   intro?: string;
   breadcrumb?: PageBreadcrumb;
+  wideContent?: ReactNode;
   children: ReactNode;
 }
 
@@ -29,7 +30,7 @@ const NAV = [
   { label: "Kontak", href: "/kontak" },
 ];
 
-export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro, breadcrumb, children }: Props) {
+export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro, breadcrumb, wideContent, children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const variant = VARIANT_BY_BRAND[brand.id];
   const brandName = variant?.brandName ?? brand.name;
@@ -216,6 +217,7 @@ export default function SubPageLayout({ brand, activeNav, title, eyebrow, intro,
             {eyebrow && <span className="sp-eyebrow">{eyebrow}</span>}
             <h1 className="sp-title">{title}</h1>
             {intro && <p className="sp-intro">{intro}</p>}
+            {wideContent}
             <div className="sp-content">{children}</div>
 
             <div className="sp-cta-block">
