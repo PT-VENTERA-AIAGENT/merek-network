@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 
 const API = "https://api.hakimerek.com/api/search";
 
@@ -14,7 +13,6 @@ interface Result {
   filing_date_iso: string;
   status: string;
   image_url: string;
-  detail_url: string;
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -25,102 +23,17 @@ function StatusBadge({ status }: { status: string }) {
   return <span className="cmk-badge cmk-badge-active">Terdaftar</span>;
 }
 
-function LogoImg({ src, alt, size = 64 }: { src: string; alt: string; size?: number }) {
+function LogoImg({ src, alt }: { src: string; alt: string }) {
   const [err, setErr] = useState(false);
-  const style = { width: size, height: size, borderRadius: 10, objectFit: "contain" as const, background: "#f7f9fd", border: "1px solid var(--line, #e8edf7)", display: "block", flexShrink: 0 };
-  const phStyle = { ...style, display: "flex", alignItems: "center", justifyContent: "center", background: "#f0f4ff", fontSize: size * 0.34, color: "var(--muted, #6c7897)" };
-  if (err) return <div style={phStyle}>™</div>;
+  const base = { width: 64, height: 64, borderRadius: 10, objectFit: "contain" as const, background: "#f7f9fd", border: "1px solid var(--line,#e8edf7)", display: "block" };
+  if (err) return <div style={{ ...base, display: "flex", alignItems: "center", justifyContent: "center", background: "#f0f4ff", fontSize: 22, color: "var(--muted,#6c7897)" }}>™</div>;
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt={alt} style={style} onError={() => setErr(true)} />;
+  return <img src={src} alt={alt} style={base} onError={() => setErr(true)} />;
 }
 
 function formatDate(iso: string, fallback: string) {
   if (!iso) return fallback || "—";
   return new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
-}
-
-const MODAL_STYLES = `
-  .cmk-overlay{position:fixed;inset:0;background:rgba(15,34,77,.48);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-  .cmk-modal{background:#fff;border-radius:22px;padding:32px;max-width:580px;width:100%;position:relative;box-shadow:0 28px 72px rgba(15,34,77,.2);max-height:90vh;overflow-y:auto}
-  .cmk-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:28px;color:#6c7897;cursor:pointer;line-height:1;padding:0}
-  .cmk-modal-close:hover{color:#0f224d}
-  .cmk-mhdr{display:flex;gap:18px;align-items:flex-start;margin-bottom:24px}
-  .cmk-mtitle{font-size:20px;font-weight:900;color:#0f224d;margin-bottom:4px;line-height:1.2}
-  .cmk-mserial{font-size:12px;color:#6c7897;font-family:monospace;margin-bottom:8px}
-  .cmk-mgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-  .cmk-mfull{grid-column:1/-1}
-  .cmk-mfield{display:flex;flex-direction:column;gap:5px}
-  .cmk-mlabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6c7897}
-  .cmk-mval{font-size:14px;color:#0f224d;font-weight:600;line-height:1.5}
-  .cmk-mgoods{font-size:13.5px;font-weight:400;line-height:1.65;color:#0f224d}
-  .cmk-mfooter{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid #e8edf7}
-  .cmk-mextlink{font-size:12.5px;color:#6c7897;text-decoration:none;font-weight:600}
-  .cmk-mextlink:hover{color:#0f224d;text-decoration:underline}
-  .cmk-badge{border-radius:99px;padding:3px 11px;font-size:11px;font-weight:700;white-space:nowrap}
-  .cmk-badge-active{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
-  .cmk-badge-expired{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
-  .cmk-badge-pending{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
-  .cmk-class-pill{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;background:var(--accent,#1e3a8a);color:#fff;font-weight:800;font-size:14px}
-  @media(max-width:600px){.cmk-modal{padding:22px 16px}.cmk-mgrid{grid-template-columns:1fr}}
-`;
-
-function DetailModal({ result, onClose }: { result: Result; onClose: () => void }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  if (!mounted) return null;
-
-  return createPortal(
-    <>
-      <style>{MODAL_STYLES}</style>
-      <div className="cmk-overlay" onClick={onClose}>
-        <div className="cmk-modal" onClick={e => e.stopPropagation()}>
-          <button className="cmk-modal-close" onClick={onClose} aria-label="Tutup">×</button>
-
-          <div className="cmk-mhdr">
-            <LogoImg src={result.image_url} alt={result.brand_name} size={80} />
-            <div>
-              <div className="cmk-mtitle">{result.brand_name}</div>
-              <div className="cmk-mserial">{result.serial_number}</div>
-              <StatusBadge status={result.status} />
-            </div>
-          </div>
-
-          <div className="cmk-mgrid">
-            <div className="cmk-mfield">
-              <span className="cmk-mlabel">Kelas NICE</span>
-              <span className="cmk-mval">
-                {result.nice_class
-                  ? <span className="cmk-class-pill">{result.nice_class}</span>
-                  : "—"}
-              </span>
-            </div>
-            <div className="cmk-mfield">
-              <span className="cmk-mlabel">Tanggal Pendaftaran</span>
-              <span className="cmk-mval">{formatDate(result.filing_date_iso, result.filing_date)}</span>
-            </div>
-            <div className="cmk-mfield cmk-mfull">
-              <span className="cmk-mlabel">Barang / Jasa</span>
-              <span className="cmk-mgoods">{result.goods_services || "—"}</span>
-            </div>
-          </div>
-
-          <div className="cmk-mfooter">
-            <span style={{ fontSize: 12, color: "#6c7897" }}>Sumber: DJKI via Jumbomark</span>
-            <a className="cmk-mextlink" href={result.detail_url} target="_blank" rel="noopener">
-              Lihat di DJKI ↗
-            </a>
-          </div>
-        </div>
-      </div>
-    </>,
-    document.body
-  );
 }
 
 export default function CekMerekSearch() {
@@ -131,7 +44,6 @@ export default function CekMerekSearch() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
-  const [selected, setSelected] = useState<Result | null>(null);
 
   async function doSearch(q: string, p = 1) {
     if (!q.trim()) return;
@@ -154,11 +66,6 @@ export default function CekMerekSearch() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    doSearch(query, 1);
-  }
-
   const QUICK = ["Indomie", "Tokopedia", "Aqua", "Gojek"];
 
   return (
@@ -174,19 +81,21 @@ export default function CekMerekSearch() {
         .cmk-hint{margin-top:10px;font-size:12.5px;color:var(--muted,#6c7897)}
         .cmk-hint b{color:var(--ink,#0f224d);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
         .cmk-meta{font-size:13px;color:var(--muted,#6c7897);margin-bottom:14px}
-        /* Table: full width of sp-workspace (already outside sp-content's 920px max-width) */
         .cmk-wrap{width:100%;overflow-x:auto;border-top:1px solid var(--line,#e8edf7);border-bottom:1px solid var(--line,#e8edf7);margin-bottom:20px}
-        .cmk-table{width:100%;min-width:700px;border-collapse:collapse;font-size:13.5px}
+        .cmk-table{width:100%;min-width:680px;border-collapse:collapse;font-size:13.5px}
         .cmk-table th{background:var(--soft,#f0f4ff);color:var(--muted,#6c7897);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:10px 16px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line,#e8edf7)}
         .cmk-table td{padding:14px 16px;border-bottom:1px solid var(--line,#e8edf7);vertical-align:middle;color:var(--ink,#0f224d)}
         .cmk-table tr:last-child td{border-bottom:none}
-        .cmk-table tbody tr:hover td{background:#f7f9fd;cursor:pointer}
+        .cmk-table tbody tr:hover td{background:#f7f9fd}
+        .cmk-badge{border-radius:99px;padding:3px 11px;font-size:11px;font-weight:700;white-space:nowrap}
+        .cmk-badge-active{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+        .cmk-badge-expired{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+        .cmk-badge-pending{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
         .cmk-brand{font-weight:800;font-size:14px;color:var(--ink,#0f224d)}
         .cmk-serial{font-size:11px;color:var(--muted,#6c7897);font-family:monospace;margin-top:3px}
-        .cmk-goods{max-width:320px;color:var(--muted,#6c7897);font-size:12.5px;line-height:1.55}
+        .cmk-class-pill{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;background:var(--accent,#1e3a8a);color:#fff;font-weight:800;font-size:14px}
+        .cmk-goods{max-width:340px;color:var(--muted,#6c7897);font-size:12.5px;line-height:1.55}
         .cmk-date{white-space:nowrap;font-size:12.5px}
-        .cmk-detail-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--line,#e8edf7);background:#fff;color:var(--accent,#1e3a8a);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:border-color .15s,background .15s;white-space:nowrap}
-        .cmk-detail-btn:hover{border-color:var(--accent,#1e3a8a);background:#f0f4ff}
         .cmk-more{margin-top:20px;text-align:center}
         .cmk-more-btn{padding:11px 28px;border-radius:10px;border:1.5px solid var(--line,#e8edf7);background:#fff;color:var(--ink,#0f224d);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:border-color .15s}
         .cmk-more-btn:hover{border-color:var(--accent,#1e3a8a)}
@@ -201,9 +110,8 @@ export default function CekMerekSearch() {
         }
       `}</style>
 
-      {/* Search box */}
       <div className="cmk-box">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={e => { e.preventDefault(); doSearch(query, 1); }}>
           <div className="cmk-row">
             <input
               className="cmk-input"
@@ -232,7 +140,7 @@ export default function CekMerekSearch() {
           <p className="cmk-meta">
             {results.length === 0
               ? `Tidak ditemukan merek untuk "${query}"`
-              : `Menampilkan ${results.length} dari ${total.toLocaleString("id-ID")} merek untuk "${query}" — data DJKI via Jumbomark`}
+              : `Menampilkan ${results.length} dari ${total.toLocaleString("id-ID")} merek untuk "${query}" — data DJKI`}
           </p>
 
           {results.length === 0 ? (
@@ -252,13 +160,12 @@ export default function CekMerekSearch() {
                       <th>Barang / Jasa</th>
                       <th>Tgl Daftar</th>
                       <th>Status</th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {results.map((r, i) => (
-                      <tr key={`${r.serial_number}-${i}`} onClick={() => setSelected(r)}>
-                        <td><LogoImg src={r.image_url} alt={r.brand_name} size={64} /></td>
+                      <tr key={`${r.serial_number}-${i}`}>
+                        <td><LogoImg src={r.image_url} alt={r.brand_name} /></td>
                         <td>
                           <div className="cmk-brand">{r.brand_name}</div>
                           <div className="cmk-serial">{r.serial_number}</div>
@@ -269,7 +176,7 @@ export default function CekMerekSearch() {
                             : <span style={{ color: "var(--muted,#6c7897)", fontSize: 12 }}>—</span>}
                         </td>
                         <td>
-                          <div className="cmk-goods" title={r.goods_services}>
+                          <div className="cmk-goods">
                             {r.goods_services
                               ? r.goods_services.length > 130 ? r.goods_services.slice(0, 127) + "…" : r.goods_services
                               : "—"}
@@ -277,14 +184,6 @@ export default function CekMerekSearch() {
                         </td>
                         <td><div className="cmk-date">{formatDate(r.filing_date_iso, r.filing_date)}</div></td>
                         <td><StatusBadge status={r.status} /></td>
-                        <td>
-                          <button
-                            className="cmk-detail-btn"
-                            onClick={e => { e.stopPropagation(); setSelected(r); }}
-                          >
-                            Detail →
-                          </button>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -302,8 +201,6 @@ export default function CekMerekSearch() {
           )}
         </div>
       )}
-
-      {selected && <DetailModal result={selected} onClose={() => setSelected(null)} />}
     </>
   );
 }
