@@ -141,6 +141,7 @@ export default function CekHakiHeroPage({ brand }: { brand: Brand }) {
   };
 
   const handleWaClick = () => {
+    (window as unknown as { gtag_report_conversion?: (url: string) => void }).gtag_report_conversion?.(waLink);
     setWaClicked(true);
     setMessages((prev) => [
       ...prev,

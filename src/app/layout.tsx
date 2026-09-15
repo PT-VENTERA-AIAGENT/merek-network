@@ -25,6 +25,7 @@ export default async function RootLayout({
   const brandId = hdrs.get("x-brand-id") ?? "hakimerek";
   const brand = getBrandById(brandId);
   const gtagId = brand.gtagId;
+  const gtagConversionLabel = brand.gtagConversionLabel;
 
   return (
     <html lang="id">
@@ -41,6 +42,13 @@ export default async function RootLayout({
               }}
             />
           </>
+        )}
+        {gtagConversionLabel && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `function gtag_report_conversion(url){var cb=function(){if(typeof url!='undefined'){window.location=url;}};gtag('event','conversion',{'send_to':'${gtagConversionLabel}','value':1.0,'currency':'IDR','event_callback':cb});return false;}`,
+            }}
+          />
         )}
       </head>
       <body>{children}</body>

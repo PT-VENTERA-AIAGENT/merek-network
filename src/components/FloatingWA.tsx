@@ -59,6 +59,7 @@ export default function FloatingWA({ domain, whatsappNumber, accent, label = "Ch
         rel="noopener noreferrer"
         aria-label={`Chat ${domain} via WhatsApp`}
         style={{ borderColor: accent }}
+        onClick={() => (window as unknown as { gtag_report_conversion?: (url: string) => void }).gtag_report_conversion?.(href)}
       >
         <span className="fwa-icon" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

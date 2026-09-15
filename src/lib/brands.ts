@@ -13,6 +13,7 @@ export interface Brand {
   ogImage?: string;
   keywords: string[];
   gtagId?: string;
+  gtagConversionLabel?: string;
   schema: {
     name: string;
     description: string;
@@ -62,6 +63,7 @@ export const BRANDS: Record<string, Brand> = {
     accentRgb: "5,150,105",
     whatsapp: WHATSAPP,
     gtagId: "AW-17522921333",
+    gtagConversionLabel: "AW-17522921333/Lsz2COHe57wcEPWeyqNB",
     chips: [
       "Cek nama merek saya",
       "Apa itu PDKI?",
