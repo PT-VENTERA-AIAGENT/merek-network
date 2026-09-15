@@ -12,6 +12,7 @@ export interface Brand {
   chips: string[];
   ogImage?: string;
   keywords: string[];
+  gtagId?: string;
   schema: {
     name: string;
     description: string;
@@ -60,6 +61,7 @@ export const BRANDS: Record<string, Brand> = {
     accentLight: "#10b981",
     accentRgb: "5,150,105",
     whatsapp: WHATSAPP,
+    gtagId: "AW-17522921333",
     chips: [
       "Cek nama merek saya",
       "Apa itu PDKI?",
