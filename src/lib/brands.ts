@@ -95,6 +95,7 @@ export const BRANDS: Record<string, Brand> = {
     accentLight: "#F59E0B",
     accentRgb: "217,119,6",
     whatsapp: WHATSAPP,
+    gtagId: "AW-17522921333",
     chips: [
       "Daftarkan merek saya",
       "Biaya daftar merek",
