@@ -14,6 +14,7 @@ export interface Brand {
   keywords: string[];
   gtagId?: string;
   gtagConversionLabel?: string;
+  ga4Id?: string;
   gtmId?: string;
   schema: {
     name: string;
@@ -97,6 +98,7 @@ export const BRANDS: Record<string, Brand> = {
     accentRgb: "217,119,6",
     whatsapp: WHATSAPP,
     gtagId: "AW-17522921333",
+    ga4Id: "G-1WFMTZB9BH",
     gtmId: "GTM-MHKMZXCL",
     chips: [
       "Daftarkan merek saya",

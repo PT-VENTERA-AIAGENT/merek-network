@@ -24,7 +24,9 @@ export default async function RootLayout({
   const hdrs = await headers();
   const brandId = hdrs.get("x-brand-id") ?? "hakimerek";
   const brand = getBrandById(brandId);
-  const gtagId = brand.gtagId;
+  const gtagIds = [brand.gtagId, brand.ga4Id].filter(
+    (id): id is string => Boolean(id),
+  );
   const gtagConversionLabel = brand.gtagConversionLabel;
   const gtmId = brand.gtmId;
 
@@ -38,15 +40,18 @@ export default async function RootLayout({
             }}
           />
         )}
-        {gtagId && (
+        {gtagIds.length > 0 && (
           <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}
-            />
+            {gtagIds.map((id) => (
+              <script
+                key={id}
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
+              />
+            ))}
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gtagId}');`,
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${gtagIds.map((id) => `gtag('config','${id}');`).join("")}`,
               }}
             />
           </>
