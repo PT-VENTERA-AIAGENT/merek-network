@@ -37,6 +37,8 @@ export const BRANDS: Record<string, Brand> = {
     whatsapp: WHATSAPP,
     gtagId: "AW-17522921333",
     gtagConversionLabel: "AW-17522921333/N9ucCJT5g78cEPWeyqNB",
+    ga4Id: "G-GCH04EK2Q9",
+    gtmId: "GTM-W3NXNS3W",
     chips: [
       "Cek nama merekku",
       "Berapa biaya daftar merek?",
@@ -68,6 +70,8 @@ export const BRANDS: Record<string, Brand> = {
     whatsapp: WHATSAPP,
     gtagId: "AW-17522921333",
     gtagConversionLabel: "AW-17522921333/Lsz2COHe57wcEPWeyqNB",
+    ga4Id: "G-YFWS4JQCBB",
+    gtmId: "GTM-P4ZVPPRN",
     chips: [
       "Cek nama merek saya",
       "Apa itu PDKI?",
