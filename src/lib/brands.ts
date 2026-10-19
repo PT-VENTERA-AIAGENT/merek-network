@@ -16,6 +16,7 @@ export interface Brand {
   gtagConversionLabel?: string;
   ga4Id?: string;
   gtmId?: string;
+  metaPixelId?: string;
   schema: {
     name: string;
     description: string;
@@ -39,6 +40,7 @@ export const BRANDS: Record<string, Brand> = {
     gtagConversionLabel: "AW-17522921333/N9ucCJT5g78cEPWeyqNB",
     ga4Id: "G-GCH04EK2Q9",
     gtmId: "GTM-W3NXNS3W",
+    metaPixelId: "1451758127081018",
     chips: [
       "Cek nama merekku",
       "Berapa biaya daftar merek?",
